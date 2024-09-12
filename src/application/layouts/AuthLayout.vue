@@ -1,5 +1,6 @@
 <template>
 	<div
+		v-if="showBodyBgImage"
 		class="flex gap-2 items-center w-full lg:text-sm mdlg:text-[12px] text-xs z-[100] px-4 py-4 mdlg:py-0 sticky top-0 bg-white justify-between mdlg:shadow-custom">
 		<div class="py-2 pr-3 hidden mdlg:block">
 			<Logo class="h-[32px]" />
@@ -53,7 +54,7 @@ withDefaults(
 		subTitle: '',
 		hideBack: false,
 		bgImage: '/images/auth.png',
-		bodyBgImage: '/images/plays-bg.svg',
+		bodyBgImage: '/images/auth-setup-frame.svg',
 		showBodyBgImage: false,
 	},
 )

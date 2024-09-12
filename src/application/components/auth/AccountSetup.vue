@@ -35,167 +35,181 @@
 			</div>
 		</div>
 
-		<div v-if="tab === 'profile'" class="w-full flex flex-col mdlg:flex-row gap-4 py-3">
-			<div class="mdlg:w-2/5 flex flex-col items-center justify-center pt-3">
-				<SofaImageLoader class="size-[90px] mdlg:size-[200px] bg-grayColor rounded-full" :photoUrl="profileFactory.photo?.link">
-					<SofaIcon v-if="!profileFactory.photo" class="h-[50px] mdlg:h-[150px]" name="user" />
-					<SofaFileInput
-						v-model="profileFactory.photo"
-						class="absolute bottom-[-5%] right-[-5%] mdlg:bottom-[5%] mdlg:right-[5%] bg-black bg-opacity-50 rounded-full !h-[40px] !w-[40px] flex items-center justify-center"
-						accept="image/*">
-						<SofaIcon class="h-[18px] fill-white" name="camera" />
-					</SofaFileInput>
-				</SofaImageLoader>
-			</div>
-
-			<div class="mdlg:w-3/5 grid gap-4">
-				<div class="grid mdlg:grid-cols-2 gap-4">
-					<SofaTextField
-						v-model="profileFactory.first"
-						customClass="rounded-custom !bg-lightGray"
-						type="text"
-						placeholder="First Name"
-						:error="profileFactory.errors.first"
-						borderColor="border-transparent" />
-
-					<SofaTextField
-						v-model="profileFactory.last"
-						customClass="rounded-custom !bg-lightGray"
-						type="text"
-						placeholder="Last Name"
-						:error="profileFactory.errors.last"
-						borderColor="border-transparent" />
+		<div
+			:class="{
+				'flex flex-col mdlg:flex-row items-center justify-around':
+					tab === 'profile' || (tab === 'type' && (typeFactory.isStudent || typeFactory.isTeacher)),
+			}">
+			<div
+				v-if="tab === 'profile' || (tab === 'type' && (typeFactory.isStudent || typeFactory.isTeacher))"
+				class="w-full flex flex-col mdlg:flex-row gap-4 py-3">
+				<div class="mdlg:w-2/5 flex flex-col items-center justify-center pt-3">
+					<SofaImageLoader class="size-[90px] mdlg:size-[200px] bg-grayColor rounded-full" :photoUrl="profileFactory.photo?.link">
+						<SofaIcon v-if="!profileFactory.photo" class="h-[50px] mdlg:h-[150px]" name="user" />
+						<SofaFileInput
+							v-model="profileFactory.photo"
+							class="absolute bottom-[-5%] right-[-5%] mdlg:bottom-[5%] mdlg:right-[5%] bg-black bg-opacity-50 rounded-full !h-[40px] !w-[40px] flex items-center justify-center"
+							accept="image/*">
+							<SofaIcon class="h-[18px] fill-white" name="camera" />
+						</SofaFileInput>
+					</SofaImageLoader>
 				</div>
 
-				<SofaTextField
-					v-if="typeFactory.isOrganization"
-					v-model="typeFactory.name"
-					customClass="rounded-custom !bg-lightGray"
-					type="text"
-					placeholder="Organization name"
-					:error="typeFactory.errors.name"
-					borderColor="border-transparent" />
+				<div v-if="tab === 'profile'" class="mdlg:w-3/5 grid gap-4">
+					<div class="grid mdlg:grid-cols-2 gap-4">
+						<SofaTextField
+							v-model="profileFactory.first"
+							customClass="rounded-custom !bg-lightGray"
+							type="text"
+							placeholder="First Name"
+							:error="profileFactory.errors.first"
+							borderColor="border-transparent" />
 
-				<SofaTextarea
-					v-model="profileFactory.description"
-					class="h-[90px] resize-none"
-					:error="profileFactory.errors.description"
-					:placeholder="typeFactory.isOrganization ? 'About the organization' : 'Bio'" />
-
-				<SofaPhoneInput v-model="phoneFactory.phone" class="rounded !border-none bg-lightGray py-2" />
-
-				<SofaTextField
-					v-if="typeFactory.isOrganization"
-					v-model="typeFactory.code"
-					customClass="rounded-custom !bg-lightGray"
-					type="text"
-					placeholder="Set organization code"
-					:error="typeFactory.errors.code"
-					borderColor="border-transparent" />
-
-				<div class="w-full grid grid-cols-2 gap-4">
-					<SofaSelect
-						v-model="locationFactory.country"
-						class="col-span-1"
-						placeholder="Country"
-						:error="locationFactory.errors.country"
-						:options="countries.map((c) => ({ key: c, value: c }))" />
-
-					<SofaSelect
-						v-model="locationFactory.state"
-						class="col-span-1"
-						placeholder="State"
-						:error="locationFactory.errors.state"
-						:options="states.map((s) => ({ key: s, value: s }))" />
-				</div>
-			</div>
-		</div>
-
-		<div v-if="tab === 'type'" class="w-full flex flex-col gap-4 py-3">
-			<SofaTextField
-				v-if="typeFactory.isTeacher"
-				customClass="rounded-custom !bg-lightGray"
-				type="text"
-				placeholder="What acdemy degree(s) do you have?"
-				borderColor="border-transparent" />
-
-			<SofaTextField
-				v-if="typeFactory.isTeacher"
-				v-model="typeFactory.school"
-				customClass="rounded-custom !bg-lightGray"
-				type="text"
-				placeholder="Where do you teach now?"
-				:error="typeFactory.errors.school"
-				borderColor="border-transparent" />
-
-			<SofaSelect v-if="typeFactory.isTeacher" placeholder="How long have you been teaching?" :options="[]" class="text-grayColor" />
-
-			<SofaSelect v-if="typeFactory.isTeacher" placeholder="Do you sell study materials?" :options="[]" class="text-grayColor" />
-
-			<SofaSelect
-				v-if="typeFactory.isStudent"
-				v-model="typeFactory.schoolType"
-				placeholder="Education level"
-				:error="typeFactory.errors.schoolType"
-				:options="[UserSchoolType.university].map((s) => ({ key: s, value: s }))" />
-
-			<template v-if="typeFactory.isStudent && typeFactory.isCollegeType">
-				<SofaSelect
-					v-model="typeFactory.institutionId"
-					placeholder="School"
-					:error="typeFactory.errors.institutionId"
-					:options="schools.map((s) => ({ key: s.id, value: s.title }))" />
-
-				<SofaSelect
-					v-model="typeFactory.facultyId"
-					placeholder="Faculty"
-					:error="typeFactory.errors.facultyId"
-					:options="filteredFaculties.map((s) => ({ key: s.id, value: s.title }))" />
-
-				<SofaSelect
-					v-model="typeFactory.departmentId"
-					placeholder="Department"
-					:error="typeFactory.errors.departmentId"
-					:options="filteredDepartments.map((s) => ({ key: s.id, value: s.title }))" />
-			</template>
-			<template v-if="typeFactory.isStudent && typeFactory.isAspirantType">
-				<div class="w-full flex flex-col gap-4">
-					<SofaNormalText class="!font-semibold" content="Your exams" />
-
-					<SofaSelect
-						v-model="typeFactory.institutions"
-						placeholder="Exams"
-						multiple
-						:options="gatewayExams.map((s) => ({ key: s.id, value: s.title }))" />
-
-					<div class="w-full flex flex-wrap gap-3">
-						<SofaBadge
-							v-for="institution in typeFactory.institutions
-								.map((id) => gatewayExams.find((i) => i.id === id))
-								.filter(Boolean)"
-							:key="institution.id"
-							:color="typeFactory.activeInst === institution.id ? 'purple' : 'gray'"
-							customClass="flex items-center gap-2"
-							as="a"
-							@click.prevent="typeFactory.activeInst = institution.id">
-							{{ institution.title }}
-							<SofaIcon
-								name="circle-close"
-								:class="typeFactory.activeInst === institution.id ? 'fill-white' : 'fill-deepGray'"
-								class="h-[17px]" />
-						</SofaBadge>
+						<SofaTextField
+							v-model="profileFactory.last"
+							customClass="rounded-custom !bg-lightGray"
+							type="text"
+							placeholder="Last Name"
+							:error="profileFactory.errors.last"
+							borderColor="border-transparent" />
 					</div>
 
-					<SofaSelect
-						v-if="typeFactory.activeInst"
-						v-model="typeFactory.getInstitution(typeFactory.activeInst).courseIds"
-						placeholder="Subjects"
-						multiple
-						:options="
-							courses.filter((c) => c.institutionId === typeFactory.activeInst).map((s) => ({ key: s.id, value: s.title }))
-						" />
+					<SofaTextField
+						v-if="typeFactory.isOrganization"
+						v-model="typeFactory.name"
+						customClass="rounded-custom !bg-lightGray"
+						type="text"
+						placeholder="Organization name"
+						:error="typeFactory.errors.name"
+						borderColor="border-transparent" />
+
+					<SofaTextarea
+						v-model="profileFactory.description"
+						class="h-[90px] resize-none"
+						:error="profileFactory.errors.description"
+						:placeholder="typeFactory.isOrganization ? 'About the organization' : 'Bio'" />
+
+					<SofaPhoneInput v-model="phoneFactory.phone" class="rounded !border-none bg-lightGray py-2" />
+
+					<SofaTextField
+						v-if="typeFactory.isOrganization"
+						v-model="typeFactory.code"
+						customClass="rounded-custom !bg-lightGray"
+						type="text"
+						placeholder="Set organization code"
+						:error="typeFactory.errors.code"
+						borderColor="border-transparent" />
+
+					<div class="w-full grid grid-cols-2 gap-4">
+						<SofaSelect
+							v-model="locationFactory.country"
+							class="col-span-1"
+							placeholder="Country"
+							:error="locationFactory.errors.country"
+							:options="countries.map((c) => ({ key: c, value: c }))" />
+
+						<SofaSelect
+							v-model="locationFactory.state"
+							class="col-span-1"
+							placeholder="State"
+							:error="locationFactory.errors.state"
+							:options="states.map((s) => ({ key: s, value: s }))" />
+					</div>
 				</div>
-			</template>
+			</div>
+
+			<div v-if="tab === 'type'" class="w-full flex flex-col gap-4 py-3">
+				<SofaTextField
+					v-if="typeFactory.isTeacher"
+					customClass="rounded-custom !bg-lightGray"
+					type="text"
+					placeholder="What acdemy degree(s) do you have?"
+					borderColor="border-transparent" />
+
+				<SofaTextField
+					v-if="typeFactory.isTeacher"
+					v-model="typeFactory.school"
+					customClass="rounded-custom !bg-lightGray"
+					type="text"
+					placeholder="Where do you teach now?"
+					:error="typeFactory.errors.school"
+					borderColor="border-transparent" />
+
+				<SofaSelect
+					v-if="typeFactory.isTeacher"
+					placeholder="How long have you been teaching?"
+					:options="[]"
+					class="text-grayColor" />
+
+				<SofaSelect v-if="typeFactory.isTeacher" placeholder="Do you sell study materials?" :options="[]" class="text-grayColor" />
+
+				<SofaSelect
+					v-if="typeFactory.isStudent"
+					v-model="typeFactory.schoolType"
+					placeholder="Education level"
+					:error="typeFactory.errors.schoolType"
+					:options="[UserSchoolType.university].map((s) => ({ key: s, value: s }))" />
+
+				<template v-if="typeFactory.isStudent && typeFactory.isCollegeType">
+					<SofaSelect
+						v-model="typeFactory.institutionId"
+						placeholder="School"
+						:error="typeFactory.errors.institutionId"
+						:options="schools.map((s) => ({ key: s.id, value: s.title }))" />
+
+					<SofaSelect
+						v-model="typeFactory.facultyId"
+						placeholder="Faculty"
+						:error="typeFactory.errors.facultyId"
+						:options="filteredFaculties.map((s) => ({ key: s.id, value: s.title }))" />
+
+					<SofaSelect
+						v-model="typeFactory.departmentId"
+						placeholder="Department"
+						:error="typeFactory.errors.departmentId"
+						:options="filteredDepartments.map((s) => ({ key: s.id, value: s.title }))" />
+				</template>
+				<template v-if="typeFactory.isStudent && typeFactory.isAspirantType">
+					<div class="w-full flex flex-col gap-4">
+						<SofaNormalText class="!font-semibold" content="Your exams" />
+
+						<SofaSelect
+							v-model="typeFactory.institutions"
+							placeholder="Exams"
+							multiple
+							:options="gatewayExams.map((s) => ({ key: s.id, value: s.title }))" />
+
+						<div class="w-full flex flex-wrap gap-3">
+							<SofaBadge
+								v-for="institution in typeFactory.institutions
+									.map((id) => gatewayExams.find((i) => i.id === id))
+									.filter(Boolean)"
+								:key="institution.id"
+								:color="typeFactory.activeInst === institution.id ? 'purple' : 'gray'"
+								customClass="flex items-center gap-2"
+								as="a"
+								@click.prevent="typeFactory.activeInst = institution.id">
+								{{ institution.title }}
+								<SofaIcon
+									name="circle-close"
+									:class="typeFactory.activeInst === institution.id ? 'fill-white' : 'fill-deepGray'"
+									class="h-[17px]" />
+							</SofaBadge>
+						</div>
+
+						<SofaSelect
+							v-if="typeFactory.activeInst"
+							v-model="typeFactory.getInstitution(typeFactory.activeInst).courseIds"
+							placeholder="Subjects"
+							multiple
+							:options="
+								courses
+									.filter((c) => c.institutionId === typeFactory.activeInst)
+									.map((s) => ({ key: s.id, value: s.title }))
+							" />
+					</div>
+				</template>
+			</div>
 		</div>
 
 		<div v-if="tab === 'phone'" class="w-full flex flex-col py-5">
