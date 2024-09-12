@@ -1,20 +1,15 @@
 <template>
 	<div class="flex flex-col justify-center items-start w-full gap-4 text-left">
-		<SofaHeaderText
-			class="!font-bold border-b-2 pb-2"
-			:class="isDark ? 'border-white' : 'border-darkLightGray'"
-			color="text-inherit"
-			:content="title" />
+		<SofaHeading class="border-b-2 pb-2" :class="isDark ? 'border-white' : 'border-darkLightGray'" :content="title" />
 
-		<SofaHeaderText
+		<SofaHeading
 			v-if="question.data.type !== QuestionTypes.fillInBlanks && question.data.type !== QuestionTypes.dragAnswers"
-			class="!font-bold md:!text-2xl text-base w-full justify-start"
-			color="text-inherit"
+			size="title"
 			:content="question.question" />
 
 		<SofaImageLoader v-if="question.questionMedia" class="w-full" :photoUrl="question.questionMedia.link" />
 
-		<SofaNormalText color="text-inherit" class="pb-2" :content="question.instruction" />
+		<SofaText :content="question.instruction" />
 
 		<template v-if="question.strippedData.type === QuestionTypes.multipleChoice">
 			<a
@@ -29,10 +24,7 @@
 				@click="selectMultipleChoiceAnswer(index)">
 				<div class="grow flex gap-3 items-center">
 					<SofaIcon :name="QuestionEntity.getShape(index)" :class="buildIconClass(option, index)" />
-					<SofaHeaderText
-						:content="option"
-						color="text-inherit"
-						class="md:!text-lg mdlg:!text-xl text-xs w-full justify-start flex" />
+					<SofaText :content="option" />
 				</div>
 			</a>
 		</template>
@@ -50,10 +42,7 @@
 				@click="answer.value = option">
 				<div class="grow flex gap-3 items-center">
 					<SofaIcon :name="QuestionEntity.getShape(index)" :class="buildIconClass(option, index)" />
-					<SofaHeaderText
-						:content="option.toString()"
-						color="text-inherit"
-						class="capitalize md:!text-lg mdlg:!text-xl text-xs w-full justify-start flex" />
+					<SofaText :content="option.toString()" class="capitalize" />
 				</div>
 			</a>
 		</template>
@@ -76,7 +65,7 @@
 							placeholder="answer here"
 							class="w-full focus:outline-none placeholder:md:text-2xl text-inherit bg-transparent placeholder:text-base placeholder:text-inherit md:text-2xl text-base" />
 					</div>
-					<SofaHeaderText class="!font-semibold md:!text-2xl text-base" color="text-inherit" :content="content" />
+					<SofaText :content="content" />
 				</template>
 			</div>
 		</template>
@@ -97,10 +86,10 @@
 							:key="i"
 							class="md:p-4 p-2 flex items-center cursor-move justify-center touch-none rounded-xl border-2"
 							:class="isDark ? 'bg-primaryBlue' : 'bg-lightBlue'">
-							<SofaHeaderText class="!font-bold md:!text-2xl text-base" color="text-inherit" :content="element" />
+							<SofaText :content="element" />
 						</div>
 					</VueDraggable>
-					<SofaHeaderText class="!font-semibold md:!text-2xl text-base" color="text-inherit" :content="content" />
+					<SofaText :content="content" />
 				</template>
 
 				<VueDraggable
@@ -114,7 +103,7 @@
 						:key="i"
 						class="md:p-4 p-2 flex items-center cursor-move justify-center touch-none rounded-xl border-2"
 						:class="isDark ? 'bg-primaryBlue' : 'bg-lightBlue'">
-						<SofaHeaderText class="!font-bold md:!text-2xl text-base" color="text-inherit" :content="element" />
+						<SofaText :content="element" />
 					</div>
 				</VueDraggable>
 			</div>
@@ -124,16 +113,10 @@
 			<VueDraggable v-model="answer.value" group="sequence" class="flex flex-col gap-4 w-full">
 				<div v-for="(element, index) in answer.value" :key="index" class="w-full flex items-center gap-3 cursor-move">
 					<div class="p-3 rounded-xl border-2" :class="buildClass(element, index)">
-						<SofaHeaderText
-							:content="(index + 1).toString()"
-							color="text-inherit"
-							class="md:!text-lg mdlg:!text-xl text-xs w-full justify-start flex" />
+						<SofaText :content="(index + 1).toString()" />
 					</div>
 					<div class="p-3 rounded-xl border-2 grow" :class="buildClass(element, index)">
-						<SofaHeaderText
-							:content="element"
-							color="text-inherit"
-							class="'md:!text-lg mdlg:!text-xl text-xs w-full justify-start flex !line-clamp-1" />
+						<SofaText :content="element" class="!line-clamp-1" />
 					</div>
 				</div>
 			</VueDraggable>
@@ -144,13 +127,10 @@
 				<div
 					v-for="(element, index) in question.matchQuestions"
 					:key="index"
-					class="w-full flex items-center justify-between rounded-xl grow p-3 border-2 gap-3"
+					class="w-full flex items-center rounded-xl grow p-3 border-2 gap-3"
 					:class="buildClass(answer.value[index], index)">
 					<SofaIcon :name="QuestionEntity.getShape(index)" :class="buildIconClass(answer.value[index], index)" />
-					<SofaHeaderText
-						color="text-inherit"
-						class="md:!text-lg mdlg:!text-xl text-xs w-full justify-start flex line-clamp-1"
-						:content="element" />
+					<SofaText class="line-clamp-1" :content="element" />
 				</div>
 			</VueDraggable>
 
@@ -158,13 +138,10 @@
 				<div
 					v-for="(element, index) in answer.value"
 					:key="index"
-					class="w-full flex items-center justify-between rounded-xl grow p-3 border-2 gap-3 cursor-move"
+					class="w-full flex items-center rounded-xl grow p-3 border-2 gap-3 cursor-move"
 					:class="buildClass(element, index)">
 					<SofaIcon :name="QuestionEntity.getShape(index)" :class="buildIconClass(element, index)" />
-					<SofaHeaderText
-						color="text-inherit"
-						class="md:!text-lg mdlg:!text-xl text-xs w-full justify-start flex line-clamp-1"
-						:content="element" />
+					<SofaText class="line-clamp-1" :content="element" />
 				</div>
 			</VueDraggable>
 		</div>

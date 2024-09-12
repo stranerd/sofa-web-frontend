@@ -56,6 +56,8 @@ const cls = computed(() =>
 		word-wrap: break-word;
 		word-break: break-word;
 		overflow-wrap: break-word;
+		background-color: unset !important;
+		color: unset !important;
 	}
 }
 </style>
