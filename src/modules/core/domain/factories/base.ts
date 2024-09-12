@@ -53,6 +53,9 @@ export abstract class BaseFactory<E, T, K extends Record<string, any>> extends C
 	get valid() {
 		return this.#keys.map((key) => this.isValid(key)).every(Boolean)
 	}
+	get keys() {
+		return this.#keys
+	}
 
 	get hasChanges() {
 		return this.#keys.some((key) => !Differ.equal(this.#cloneValues[key], this.values[key]))

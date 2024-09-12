@@ -27,8 +27,6 @@ export type UserTypeData =
 						exams: {
 							institutionId: string
 							courseIds: string[]
-							startDate: number
-							endDate: number
 						}[]
 				  }
 				| {
@@ -44,11 +42,19 @@ export type UserTypeData =
 	| {
 			type: UserType.teacher
 			school: string
+			exams: {
+				institutionId: string
+				courseIds: string[]
+			}[]
 	  }
 	| {
 			type: UserType.organization
 			name: string
 			code: string
+			exams: {
+				institutionId: string
+				courseIds: string[]
+			}[]
 	  }
 
 export enum RankingTimes {

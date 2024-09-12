@@ -7,8 +7,6 @@ import { BaseFactory } from '@modules/core'
 type Exam = {
 	institutionId: string
 	courseIds: string[]
-	startDate: number
-	endDate: number
 }
 
 type Keys = {
@@ -49,13 +47,11 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 						.object({
 							institutionId: v.string().min(1),
 							courseIds: v.array(v.string().min(1)).min(1),
-							startDate: v.time().asStamp(),
-							endDate: v.time().min(val?.start).asStamp(),
 						})
 						.parse(val),
 				),
 			)
-			.requiredIf(() => this.isStudent && this.isAspirantType),
+			.requiredIf(() => (this.isStudent && this.isAspirantType) || this.isTeacher || this.isOrganization),
 
 		school: v
 			.string()
@@ -149,6 +145,13 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 		return this.schoolType === UserSchoolType.university
 	}
 
+	get isValidExceptExams() {
+		return this.keys
+			.filter((key) => key !== 'exams')
+			.map((key) => this.isValid(key))
+			.every(Boolean)
+	}
+
 	getInstitution(institutionId: string) {
 		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		const classThis = this
@@ -160,22 +163,6 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 			},
 			set courseIds(value: string[]) {
 				obj.courseIds = value
-				// eslint-disable-next-line no-self-assign
-				classThis.exams = classThis.exams
-			},
-			get startTime() {
-				return new Date(obj.startDate).toISOString().substring(0, 10)
-			},
-			set startTime(value: string) {
-				obj.startDate = new Date(value).getTime()
-				// eslint-disable-next-line no-self-assign
-				classThis.exams = classThis.exams
-			},
-			get endTime() {
-				return new Date(obj.endDate).toISOString().substring(0, 10)
-			},
-			set endTime(value: string) {
-				obj.endDate = new Date(value).getTime()
 				// eslint-disable-next-line no-self-assign
 				classThis.exams = classThis.exams
 			},
@@ -192,12 +179,14 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 				this.facultyId = entity.type.school.facultyId
 				this.departmentId = entity.type.school.departmentId
 			} else if (entity.type.school.type === UserSchoolType.aspirant) {
-				this.set('exams', entity.type.school.exams)
+				this.exams = entity.type.school.exams
 				this.institutions = entity.type.school.exams.map((e) => e.institutionId)
 			}
 		} else if (entity.type.type === UserType.teacher) {
+			this.exams = entity.type.exams
 			this.school = entity.type.school
 		} else if (entity.type.type === UserType.organization) {
+			this.exams = entity.type.exams
 			this.name = entity.type.name
 			this.code = entity.type.code
 		}
@@ -205,8 +194,8 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 
 	model = (): UserTypeData => {
 		const { institutionId, facultyId, departmentId, exams, school, name, code } = this.validValues
-		if (this.isTeacher) return { type: UserType.teacher, school }
-		if (this.isOrganization) return { type: UserType.organization, name, code }
+		if (this.isTeacher) return { type: UserType.teacher, school, exams }
+		if (this.isOrganization) return { type: UserType.organization, name, code, exams }
 		return {
 			type: UserType.student,
 			school: this.isCollegeType

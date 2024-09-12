@@ -47,6 +47,7 @@
 					<SofaImageLoader class="size-[90px] mdlg:size-[200px] bg-grayColor rounded-full" :photoUrl="profileFactory.photo?.link">
 						<SofaIcon v-if="!profileFactory.photo" class="h-[50px] mdlg:h-[150px]" name="user" />
 						<SofaFileInput
+							v-if="tab === 'profile'"
 							v-model="profileFactory.photo"
 							class="absolute bottom-[-5%] right-[-5%] mdlg:bottom-[5%] mdlg:right-[5%] bg-black bg-opacity-50 rounded-full !h-[40px] !w-[40px] flex items-center justify-center"
 							accept="image/*">
@@ -88,8 +89,6 @@
 						class="h-[90px] resize-none"
 						:error="profileFactory.errors.description"
 						:placeholder="typeFactory.isOrganization ? 'About the organization' : 'Bio'" />
-
-					<SofaPhoneInput v-model="phoneFactory.phone" class="rounded !border-none bg-lightGray py-2" />
 
 					<SofaTextField
 						v-if="typeFactory.isOrganization"
@@ -148,7 +147,7 @@
 					v-model="typeFactory.schoolType"
 					placeholder="Education level"
 					:error="typeFactory.errors.schoolType"
-					:options="[UserSchoolType.university].map((s) => ({ key: s, value: s }))" />
+					:options="Object.values(UserSchoolType).map((s) => ({ key: s, value: s }))" />
 
 				<template v-if="typeFactory.isStudent && typeFactory.isCollegeType">
 					<SofaSelect
@@ -268,17 +267,20 @@ const { factory: locationFactory, countries, states, updateLocation } = useUserL
 const { factory: typeFactory, updateType } = useUserTypeUpdate()
 const { factory: phoneFactory, token, sendVerificationText, completeVerification } = usePhoneUpdate()
 
-const tab = ref(props.isProfileEducation ? 'type' : props.isProfilePhone ? 'phone' : 'profile')
+type Tab = 'type' | 'phone' | 'profile' | 'phone-verify' | 'exams' | 'subjects'
+
+const tab = ref<Tab>(props.isProfileEducation ? 'type' : props.isProfilePhone ? 'phone' : 'profile')
 const isDisabled = computed(() => {
-	if (tab.value === 'profile')
-		return !profileFactory.valid || !locationFactory.valid || (typeFactory.isOrganization && !typeFactory.valid)
-	else if (tab.value === 'type') return !typeFactory.isOrganization && !typeFactory.valid
+	if (tab.value === 'profile') return !profileFactory.valid || !locationFactory.valid
 	else if (tab.value === 'phone') return !phoneFactory.valid
 	else if (tab.value === 'phone-verify') return !token.value
+	else if (tab.value === 'type') return !typeFactory.isValidExceptExams
+	else if (tab.value === 'exams') return !typeFactory.isValidExceptExams
+	else if (tab.value === 'subjects') return !typeFactory.valid
 	return false
 })
 
-const accountSetupOptions = computed(() => [
+const accountSetupOptions = computed<{ name: string; id: Tab; hide: boolean; done: boolean }[]>(() => [
 	{
 		name: 'Profile',
 		id: 'profile',
@@ -286,10 +288,22 @@ const accountSetupOptions = computed(() => [
 		done: !!auth.value?.description && !!user.value?.location && (typeFactory.isOrganization ? user.value?.userType.isOrg : true),
 	},
 	{
-		name: typeFactory.isTeacher ? 'Experience' : 'Education',
+		name: typeFactory.isStudent ? 'Education' : 'Experience',
 		id: 'type',
-		hide: typeFactory.isOrganization,
-		done: !!user.value?.type,
+		hide: false,
+		done: !!user.value?.type || typeFactory.isValidExceptExams,
+	},
+	{
+		name: 'Exams',
+		id: 'exams',
+		hide: typeFactory.isStudent && (typeFactory.isCollegeType || typeFactory.isUniversityType),
+		done: !!user.value?.type || typeFactory.isValidExceptExams,
+	},
+	{
+		name: 'Subjects',
+		id: 'subjects',
+		hide: typeFactory.isStudent && (typeFactory.isCollegeType || typeFactory.isUniversityType),
+		done: !!user.value?.type || typeFactory.isValidExceptExams,
 	},
 	/* {
 		name: 'Phone',
@@ -302,14 +316,9 @@ const accountSetupOptions = computed(() => [
 const handleAccountSetup = async () => {
 	if (isDisabled.value) return
 	if (tab.value === 'profile')
-		await Promise.all([typeFactory.isOrganization ? updateType() : true, updateProfile(), updateLocation()]).then((res) => {
-			// if (res.every(Boolean)) tab.value = typeFactory.isOrganization ? 'phone' : 'type'
-			if (res.every(Boolean)) typeFactory.isOrganization ? complete() : (tab.value = 'type')
-		})
-	else if (tab.value === 'type')
-		await updateType().then((res) => {
-			// if (res && !props.isProfileEducation) tab.value = 'phone'
-			if (res && !props.isProfileEducation) complete()
+		await Promise.all([updateProfile(), updateLocation()]).then((res) => {
+			// if (res.every(Boolean)) tab.value = 'phone'
+			if (res.every(Boolean)) tab.value = 'type'
 		})
 	else if (tab.value === 'phone')
 		await sendVerificationText().then((res) => {
@@ -319,8 +328,24 @@ const handleAccountSetup = async () => {
 		await completeVerification().then((res) => {
 			if (!res) return
 			if (props.isProfilePhone) tab.value = 'phone'
-			else complete()
+			else tab.value = 'type'
 		})
+	else if (tab.value === 'type') {
+		if (typeFactory.isStudent && (typeFactory.isUniversityType || typeFactory.isCollegeType)) {
+			await updateType().then((res) => {
+				if (res && !props.isProfileEducation) complete()
+			})
+		}
+		if ((typeFactory.isStudent && typeFactory.isAspirantType) || typeFactory.isTeacher || typeFactory.isOrganization) {
+			tab.value = 'exams'
+		}
+	} else if (tab.value === 'exams') {
+		tab.value = 'subjects'
+	} else if (tab.value === 'subjects') {
+		await updateType().then((res) => {
+			if (res && !props.isProfileEducation) complete()
+		})
+	}
 }
 
 const complete = async () => {
