@@ -19,6 +19,9 @@ type Keys = {
 	school: string
 	name: string
 	code: string
+	degree: string
+	teachingYears: string
+	sellMaterials: boolean
 }
 
 export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys> {
@@ -66,6 +69,18 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 			.string()
 			.min(6)
 			.requiredIf(() => this.isOrganization),
+
+		degree: v
+			.string()
+			.min(1)
+			.requiredIf(() => this.isTeacher),
+
+		teachingYears: v
+			.string()
+			.min(1)
+			.requiredIf(() => this.isTeacher),
+
+		sellMaterials: v.boolean().requiredIf(() => this.isTeacher),
 	}
 	reserved = ['type']
 	extras = reactive({
@@ -93,6 +108,9 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 			school: '',
 			name: '',
 			code: '',
+			degree: '',
+			teachingYears: '',
+			sellMaterials: false,
 		})
 	}
 
