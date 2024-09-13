@@ -1,5 +1,5 @@
 <template>
-	<AuthLayout title="Create your account">
+	<AuthLayout title="Create your account" :hideBack="true">
 		<form class="flex flex-col gap-6 w-full" @submit.prevent="signup">
 			<AuthProvider :signUp="true" />
 

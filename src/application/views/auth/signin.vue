@@ -1,5 +1,5 @@
 <template>
-	<AuthLayout title="Welcome back" subTitle="Let the progress continue">
+	<AuthLayout title="Welcome back" :hideBack="true" subTitle="Let the progress continue">
 		<form class="flex flex-col gap-6 w-full" @submit.prevent="signin">
 			<AuthProvider :signUp="false" />
 

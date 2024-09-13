@@ -39,15 +39,15 @@
 
 		<div
 			:class="{
-				'flex flex-col mdlg:flex-row items-center justify-around':
-					tab === 'profile' || (tab === 'type' && (typeFactory.isStudent || typeFactory.isTeacher)),
+				'flex flex-col mdlg:flex-row items-center min-w-full':
+					tab === 'profile' || (tab === 'type' && (typeFactory.isStudent || typeFactory.isTeacher || typeFactory.isOrganization)),
 			}">
 			<div
 				v-if="
 					tab === 'profile' || (tab === 'type' && (typeFactory.isStudent || typeFactory.isTeacher || typeFactory.isOrganization))
 				"
 				class="w-full flex flex-col mdlg:flex-row gap-4 py-3">
-				<div class="mdlg:w-2/5 flex flex-col items-center justify-center pt-3">
+				<div class="flex flex-col items-center justify-center pt-3">
 					<SofaImageLoader class="size-[90px] mdlg:size-[200px] bg-grayColor rounded-full" :photoUrl="profileFactory.photo?.link">
 						<SofaIcon v-if="!profileFactory.photo" class="h-[50px] mdlg:h-[150px]" name="user" />
 						<SofaFileInput
@@ -147,9 +147,31 @@
 					:options="[]"
 					:error="typeFactory.errors.teachingYears"
 					class="text-grayColor" />
-
+				<!-- Organization -->
 				<SofaSelect
-					v-if="typeFactory.isTeacher"
+					v-if="typeFactory.isOrganization"
+					v-model="typeFactory.orgLength"
+					placeholder="How long has your organization been operating?"
+					:error="typeFactory.errors.orgLength"
+					:options="[]"
+					class="text-grayColor" />
+				<SofaSelect
+					v-if="typeFactory.isOrganization"
+					v-model="typeFactory.orgTeachersLength"
+					placeholder="How many teachers do you have?"
+					:error="typeFactory.errors.orgTeachersLength"
+					:options="[]"
+					class="text-grayColor" />
+				<SofaSelect
+					v-if="typeFactory.isOrganization"
+					v-model="typeFactory.orgStudentsLength"
+					placeholder="How many students do you have?"
+					:error="typeFactory.errors.orgStudentsLength"
+					:options="[]"
+					class="text-grayColor" />
+				<!-- Organization & Teachers -->
+				<SofaSelect
+					v-if="typeFactory.isTeacher || typeFactory.isOrganization"
 					v-model="typeFactory.sellMaterials"
 					placeholder="Do you sell study materials?"
 					:options="[]"
@@ -167,7 +189,7 @@
 						:key="studentType.key"
 						:for="studentType.value"
 						:class="[
-							'flex items-center justify-between gap-2 px-2 py-3 border-2 rounded-lg min-w-fit',
+							'flex items-center justify-between whitespace-nowrap gap-2 px-2 py-3 border-2 rounded-lg',
 							typeFactory.schoolType === studentType.value ? 'border-primaryPurple bg-lightPurple' : 'border-lightGray',
 						]">
 						<SofaNormalText :content="studentType.value" class="capitalize text-grayColor" />
@@ -209,8 +231,7 @@
 		<div v-if="tab === 'exams'" class="w-full flex flex-col py-5">
 			<template v-if="typeFactory.isStudent && typeFactory.isAspirantType">
 				<div class="w-full flex flex-col gap-4 justify-center items-center">
-					<SofaNormalText class="!font-semibold" content="Choose exams your studying for" />
-
+					<SofaNormalText v-if="typeFactory.isStudent" class="!font-semibold" content="Choose exams your studying for" />
 					<SofaSelect
 						v-model="typeFactory.institutions"
 						placeholder="Exams"
@@ -253,22 +274,63 @@
 					</div>
 				</div>
 			</template>
+			<template v-if="typeFactory.isTeacher">
+				<div class="w-full flex flex-col gap-4 justify-center items-center">
+					<SofaNormalText class="!font-semibold" content="What exams do you teach for?" />
+					<div class="w-full flex justify-center items-center flex-wrap gap-3">
+						<SofaBadge customClass="flex items-center gap-2" color="gray">Enter exam</SofaBadge>
+						<SofaBadge v-for="exam in gatewayExams" :key="exam.id" color="gray" customClass="flex items-center gap-2" as="a">
+							{{ exam.title }}
+							<SofaIcon name="circle-close" class="fill-deepGray h-[17px]" />
+						</SofaBadge>
+					</div>
+				</div>
+			</template>
+
+			<template v-if="typeFactory.isOrganization">
+				<div class="w-full flex flex-col gap-4 justify-center items-center">
+					<SofaNormalText class="!font-semibold" content="What exams does your organization cover?" />
+					<div class="w-full flex justify-center items-center flex-wrap gap-3">
+						<SofaBadge customClass="flex items-center gap-2" color="gray">Enter exam</SofaBadge>
+					</div>
+				</div>
+			</template>
 		</div>
 
 		<div v-if="tab === 'subjects'" class="w-full flex flex-col py-5 justify-center items-center">
-			<SofaNormalText class="!font-semibold" content="Choose subjects you are studying for" />
-			<div class="w-full flex justify-center items-center flex-wrap gap-3">
-				<SofaBadge customClass="flex items-center gap-2" color="gray">Enter exam</SofaBadge>
-				<!-- To convert items in the select to now be badges -->
-				<SofaSelect
-					v-if="typeFactory.activeInst"
-					v-model="typeFactory.getInstitution(typeFactory.activeInst).courseIds"
-					placeholder="Subjects"
-					multiple
-					:options="
-						courses.filter((c) => c.institutionId === typeFactory.activeInst).map((s) => ({ key: s.id, value: s.title }))
-					" />
-			</div>
+			<template v-if="typeFactory.isStudent">
+				<SofaNormalText class="!font-semibold" content="Choose subjects you are studying for" />
+				<div class="w-full flex justify-center items-center flex-wrap gap-3">
+					<SofaBadge customClass="flex items-center gap-2" color="gray">Enter exam</SofaBadge>
+					<!-- To convert items in the select to now be badges -->
+					<SofaSelect
+						v-if="typeFactory.activeInst"
+						v-model="typeFactory.getInstitution(typeFactory.activeInst).courseIds"
+						placeholder="Subjects"
+						multiple
+						:options="
+							courses.filter((c) => c.institutionId === typeFactory.activeInst).map((s) => ({ key: s.id, value: s.title }))
+						" />
+				</div>
+			</template>
+
+			<template v-if="typeFactory.isTeacher">
+				<div class="w-full flex flex-col gap-4 justify-center items-center">
+					<SofaNormalText class="!font-semibold" content="What subjects do you teach?" />
+					<div class="w-full flex justify-center items-center flex-wrap gap-3">
+						<SofaBadge customClass="flex items-center gap-2" color="gray">Enter subject</SofaBadge>
+					</div>
+				</div>
+			</template>
+
+			<template v-if="typeFactory.isOrganization">
+				<div class="w-full flex flex-col gap-4 justify-center items-center">
+					<SofaNormalText class="!font-semibold" content="What subjects does your organization cover?" />
+					<div class="w-full flex justify-center items-center flex-wrap gap-3">
+						<SofaBadge customClass="flex items-center gap-2" color="gray">Enter subject</SofaBadge>
+					</div>
+				</div>
+			</template>
 		</div>
 
 		<div v-if="tab === 'phone'" class="w-full flex flex-col py-5">
