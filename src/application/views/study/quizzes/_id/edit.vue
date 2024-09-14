@@ -209,27 +209,62 @@
 			</SofaModal>
 
 			<SofaModal v-if="showAddQuestionModal" :close="() => (showAddQuestionModal = false)">
-				<div class="w-full flex flex-col mdlg:p-6 gap-4 p-4 items-center justify-center">
+				<form
+					class="w-full flex flex-col mdlg:p-6 gap-6 p-4 items-center justify-center"
+					@submit.prevent="() => extras.addQuestion().then(() => (showAddQuestionModal = false))">
 					<div class="w-full text-center hidden md:inline-block">
-						<SofaHeading size="title" content="Choose question type" />
+						<SofaHeading size="title" content="Add question" />
 					</div>
 
 					<div class="w-full flex justify-between items-center md:!hidden">
-						<SofaHeading content="Choose question type" />
+						<SofaHeading content="Add question" />
 						<SofaIcon class="h-[16px]" name="circle-close" @click="showAddQuestionModal = false" />
 					</div>
 
-					<div class="w-full grid grid-cols-2 md:grid-cols-3 mdlg:grid-cols-4 gap-4">
-						<a
-							v-for="type in QuestionEntity.getAllTypes()"
-							:key="type.value"
-							class="col-span-1 p-3 flex flex-col gap-2 items-center justify-center hover:bg-lightBlue bg-lightGray rounded-lg"
-							@click="extras.addQuestion(type.value).then(() => (showAddQuestionModal = false))">
-							<SofaIcon :name="type.icon" class="h-[50px]" />
-							<SofaText :content="type.label" />
-						</a>
+					<SofaFormGroup>
+						<SofaLabel>Amount</SofaLabel>
+						<SofaInput
+							v-model="extras.aiGenQuestionFactory.amount"
+							type="number"
+							placeholder="Number of questions"
+							:error="extras.aiGenQuestionFactory.errors.amount" />
+					</SofaFormGroup>
+
+					<SofaFormGroup>
+						<SofaLabel>Type</SofaLabel>
+						<div class="w-full grid grid-cols-2 md:grid-cols-3 mdlg:grid-cols-4 gap-4">
+							<a
+								v-for="type in QuestionEntity.getAllTypes()"
+								:key="type.value"
+								class="col-span-1 p-4 flex flex-col gap-2 items-center justify-center hover:bg-lightBlue rounded-lg"
+								:class="[extras.aiGenQuestionFactory.questionType === type.value ? 'bg-lightBlue' : 'bg-lightGray']"
+								@click="extras.aiGenQuestionFactory.questionType = type.value">
+								<SofaIcon :name="type.icon" class="h-[50px]" />
+								<SofaText :content="type.label" />
+							</a>
+						</div>
+					</SofaFormGroup>
+
+					<div class="w-full flex items-center justify-between">
+						<SofaButton
+							type="button"
+							padding="px-5 py-2"
+							bgColor="bg-white"
+							textColor="text-grayColor"
+							class="border border-gray-100 hidden mdlg:inline-block"
+							@click.prevent="showAddQuestionModal = false">
+							Cancel
+						</SofaButton>
+
+						<SofaButton
+							:disabled="!extras.aiGenQuestionFactory.valid"
+							padding="px-5 mdlg:py-2 py-3"
+							class="mdlg:w-auto w-full"
+							type="submit">
+							Add
+						</SofaButton>
 					</div>
-				</div>
+				</form>
 			</SofaModal>
 		</template>
 

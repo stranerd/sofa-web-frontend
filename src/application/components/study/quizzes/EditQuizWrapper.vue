@@ -9,7 +9,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
 import { useDeleteQuiz, useEditQuiz } from '@app/composables/study/quizzes'
 import { UserEntity, UsersUseCases } from '@modules/users'
-import { QuestionEntity, QuestionTypes } from '@modules/study'
+import { QuestionEntity } from '@modules/study'
 
 const props = withDefaults(
 	defineProps<{
@@ -29,10 +29,11 @@ const {
 	questions,
 	fetched,
 	questionFactory,
+	aiGenQuestionFactory,
 	saveQuestion,
 	reorderQuestions,
 	deleteQuestion,
-	addQuestion,
+	addQuestions,
 	duplicateQuestion,
 	members,
 	requestAccess,
@@ -70,12 +71,13 @@ const extras = computed(() => ({
 	},
 	currentQuestionById: currentQuestionById.value,
 	questionFactory,
+	aiGenQuestionFactory,
 	sortedQuestions: quiz.value?.questions.map((qId) => questions.value.find((q) => q.id === qId)).filter(Boolean) ?? [],
 	reorderQuestions,
 	deleteQuestion,
-	addQuestion: async (type: QuestionTypes) => {
-		const question = await addQuestion(type)
-		if (question) secondarySelectedQuestionId.value = question.id
+	addQuestion: async () => {
+		const questions = await addQuestions()
+		if (questions?.at(0)) secondarySelectedQuestionId.value = questions[0].id
 	},
 	duplicateQuestion: async (original: QuestionEntity) => {
 		const question = await duplicateQuestion(original)

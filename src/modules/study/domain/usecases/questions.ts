@@ -1,8 +1,9 @@
 import { QuestionToModel } from '../../data/models/questions'
 import { QuestionEntity } from '../entities/questions'
+import { AiGenQuestionFactory } from '../factories/aiGenQuestions'
 import { QuestionFactory } from '../factories/questions'
 import { IQuestionRepository } from '../irepositories/iquestions'
-import { CoursableAccess, CreateAiQuestionsData } from '../types'
+import { CoursableAccess } from '../types'
 import { Conditions, Listeners } from '@modules/core'
 
 export class QuestionsUseCase {
@@ -16,8 +17,8 @@ export class QuestionsUseCase {
 		return await this.repository(quizId).add(data)
 	}
 
-	async aiAdd(quizId: string, data: CreateAiQuestionsData) {
-		return await this.repository(quizId).aiAdd(data)
+	async aiAdd(quizId: string, factory: AiGenQuestionFactory) {
+		return await this.repository(quizId).aiAdd(await factory.toModel())
 	}
 
 	async delete(quizId: string, id: string) {
