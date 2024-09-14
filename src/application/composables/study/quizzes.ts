@@ -101,11 +101,7 @@ export const useCreateQuiz = () => {
 	} = useAsyncFn(async () => {
 		const factory = new QuizFactory()
 		const quiz = await QuizzesUseCases.add(factory)
-		await Promise.all(
-			[QuestionEntity.getTemplate(QuestionTypes.multipleChoice), QuestionEntity.getTemplate(QuestionTypes.trueOrFalse)].map((q) =>
-				QuestionsUseCases.add(quiz.id, q),
-			),
-		).catch()
+		await QuestionsUseCases.aiAdd(quiz.id, { amount: 2, questionType: QuestionTypes.multipleChoice })
 		return quiz
 	})
 
@@ -180,9 +176,8 @@ export const useEditQuiz = (id: string) => {
 		},
 	)
 
-	const { asyncFn: addQuestion } = useAsyncFn(async (type: QuestionTypes) => {
-		const data = QuestionEntity.getTemplate(type)
-		const question = await QuestionsUseCases.add(id, data)
+	const { asyncFn: addQuestion } = useAsyncFn(async (questionType: QuestionTypes) => {
+		const [question] = await QuestionsUseCases.aiAdd(id, { amount: 1, questionType })
 		await setMessage('Question saved')
 		return question
 	})
