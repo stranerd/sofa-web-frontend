@@ -61,7 +61,7 @@
 										<SofaImageLoader :photoUrl="extras.picture" class="h-[80px] w-[140px] rounded-custom" />
 										<div class="w-full flex flex-col h-full gap-1">
 											<div class="w-full flex items-center justify-between">
-												<SofaHeaderText :content="play.title" size="xl" class="text-left !line-clamp-1" />
+												<SofaHeading :content="play.title" size="title" clamp />
 												<SofaIcon class="h-[16px]" name="share" @click="extras.share()" />
 											</div>
 											<div class="flex gap-2 items-center">

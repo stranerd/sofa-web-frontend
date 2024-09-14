@@ -10,9 +10,7 @@
 					<slot name="title" />
 					<SofaIcon v-if="showArrow" class="h-[12px] fill-black" name="arrow-right" />
 				</div>
-				<SofaNormalText customClass="text-left w-full !line-clamp-1">
-					{{ data.subTitle }}
-				</SofaNormalText>
+				<SofaText clamp>{{ data.subTitle }}</SofaText>
 			</div>
 		</div>
 
@@ -24,13 +22,13 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import SofaIcon from '../SofaIcon'
-import { SofaNormalText } from '../SofaTypography'
+import { SofaText } from '../SofaTypography'
 
 export default defineComponent({
 	name: 'SofaIconCard',
 	components: {
 		SofaIcon,
-		SofaNormalText,
+		SofaText,
 	},
 	props: {
 		customClass: {

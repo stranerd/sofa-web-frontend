@@ -36,9 +36,9 @@
 					<div class="w-full flex items-center gap-2 justify-between">
 						<div class="flex items-center gap-2">
 							<SofaAvatar :size="20" :photoUrl="material.user.bio.photo?.link" :userId="material.user.id" />
-							<SofaNormalText class="!whitespace-nowrap !line-clamp-1">
+							<SofaText clamp class="!whitespace-nowrap">
 								{{ material.user.id === id ? 'You' : material.user.bio.publicName }}
-							</SofaNormalText>
+							</SofaText>
 
 							<span class="size-[5px] rounded-full bg-bodyBlack" />
 
@@ -99,7 +99,7 @@
 
 				<div v-for="(section, index) in sections" :key="index" class="w-full flex flex-col gap-3">
 					<a class="bg-lightGray rounded-custom p-4 gap-4 flex items-center" @click="toggleSection(index)">
-						<SofaNormalText class="!font-bold !line-clamp-1" :content="section.label" />
+						<SofaHeading clamp :content="section.label" />
 						<span class="grow" />
 						<SofaNormalText>
 							{{ section.items.length }} {{ $utils.pluralize(section.items.length, 'material', 'materials') }}
@@ -115,8 +115,8 @@
 							<div class="flex items-center gap-3" :class="{ 'opacity-50': !hasAccess }">
 								<SofaIcon class="h-[42px] fill-deepGray" :name="item.icon" />
 								<div class="flex flex-col gap-1">
-									<SofaNormalText class="!font-bold !line-clamp-1" :content="item.title" />
-									<SofaNormalText color="text-grayColor" class="!line-clamp-1 capitalize" :content="item.info" />
+									<SofaHeading clamp :content="item.title" />
+									<SofaText clamp class="capitalize" :content="item.info" />
 								</div>
 							</div>
 
