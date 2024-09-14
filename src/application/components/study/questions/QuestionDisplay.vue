@@ -116,7 +116,7 @@
 						<SofaText :content="(index + 1).toString()" />
 					</div>
 					<div class="p-3 rounded-xl border-2 grow" :class="buildClass(element, index)">
-						<SofaText :content="element" class="!line-clamp-1" />
+						<SofaText :content="element" clamp />
 					</div>
 				</div>
 			</VueDraggable>
@@ -130,7 +130,7 @@
 					class="w-full flex items-center rounded-xl grow p-3 border-2 gap-3"
 					:class="buildClass(answer.value[index], index)">
 					<SofaIcon :name="QuestionEntity.getShape(index)" :class="buildIconClass(answer.value[index], index)" />
-					<SofaText class="line-clamp-1" :content="element" />
+					<SofaText clamp :content="element" />
 				</div>
 			</VueDraggable>
 
@@ -141,7 +141,7 @@
 					class="w-full flex items-center rounded-xl grow p-3 border-2 gap-3 cursor-move"
 					:class="buildClass(element, index)">
 					<SofaIcon :name="QuestionEntity.getShape(index)" :class="buildIconClass(element, index)" />
-					<SofaText class="line-clamp-1" :content="element" />
+					<SofaText clamp :content="element" />
 				</div>
 			</VueDraggable>
 		</div>

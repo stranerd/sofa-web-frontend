@@ -24,10 +24,10 @@ export class CourseFactory extends BaseFactory<CourseEntity, CourseToModel, Keys
 
 	constructor(isVerified: boolean) {
 		super({
-			title: 'Untitled Course',
-			description: 'Here is the course description',
+			title: '',
+			description: '',
 			photo: null,
-			topic: 'Physics',
+			topic: '',
 			tags: [],
 			amount: isVerified ? 5000 : 0,
 			currency: Currencies.NGN,

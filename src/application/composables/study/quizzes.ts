@@ -94,22 +94,25 @@ export const useQuiz = (id: string, skip?: { questions?: boolean; members?: bool
 }
 
 export const useCreateQuiz = () => {
+	const router = useRouter()
+	const factory = new QuizFactory()
 	const {
 		asyncFn: createQuiz,
 		loading,
 		error,
 	} = useAsyncFn(async () => {
-		const factory = new QuizFactory()
 		const quiz = await QuizzesUseCases.add(factory)
 		await Promise.all(
-			[QuestionEntity.getTemplate(QuestionTypes.multipleChoice), QuestionEntity.getTemplate(QuestionTypes.trueOrFalse)].map((q) =>
-				QuestionsUseCases.add(quiz.id, q),
+			[QuestionTypes.multipleChoice, QuestionTypes.trueOrFalse].map((questionType) =>
+				QuestionsUseCases.aiAdd(quiz.id, { amount: 1, questionType }),
 			),
 		).catch()
+		await router.push(`/study/quizzes/${quiz.id}/edit`)
+		factory.reset()
 		return quiz
 	})
 
-	return { createQuiz, error, loading }
+	return { factory, createQuiz, error, loading }
 }
 
 export const useEditQuiz = (id: string) => {
@@ -180,9 +183,10 @@ export const useEditQuiz = (id: string) => {
 		},
 	)
 
-	const { asyncFn: addQuestion } = useAsyncFn(async (type: QuestionTypes) => {
-		const data = QuestionEntity.getTemplate(type)
-		await QuestionsUseCases.add(id, data)
+	const { asyncFn: addQuestion } = useAsyncFn(async (questionType: QuestionTypes) => {
+		const [question] = await QuestionsUseCases.aiAdd(id, { amount: 1, questionType })
+		await setMessage('Question saved')
+		return question
 	})
 
 	const { asyncFn: saveQuestion } = useAsyncFn(async (questionId: string, factory: QuestionFactory) => {
@@ -190,9 +194,10 @@ export const useEditQuiz = (id: string) => {
 		await setMessage('Question saved')
 	})
 
-	const { asyncFn: duplicateQuestion } = useAsyncFn(async (question: QuestionEntity) => {
-		await QuestionsUseCases.add(id, question)
+	const { asyncFn: duplicateQuestion } = useAsyncFn(async (original: QuestionEntity) => {
+		const question = await QuestionsUseCases.add(id, original)
 		await setMessage('Question duplicated')
+		return question
 	})
 
 	const { asyncFn: requestAccess } = useAsyncFn(

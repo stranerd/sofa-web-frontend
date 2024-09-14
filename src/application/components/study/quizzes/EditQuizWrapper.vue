@@ -9,6 +9,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
 import { useDeleteQuiz, useEditQuiz } from '@app/composables/study/quizzes'
 import { UserEntity, UsersUseCases } from '@modules/users'
+import { QuestionEntity, QuestionTypes } from '@modules/study'
 
 const props = withDefaults(
 	defineProps<{
@@ -41,6 +42,7 @@ const {
 const { deleteQuiz } = useDeleteQuiz()
 
 const selectedQuestionId = ref(props.selectedQuestion)
+const secondarySelectedQuestionId = ref<string | null>(null)
 const currentQuestionById = computed(() => questions.value.find((q) => q.id === selectedQuestionId.value))
 
 const saveCurrentQuestion = async () => {
@@ -71,8 +73,14 @@ const extras = computed(() => ({
 	sortedQuestions: quiz.value?.questions.map((qId) => questions.value.find((q) => q.id === qId)).filter(Boolean) ?? [],
 	reorderQuestions,
 	deleteQuestion,
-	addQuestion,
-	duplicateQuestion,
+	addQuestion: async (type: QuestionTypes) => {
+		const question = await addQuestion(type)
+		if (question) secondarySelectedQuestionId.value = question.id
+	},
+	duplicateQuestion: async (original: QuestionEntity) => {
+		const question = await duplicateQuestion(original)
+		if (question) secondarySelectedQuestionId.value = question.id
+	},
 	deleteQuiz: async () => (quiz.value ? deleteQuiz(quiz.value) : undefined),
 	saveCurrentQuestion,
 	requestAccess,
@@ -103,6 +111,19 @@ watch(
 		router[q ? 'push' : 'replace'](`${quizPath}?q=${v}`).catch()
 		const edit = user.value?.account.editing.quizzes
 		if (edit?.id !== props.id || edit?.questionId !== v) UsersUseCases.updateEditingQuizzes({ id: props.id, questionId: v }).catch()
+	},
+	{ immediate: true },
+)
+
+watch(
+	[questions, secondarySelectedQuestionId],
+	() => {
+		const id = secondarySelectedQuestionId.value
+		if (!id) return
+		if (questions.value.some((q) => q.id === id)) {
+			selectedQuestionId.value = id
+			secondarySelectedQuestionId.value = null
+		}
 	},
 	{ immediate: true },
 )
