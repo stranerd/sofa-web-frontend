@@ -182,7 +182,9 @@ export const useEditQuiz = (id: string) => {
 
 	const { asyncFn: addQuestion } = useAsyncFn(async (type: QuestionTypes) => {
 		const data = QuestionEntity.getTemplate(type)
-		await QuestionsUseCases.add(id, data)
+		const question = await QuestionsUseCases.add(id, data)
+		await setMessage('Question saved')
+		return question
 	})
 
 	const { asyncFn: saveQuestion } = useAsyncFn(async (questionId: string, factory: QuestionFactory) => {
@@ -190,9 +192,10 @@ export const useEditQuiz = (id: string) => {
 		await setMessage('Question saved')
 	})
 
-	const { asyncFn: duplicateQuestion } = useAsyncFn(async (question: QuestionEntity) => {
-		await QuestionsUseCases.add(id, question)
+	const { asyncFn: duplicateQuestion } = useAsyncFn(async (original: QuestionEntity) => {
+		const question = await QuestionsUseCases.add(id, original)
 		await setMessage('Question duplicated')
+		return question
 	})
 
 	const { asyncFn: requestAccess } = useAsyncFn(

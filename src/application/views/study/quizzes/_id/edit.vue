@@ -102,8 +102,7 @@
 					<div class="w-full flex mdlg:hidden justify-between items-center bg-lightGray p-4">
 						<SofaIcon class="h-[19px]" name="circle-close" @click="$utils.goBack()" />
 
-						<SofaNormalText
-							class="!font-bold !text-sm"
+						<SofaHeading
 							:content="extras.currentQuestionById ? QuestionEntity.getLabel(extras.currentQuestionById.type) : ''" />
 
 						<div class="flex items-center gap-3">
@@ -153,7 +152,7 @@
 			<SofaModal v-if="showMoreOptions" :close="() => (showMoreOptions = false)">
 				<div class="flex flex-col gap-4 justify-between">
 					<div class="mdlg:hidden flex gap-2 justify-between items-center p-4 border-b border-lightGray">
-						<SofaNormalText class="!text-sm !font-bold" content="Options" />
+						<SofaHeading content="Options" />
 						<SofaIcon class="h-[19px]" name="circle-close" @click="showMoreOptions = false" />
 					</div>
 
@@ -190,7 +189,7 @@
 			<SofaModal v-if="showCurrentlyEditingModal" :close="() => (showCurrentlyEditingModal = false)">
 				<div class="flex flex-col p-6 gap-6 justify-between">
 					<div class="mdlg:hidden flex gap-2 justify-between items-center">
-						<SofaHeaderText content="Currently editing" />
+						<SofaHeading size="title" content="Currently editing" />
 						<SofaIcon class="h-[19px]" name="circle-close" @click="showCurrentlyEditingModal = false" />
 					</div>
 					<div class="flex flex-col gap-4 w-full">
@@ -199,12 +198,12 @@
 							:key="user.id"
 							class="flex items-center gap-2">
 							<SofaAvatar v-if="index < 3" :photoUrl="user.bio.photo?.link" :size="36" class="-ml-1" />
-							<SofaNormalText :content="user.publicName" size="lg" />
+							<SofaHeading :content="user.publicName" size="mid" />
 						</div>
-						<SofaNormalText
+						<SofaText
 							v-if="!(extras.usersByQuestions[extras.currentQuestionById?.id ?? ''] ?? []).length"
 							content="No users currently editing this question"
-							size="xl" />
+							size="title" />
 					</div>
 				</div>
 			</SofaModal>
@@ -212,11 +211,11 @@
 			<SofaModal v-if="showAddQuestionModal" :close="() => (showAddQuestionModal = false)">
 				<div class="w-full flex flex-col mdlg:p-6 gap-4 p-4 items-center justify-center">
 					<div class="w-full text-center hidden md:inline-block">
-						<SofaHeaderText class="!text-xl !font-bold" content="Choose question type" />
+						<SofaHeading size="title" content="Choose question type" />
 					</div>
 
 					<div class="w-full flex justify-between items-center md:!hidden">
-						<SofaNormalText class="!font-bold !text-base" content="Choose question type" />
+						<SofaHeading content="Choose question type" />
 						<SofaIcon class="h-[16px]" name="circle-close" @click="showAddQuestionModal = false" />
 					</div>
 
@@ -227,7 +226,7 @@
 							class="col-span-1 p-3 flex flex-col gap-2 items-center justify-center hover:bg-lightBlue bg-lightGray rounded-lg"
 							@click="extras.addQuestion(type.value).then(() => (showAddQuestionModal = false))">
 							<SofaIcon :name="type.icon" class="h-[50px]" />
-							<SofaNormalText :content="type.label" />
+							<SofaText :content="type.label" />
 						</a>
 					</div>
 				</div>
