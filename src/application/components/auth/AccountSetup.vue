@@ -189,7 +189,7 @@
 						:key="studentType.key"
 						:for="studentType.value"
 						:class="[
-							'flex items-center justify-between whitespace-nowrap gap-2 px-2 py-3 border-2 rounded-lg',
+							'flex items-center justify-between whitespace-nowrap gap-2 px-2 py-3 border-2 rounded-lg cursor-pointer',
 							typeFactory.schoolType === studentType.value ? 'border-primaryPurple bg-lightPurple' : 'border-lightGray',
 						]">
 						<SofaNormalText :content="studentType.value" class="capitalize text-grayColor" />
@@ -229,106 +229,56 @@
 		</div>
 
 		<div v-if="tab === 'exams'" class="w-full flex flex-col py-5">
-			<template v-if="typeFactory.isStudent && typeFactory.isAspirantType">
+			<template v-if="(typeFactory.isStudent && typeFactory.isAspirantType) || typeFactory.isTeacher || typeFactory.isOrganization">
 				<div class="w-full flex flex-col gap-4 justify-center items-center">
 					<SofaNormalText v-if="typeFactory.isStudent" class="!font-semibold" content="Choose exams your studying for" />
-					<SofaSelect
-						v-model="typeFactory.institutions"
-						placeholder="Exams"
-						multiple
-						:options="gatewayExams.map((s) => ({ key: s.id, value: s.title }))" />
-					<!-- To convert set of datas into badges here is the code snippet -->
+					<SofaNormalText v-if="typeFactory.isTeacher" class="!font-semibold" content="What exams do you teach for?" />
+					<SofaNormalText
+						v-if="typeFactory.isOrganization"
+						class="!font-semibold"
+						content="What exams does your organization cover?" />
 
-					<!-- <div class="w-full flex justify-center items-center flex-wrap gap-3">
-						<SofaBadge customClass="flex items-center gap-2" color="gray">Enter exam</SofaBadge>
-						<SofaBadge
-							v-for="exam in gatewayExams"
-							:key="exam.id"
-							:color="typeFactory.activeInst === exam.id ? 'purple' : 'gray'"
-							customClass="flex items-center gap-2"
-							as="a"
-							@click.prevent="typeFactory.activeInst = exam.id">
-							{{ exam.title }}
-							<SofaIcon
-								:name="typeFactory.activeInst === exam.id ? 'done' : 'circle-close'"
-								:class="typeFactory.activeInst === exam.id ? 'fill-white' : 'fill-deepGray'"
-								class="h-[17px]" />
-						</SofaBadge>
-					</div> -->
-					<div class="w-full flex flex-wrap gap-3">
-						<SofaBadge
-							v-for="institution in typeFactory.institutions
-								.map((id) => gatewayExams.find((i) => i.id === id))
-								.filter(Boolean)"
-							:key="institution.id"
-							:color="typeFactory.activeInst === institution.id ? 'purple' : 'gray'"
-							customClass="flex items-center gap-2"
-							as="a"
-							@click.prevent="typeFactory.activeInst = institution.id">
-							{{ institution.title }}
-							<SofaIcon
-								:name="typeFactory.activeInst === institution.id ? 'done' : 'circle-close'"
-								:class="typeFactory.activeInst === institution.id ? 'fill-white' : 'fill-deepGray'"
-								class="h-[17px]" />
-						</SofaBadge>
-					</div>
-				</div>
-			</template>
-			<template v-if="typeFactory.isTeacher">
-				<div class="w-full flex flex-col gap-4 justify-center items-center">
-					<SofaNormalText class="!font-semibold" content="What exams do you teach for?" />
 					<div class="w-full flex justify-center items-center flex-wrap gap-3">
 						<SofaBadge customClass="flex items-center gap-2" color="gray">Enter exam</SofaBadge>
-						<SofaBadge v-for="exam in gatewayExams" :key="exam.id" color="gray" customClass="flex items-center gap-2" as="a">
-							{{ exam.title }}
-							<SofaIcon name="circle-close" class="fill-deepGray h-[17px]" />
+						<SofaBadge
+							v-for="exam in gatewayExams.map((s) => ({ key: s.id, value: s.title }))"
+							:key="exam.key"
+							:color="typeFactory.institutions.includes(exam.key) ? 'purple' : 'gray'"
+							customClass="flex items-center gap-2"
+							as="a"
+							@click.prevent="toggleInstitution(exam.key)">
+							{{ exam.value }}
+							<SofaIcon
+								:name="typeFactory.institutions.includes(exam.key) ? 'done' : 'circle-close'"
+								:class="typeFactory.institutions.includes(exam.key) ? 'fill-white' : 'fill-deepGray'"
+								class="h-[17px]" />
 						</SofaBadge>
-					</div>
-				</div>
-			</template>
-
-			<template v-if="typeFactory.isOrganization">
-				<div class="w-full flex flex-col gap-4 justify-center items-center">
-					<SofaNormalText class="!font-semibold" content="What exams does your organization cover?" />
-					<div class="w-full flex justify-center items-center flex-wrap gap-3">
-						<SofaBadge customClass="flex items-center gap-2" color="gray">Enter exam</SofaBadge>
 					</div>
 				</div>
 			</template>
 		</div>
 
 		<div v-if="tab === 'subjects'" class="w-full flex flex-col py-5 justify-center items-center">
-			<template v-if="typeFactory.isStudent">
-				<SofaNormalText class="!font-semibold" content="Choose subjects you are studying for" />
-				<div class="w-full flex justify-center items-center flex-wrap gap-3">
+			<template v-if="typeFactory.isStudent || typeFactory.isTeacher || typeFactory.isOrganization">
+				<SofaNormalText v-if="typeFactory.isStudent" class="!font-semibold" content="Choose subjects you are studying for" />
+				<SofaNormalText v-if="typeFactory.isTeacher" class="!font-semibold" content="What subjects do you teach?" />
+				<SofaNormalText
+					v-if="typeFactory.isOrganization"
+					class="!font-semibold"
+					content="What subjects does your organization cover?" />
+				<div class="w-full flex justify-center items-center flex-wrap gap-3 py-2">
 					<SofaBadge customClass="flex items-center gap-2" color="gray">Enter exam</SofaBadge>
-					<!-- To convert items in the select to now be badges -->
-					<SofaSelect
-						v-if="typeFactory.activeInst"
-						v-model="typeFactory.getInstitution(typeFactory.activeInst).courseIds"
-						placeholder="Subjects"
-						multiple
-						:options="
-							courses.filter((c) => c.institutionId === typeFactory.activeInst).map((s) => ({ key: s.id, value: s.title }))
-						" />
-				</div>
-			</template>
-
-			<template v-if="typeFactory.isTeacher">
-				<div class="w-full flex flex-col gap-4 justify-center items-center">
-					<SofaNormalText class="!font-semibold" content="What subjects do you teach?" />
-					<div class="w-full flex justify-center items-center flex-wrap gap-3">
-						<SofaBadge customClass="flex items-center gap-2" color="gray">Enter subject</SofaBadge>
-					</div>
-				</div>
-			</template>
-
-			<template v-if="typeFactory.isOrganization">
-				<div class="w-full flex flex-col gap-4 justify-center items-center">
-					<SofaNormalText class="!font-semibold" content="What subjects does your organization cover?" />
-					<div class="w-full flex justify-center items-center flex-wrap gap-3">
-						<SofaBadge customClass="flex items-center gap-2" color="gray">Enter subject</SofaBadge>
-					</div>
+					<SofaBadge
+						v-for="course in courses
+							.filter((c) => c.institutionId === typeFactory.activeInst)
+							.map((s) => ({ key: s.id, value: s.title }))"
+						:key="course.key"
+						:color="typeFactory.getInstitution(typeFactory.activeInst).courseIds.includes(course.key) ? 'purple' : 'gray'"
+						customClass="flex items-center gap-2"
+						as="a"
+						@click="toggleCourse(course.key)"
+					>{{ course.value }}</SofaBadge
+					>
 				</div>
 			</template>
 		</div>
@@ -472,6 +422,22 @@ const handleAccountSetup = async () => {
 
 const complete = async () => {
 	await router.push(await $utils.getRedirectToRoute())
+}
+
+const toggleCourse = (key: string) => {
+	const institution = typeFactory.getInstitution(typeFactory.activeInst)
+	const index = institution.courseIds.indexOf(key)
+	index === -1 ? institution.courseIds.push(key) : institution.courseIds.splice(index, 1)
+}
+
+const toggleInstitution = (key: string) => {
+	if (typeFactory.institutions.includes(key)) {
+		typeFactory.institutions = []
+		typeFactory.activeInst = null
+	} else {
+		typeFactory.institutions = [key]
+		typeFactory.activeInst = key
+	}
 }
 
 const { courses, fetchInstitutionCourses } = useCourseList()
