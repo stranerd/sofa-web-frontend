@@ -1,16 +1,21 @@
 <template>
 	<form class="flex flex-col gap-4" @submit.prevent="submit">
+		<SofaText v-if="!auth?.roles.isVerified">
+			You need to <router-link class="text-primaryBlue" to="/verification">get verified</router-link> to be able to sell this course
+			on our marketplace
+		</SofaText>
+
 		<div class="w-full md:grid md:grid-cols-2 flex flex-col-reverse gap-4">
 			<div class="col-span-1 w-full flex flex-col gap-3">
 				<SofaTextField
 					v-model="factory.title"
 					customClass="rounded-custom !bg-lightGray"
 					type="text"
-					placeholder="Title"
+					placeholder="Enter title"
 					borderColor="border-transparent"
 					:error="factory.errors.title" />
 
-				<SofaTextarea v-model="factory.description" :rows="4" placeholder="Description" :error="factory.errors.description" />
+				<SofaTextarea v-model="factory.description" :rows="4" placeholder="Enter description" :error="factory.errors.description" />
 
 				<SofaSelect
 					v-model="factory.topic"
@@ -18,9 +23,26 @@
 					:error="factory.errors.topic"
 					:options="topics.map((t) => ({ key: t.title, value: t.title }))"
 					custom />
+
+				<SofaTextField
+					v-if="auth?.roles.isVerified"
+					v-model="factory.amount"
+					type="number"
+					customClass="rounded-custom !bg-lightGray"
+					placeholder="Enter price"
+					:error="factory.errors.amount"
+					borderColor="border-transparent">
+					<template #inner-suffix>
+						<div class="flex items-center gap-1 border-l-2 border-darkLightGray pl-3">
+							<SofaHeading size="title" class="text-deepGray">
+								{{ $utils.getCurrency(factory.currency) }}
+							</SofaHeading>
+						</div>
+					</template>
+				</SofaTextField>
 			</div>
 
-			<div class="col-span-1 flex flex-col w-full pb-4 md:!pb-0">
+			<div class="col-span-1 flex flex-col w-full pb-4 md:pb-0">
 				<SofaImageLoader class="w-full h-[240px] rounded-custom relative" :photoUrl="factory.photo?.link ?? '/images/default.svg'">
 					<div class="absolute bottom-0 left-0 pb-3 flex w-full items-center justify-center">
 						<SofaFileInput v-model="factory.photo" accept="image/*">
@@ -32,30 +54,6 @@
 					</div>
 				</SofaImageLoader>
 			</div>
-		</div>
-
-		<div class="w-full flex flex-col gap-2">
-			<SofaCheckbox
-				:modelValue="factory.timeLimit === null"
-				type="switch"
-				@update:modelValue="(selected: boolean) => (factory.timeLimit = selected ? null : (quiz?.questions.length ?? 0) * 30)">
-				<SofaText content="Use individual question times" class="capitalize" />
-			</SofaCheckbox>
-			<SofaTextField
-				v-if="factory.timeLimit !== null"
-				v-model="factory.timeLimit"
-				type="number"
-				:min="1"
-				customClass="rounded-custom !bg-lightGray"
-				placeholder="Enter time limit"
-				:error="factory.errors.timeLimit"
-				borderColor="border-transparent">
-				<template #inner-suffix>
-					<div class="flex items-center gap-1 border-l-2 border-darkLightGray pl-3">
-						<SofaText content="s" />
-					</div>
-				</template>
-			</SofaTextField>
 		</div>
 
 		<div class="w-full flex flex-col gap-2">
@@ -74,17 +72,6 @@
 				</template>
 			</div>
 		</div>
-
-		<div class="flex gap-4 items-center flex-wrap">
-			<SofaText content="Allowed Modes: " />
-			<SofaCheckbox v-for="mode in modes" :key="mode.value" v-model="factory[mode.key]" type="switch">
-				<SofaText :content="mode.value" class="capitalize" />
-			</SofaCheckbox>
-		</div>
-
-		<SofaCheckbox v-if="isAdmin" v-model="factory.isForTutors" type="switch">
-			<SofaText content="Is for tutor assessments?" />
-		</SofaCheckbox>
 
 		<div class="w-full flex items-center justify-between">
 			<SofaButton
@@ -119,27 +106,19 @@
 import { watch } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useGenericTagsList, useTopicsList } from '@app/composables/interactions/tags'
-import { QuizEntity, QuizFactory, QuizModes } from '@modules/study'
+import { CourseEntity, CourseFactory } from '@modules/study'
 
 const props = defineProps<{
-	quiz?: QuizEntity
-	factory: QuizFactory
 	cancel: () => void
+	factory: CourseFactory
 	submit: () => void
 	publish?: () => void
+	course: CourseEntity
 }>()
 
-const { isAdmin } = useAuth()
+const { auth } = useAuth()
 const { topics } = useTopicsList()
 const { tags } = useGenericTagsList()
-
-const modes: { value: QuizModes; key: keyof typeof props.factory }[] = [
-	{ value: QuizModes.games, key: 'modeGames' },
-	{ value: QuizModes.tests, key: 'modeTests' },
-	{ value: QuizModes.assessments, key: 'modeAssessments' },
-	{ value: QuizModes.practice, key: 'modePractice' },
-	{ value: QuizModes.flashcards, key: 'modeFlashcards' },
-]
 
 watch(
 	topics,

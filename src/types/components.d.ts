@@ -33,6 +33,7 @@ declare module 'vue' {
     ClassLessonLayout: typeof import('./../application/layouts/ClassLessonLayout.vue')['default']
     ContentDetails: typeof import('./../application/components/study/ContentDetails.vue')['default']
     ConversationMoreOptionsModal: typeof import('./../application/components/conversations/ConversationMoreOptionsModal.vue')['default']
+    CourseForm: typeof import('./../application/components/study/courses/CourseForm.vue')['default']
     CourseSections: typeof import('./../application/components/study/courses/CourseSections.vue')['default']
     CreateAnnouncementForm: typeof import('./../application/components/organizations/announcements/CreateAnnouncementForm.vue')['default']
     CreateClassModal: typeof import('./../application/components/organizations/classes/CreateClassModal.vue')['default']

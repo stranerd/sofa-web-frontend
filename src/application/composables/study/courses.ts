@@ -65,44 +65,43 @@ export const useCourse = (id: string) => {
 
 export const useCreateCourse = () => {
 	const { auth } = useAuth()
+	const factory = new CourseFactory(auth.value?.roles.isVerified ?? false)
 	const {
 		asyncFn: createCourse,
 		loading,
 		error,
 	} = useAsyncFn(async () => {
-		const factory = new CourseFactory(auth.value?.roles.isVerified ?? false)
 		const course = await CoursesUseCases.add(factory)
 		const sectionsFactory = new CourseSectionsFactory()
 		sectionsFactory.loadEntity([
 			{ items: [], label: 'Introduction' },
 			{ items: [], label: 'Section 1' },
 		])
-
 		return await CoursesUseCases.updateSections(course.id, sectionsFactory)
 	})
 
-	return { createCourse, error, loading }
+	return { factory, createCourse, error, loading }
 }
 
 export const useEditCourse = (id: string) => {
 	const { auth } = useAuth()
 	const router = useRouter()
 	const { course, fetched } = useCourse(id)
-	const courseFactory = new CourseFactory(auth.value?.roles.isVerified ?? false)
+	const factory = new CourseFactory(auth.value?.roles.isVerified ?? false)
 	const { setMessage } = useSuccessHandler()
 
 	watch(
 		course,
 		() => {
-			if (course.value) courseFactory.loadEntity(course.value)
+			if (course.value) factory.loadEntity(course.value)
 		},
 		{ immediate: true },
 	)
 
 	const { asyncFn: updateCourse } = useAsyncFn(async () => {
-		await CoursesUseCases.update(id, courseFactory)
+		await CoursesUseCases.update(id, factory)
 		await setMessage('Course updated')
-		await courseFactory.reset()
+		factory.reset()
 		useModals().study.editCourse.close()
 	})
 
@@ -141,7 +140,7 @@ export const useEditCourse = (id: string) => {
 	return {
 		course,
 		fetched,
-		courseFactory,
+		factory,
 		updateCourse,
 		publishCourse,
 		deleteCourse,
