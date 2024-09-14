@@ -94,18 +94,24 @@ export const useQuiz = (id: string, skip?: { questions?: boolean; members?: bool
 }
 
 export const useCreateQuiz = () => {
+	const router = useRouter()
+	const factory = new QuizFactory()
 	const {
 		asyncFn: createQuiz,
 		loading,
 		error,
 	} = useAsyncFn(async () => {
-		const factory = new QuizFactory()
 		const quiz = await QuizzesUseCases.add(factory)
-		await QuestionsUseCases.aiAdd(quiz.id, { amount: 2, questionType: QuestionTypes.multipleChoice })
+		await Promise.all(
+			[QuestionTypes.multipleChoice, QuestionTypes.trueOrFalse].map((questionType) =>
+				QuestionsUseCases.aiAdd(quiz.id, { amount: 1, questionType }),
+			),
+		).catch()
+		await router.push(`/study/quizzes/${quiz.id}/edit`)
 		return quiz
 	})
 
-	return { createQuiz, error, loading }
+	return { factory, createQuiz, error, loading }
 }
 
 export const useEditQuiz = (id: string) => {

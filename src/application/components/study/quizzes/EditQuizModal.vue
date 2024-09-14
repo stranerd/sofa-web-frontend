@@ -1,5 +1,5 @@
 <template>
-	<div class="w-full h-full flex flex-col gap-4 p-4 mdlg:p-6 text-grayColor">
+	<div class="w-full h-full flex flex-col gap-4 p-4 mdlg:p-6">
 		<SofaHeading size="title" class="hidden mdlg:flex">Update Quiz</SofaHeading>
 
 		<div class="w-full flex justify-between items-center sticky top-0 left-0 mdlg:hidden">
