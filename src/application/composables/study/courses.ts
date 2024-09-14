@@ -64,6 +64,7 @@ export const useCourse = (id: string) => {
 }
 
 export const useCreateCourse = () => {
+	const router = useRouter()
 	const { auth } = useAuth()
 	const factory = new CourseFactory(auth.value?.roles.isVerified ?? false)
 	const {
@@ -77,7 +78,10 @@ export const useCreateCourse = () => {
 			{ items: [], label: 'Introduction' },
 			{ items: [], label: 'Section 1' },
 		])
-		return await CoursesUseCases.updateSections(course.id, sectionsFactory)
+		const updated = await CoursesUseCases.updateSections(course.id, sectionsFactory)
+		await router.push(`/study/courses/${updated.id}/edit`)
+		factory.reset()
+		return updated
 	})
 
 	return { factory, createCourse, error, loading }

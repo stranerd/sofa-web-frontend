@@ -109,11 +109,11 @@ import { useGenericTagsList, useTopicsList } from '@app/composables/interactions
 import { CourseEntity, CourseFactory } from '@modules/study'
 
 const props = defineProps<{
+	course?: CourseEntity
 	cancel: () => void
 	factory: CourseFactory
 	submit: () => void
 	publish?: () => void
-	course: CourseEntity
 }>()
 
 const { auth } = useAuth()

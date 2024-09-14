@@ -108,6 +108,7 @@ export const useCreateQuiz = () => {
 			),
 		).catch()
 		await router.push(`/study/quizzes/${quiz.id}/edit`)
+		factory.reset()
 		return quiz
 	})
 
