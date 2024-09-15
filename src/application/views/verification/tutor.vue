@@ -2,12 +2,12 @@
 	<ExpandedLayout width="mdlg:!w-[60%] lg:!w-[45%]">
 		<div class="w-full flex mdlg:hidden items-center gap-3 justify-between bg-lightGray p-4 sticky top-0">
 			<SofaIcon class="h-[15px]" name="arrow-left" @click="$utils.goBack()" />
-			<SofaNormalText class="!font-bold !text-base"> Become a tutor</SofaNormalText>
+			<SofaHeading> Become a tutor</SofaHeading>
 			<span />
 		</div>
 		<div class="w-full flex flex-col grow overflow-y-auto gap-5 mdlg:px-0 px-4 mdlg:py-4">
 			<div class="w-full hidden items-center justify-between mdlg:flex">
-				<SofaHeaderText class="!text-2xl !font-bold"> Become a tutor </SofaHeaderText>
+				<SofaHeading size="title"> Become a tutor </SofaHeading>
 				<SofaButton :disabled="buttonProps.disabled" padding="px-5 py-2" @click="buttonProps.handler">
 					{{ buttonProps.label }}
 				</SofaButton>
@@ -20,7 +20,7 @@
 
 			<template v-if="currentStep === 'profile'">
 				<div class="w-full flex flex-col gap-4 bg-white rounded-2xl mdlg:p-5 p-4 shadow-custom">
-					<SofaHeaderText size="xl"> Profile </SofaHeaderText>
+					<SofaHeading size="title"> Profile </SofaHeading>
 					<SofaImageLoader class="size-[90px] bg-grayColor rounded-full" :photoUrl="profileFactory.photo?.link">
 						<SofaIcon v-if="!profileFactory.photo" class="h-[50px]" name="user" />
 						<SofaFileInput
@@ -51,45 +51,45 @@
 				</div>
 
 				<div class="w-full flex flex-col gap-4 bg-white rounded-2xl mdlg:p-5 p-4 shadow-custom">
-					<SofaHeaderText size="xl"> Qualification </SofaHeaderText>
+					<SofaHeading size="title"> Qualification </SofaHeading>
 
 					<SofaFileInput
 						v-model="tutorRequestFactory.qualification"
-						class="rounded-custom border-2 border-dashed border-primaryPurple bg-lightGray p-4"
+						class="rounded-custom border-2 border-dashed border-primaryPurple bg-lightGray text-primaryPurple p-4"
 						accept="application/pdf, image/*"
 						multiple>
 						<div class="w-full flex mdlg:flex-row mdlg:gap-3 flex-col gap-1 items-center justify-center">
-							<SofaIcon name="upload" class="h-[16px] fill-primaryPurple" />
+							<SofaIcon name="upload" class="h-[16px] fill-current" />
 
-							<SofaNormalText color="text-primaryPurple" class="text-center">
+							<SofaText class="text-center">
 								{{
 									tutorRequestFactory.qualification.length
 										? tutorRequestFactory.qualification.map((item) => item.name).join(', ')
 										: 'Upload PDFs or images of your degree, results, transcripts, e.t.c.'
 								}}
-							</SofaNormalText>
+							</SofaText>
 						</div>
 					</SofaFileInput>
 				</div>
 
 				<div class="w-full flex flex-col gap-4 bg-white rounded-2xl mdlg:p-5 p-4 shadow-custom">
-					<SofaHeaderText size="xl"> Verification </SofaHeaderText>
+					<SofaHeading size="title"> Verification </SofaHeading>
 
 					<SofaFileInput
 						v-model="tutorRequestFactory.verification"
-						class="rounded-custom border-2 border-dashed border-primaryPurple bg-lightGray p-4"
+						class="rounded-custom border-2 border-dashed border-primaryPurple bg-lightGray text-primaryPurple p-4"
 						accept="image/*">
 						<div class="w-full flex mdlg:flex-row mdlg:gap-3 flex-col gap-1 items-center justify-center">
-							<SofaIcon name="upload" class="h-[16px] fill-primaryPurple" />
-							<SofaNormalText color="text-primaryPurple">
+							<SofaIcon name="upload" class="h-[16px] fill-current" />
+							<SofaText>
 								{{ tutorRequestFactory.verification?.name ?? 'Upload a valid ID' }}
-							</SofaNormalText>
+							</SofaText>
 						</div>
 					</SofaFileInput>
 				</div>
 
 				<div class="w-full flex flex-col gap-4 bg-white rounded-2xl mdlg:p-5 p-4 shadow-custom">
-					<SofaHeaderText size="xl"> Location </SofaHeaderText>
+					<SofaHeading size="title"> Location </SofaHeading>
 
 					<SofaSelect
 						v-model="locationFactory.country"
@@ -108,9 +108,9 @@
 			<template v-if="currentStep === 'test'">
 				<div class="w-full flex flex-col gap-4 bg-white rounded-2xl mdlg:p-5 p-4 shadow-custom">
 					<div class="w-full flex flex-col gap-1">
-						<SofaHeaderText size="xl"> Subject </SofaHeaderText>
-						<SofaNormalText> Choose the subject you want to teach </SofaNormalText>
-						<SofaNormalText v-if="currentlyTeaching.length">
+						<SofaHeading size="title"> Subject </SofaHeading>
+						<SofaText> Choose the subject you want to teach </SofaText>
+						<SofaText v-if="currentlyTeaching.length">
 							You are already teaching the following:
 							{{
 								topics
@@ -118,7 +118,7 @@
 									.map((t) => t.title)
 									.join(', ')
 							}}
-						</SofaNormalText>
+						</SofaText>
 					</div>
 
 					<SofaSelect
@@ -130,8 +130,8 @@
 
 				<div class="w-full flex flex-col gap-4 bg-white rounded-2xl mdlg:p-5 p-4 shadow-custom">
 					<div class="w-full flex flex-col gap-1">
-						<SofaHeaderText size="xl"> Test </SofaHeaderText>
-						<SofaNormalText> Pass a test on the subject you selected </SofaNormalText>
+						<SofaHeading size="title"> Test </SofaHeading>
+						<SofaText> Pass a test on the subject you selected </SofaText>
 					</div>
 				</div>
 			</template>

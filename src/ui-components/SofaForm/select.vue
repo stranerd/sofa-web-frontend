@@ -2,7 +2,7 @@
 	<div
 		ref="selectRef"
 		:data-error="error"
-		class="group relative flex items-center gap-2 w-full rounded-lg bg-lightGray px-3 py-4 has-error text-sub"
+		class="group relative flex items-center gap-2 w-full rounded-lg bg-lightGray px-3 py-4 has-error font-size-sub"
 		:tabIndex="-1"
 		@click="showOptions = true">
 		<span v-if="placeholder" class="font-semibold">{{ placeholder }}</span>

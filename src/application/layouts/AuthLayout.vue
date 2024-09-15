@@ -5,7 +5,7 @@
 		<div class="py-2 pr-3 hidden mdlg:block">
 			<Logo class="h-[32px]" />
 		</div>
-		<SofaHeaderText content="Account Setup" />
+		<SofaHeading size="title" content="Account Setup" />
 		<SofaButton class="bg-primaryPurple">Skip</SofaButton>
 	</div>
 	<div
@@ -25,8 +25,8 @@
 					<SofaIcon v-if="!hideBack" class="md:h-[26px] h-[20px]" name="arrow-left" @click="$utils.goBack()" />
 
 					<div class="w-full flex flex-col justify-center items-center gap-1">
-						<SofaHeaderText class="md:!text-2xl text-lg" :content="title" />
-						<SofaNormalText v-if="subTitle" color="text-grayColor" class="!font-normal" :content="subTitle" />
+						<SofaHeading size="title" :content="title" />
+						<SofaText v-if="subTitle" class="text-grayColor" :content="subTitle" />
 					</div>
 				</div>
 			</div>

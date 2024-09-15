@@ -6,7 +6,7 @@
 				<SofaAvatar :size="32" :photoUrl="user?.picture" @click="openSideBar" />
 
 				<div class="py-4 flex items-center justify-center">
-					<SofaHeading v-if="title" class="!font-bold !text-base" :content="title" />
+					<SofaHeading v-if="title" :content="title" />
 					<Logo withoutText class="h-[24px]" />
 				</div>
 

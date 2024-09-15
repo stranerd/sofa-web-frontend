@@ -1,7 +1,7 @@
 <template>
 	<div class="w-full h-full flex flex-col gap-4 p-4 mdlg:p-6">
 		<div class="w-full flex items-center justify-between">
-			<SofaHeaderText class="!font-bold !text-base"> Notifications </SofaHeaderText>
+			<SofaHeading> Notifications </SofaHeading>
 			<SofaIcon class="h-[19px]" name="circle-close" @click="close" />
 		</div>
 		<div v-if="!notifications.length" class="w-full flex flex-col gap-2 items-center justify-center flex-1">

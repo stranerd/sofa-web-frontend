@@ -2,7 +2,7 @@
 	<SettingsLayout title="Security">
 		<div class="w-full flex flex-col gap-5 mdlg:px-0 px-4">
 			<form class="w-full flex flex-col gap-4 bg-white rounded-2xl md:p-5 p-4 shadow-custom" @submit.prevent="updatePassword">
-				<SofaHeaderText size="xl" content="Password" />
+				<SofaHeading size="title" content="Password" />
 
 				<SofaTextField
 					v-if="hasPassword"

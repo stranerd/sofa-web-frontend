@@ -8,10 +8,9 @@
 				<div class="flex flex-col lg:w-[50%] mdlg:w-[70%] md:w-[80%] w-full h-full p-4 mdlg:p-6 gap-4">
 					<div class="flex grow flex-col items-center text-bodyBlack" :class="{ '!text-white': isDark }">
 						<template v-if="!play.isClosed || tab === 'leaderboard'">
-							<SofaHeaderText color="text-current" size="2xl" content="Scoreboard" />
-							<SofaNormalText
+							<SofaHeading size="title3" content="Scoreboard" />
+							<SofaText
 								class="mb-4"
-								color="text-current"
 								:content="
 									play.isScored
 										? 'Ranking based on points gained'
@@ -20,18 +19,13 @@
 											: 'Waiting for others to finish'
 								" />
 						</template>
-						<SofaHeaderText
-							v-if="play.isClosed && tab === 'result'"
-							class="mb-4"
-							color="text-current"
-							size="xl"
-							content="Your Result" />
+						<SofaHeading v-if="play.isClosed && tab === 'result'" class="mb-4" size="title2" content="Your Result" />
 
 						<div class="flex flex-col gap-2 items-center grow w-full">
 							<template v-if="tab === 'leaderboard'">
-								<SofaNormalText color="text-current" class="mb-2">
+								<SofaText class="mb-2">
 									{{ extras.scores.length }} {{ $utils.pluralize(extras.scores.length, 'participant', 'participants') }}
-								</SofaNormalText>
+								</SofaText>
 								<div
 									v-for="score in extras.scores"
 									:key="score.user.id"
@@ -39,12 +33,9 @@
 									:class="{ '!bg-lightBlue': score.user.id === extras.authId }">
 									<SofaAvatar :photoUrl="score.user.picture" :size="$screen.desktop ? 64 : 48" />
 									<div class="grow">
-										<SofaNormalText
-											color="text-current"
-											class="!font-semibold truncate"
-											:content="score.user.publicName" />
-										<SofaNormalText color="text-grayColor" :content="score.position" />
-										<SofaNormalText color="text-grayColor" :content="`${score.percentage}%`" />
+										<SofaHeading :content="score.user.publicName" />
+										<SofaText class="text-grayColor" :content="score.position" />
+										<SofaText class="text-grayColor" :content="`${score.percentage}%`" />
 									</div>
 									<SofaIcon v-if="score.isWinner" name="play-winner" class="h-12" />
 								</div>
@@ -66,11 +57,8 @@
 									textStyle="!text-3xl">
 									{{ $utils.formatNumber(extras.myScore.percentage, 1) }}%
 								</SofaPieChart>
-								<SofaHeaderText size="2xl" color="text-current" :content="extras.myScore.label" />
-								<SofaNormalText
-									color="text-current"
-									class="!font-semibold"
-									:content="`${extras.myScore.correct}/${play.questions.length} correct answers`" />
+								<SofaHeading size="title3" :content="extras.myScore.label" />
+								<SofaHeading :content="`${extras.myScore.correct}/${play.questions.length} correct answers`" />
 							</div>
 						</div>
 					</div>

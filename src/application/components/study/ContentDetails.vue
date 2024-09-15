@@ -11,7 +11,7 @@
 				</SofaImageLoader>
 				<div class="flex flex-col gap-2 grow">
 					<div class="w-full flex items-center justify-between">
-						<SofaHeaderText :content="material.title" />
+						<SofaHeading size="title" :content="material.title" />
 
 						<div class="mdlg:flex items-center justify-end gap-4 hidden">
 							<SofaIcon name="flag" class="h-[16px]" @click="reportMaterial(material)" />

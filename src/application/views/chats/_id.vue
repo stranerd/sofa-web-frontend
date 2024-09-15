@@ -91,7 +91,7 @@
 						<SofaAvatar :size="180" :photoUrl="user?.bio.photo?.link" />
 					</router-link>
 
-					<SofaHeading title="xl" :content="user?.publicName" />
+					<SofaHeading size="title2" :content="user?.publicName" />
 
 					<SofaText class="text-center text-grayColor">
 						{{ user?.bio.description }}

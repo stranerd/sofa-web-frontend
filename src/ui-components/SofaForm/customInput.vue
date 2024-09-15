@@ -1,5 +1,5 @@
 <template>
-	<div class="w-full gap-2 p-2 flex items-center text-sub rounded-lg bg-white text-sub">
+	<div class="w-full gap-2 p-2 flex items-center font-size-sub rounded-lg bg-white">
 		<slot name="prefix" />
 		<input
 			v-model="text"

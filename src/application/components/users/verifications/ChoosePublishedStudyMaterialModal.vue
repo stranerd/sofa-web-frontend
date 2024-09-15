@@ -2,8 +2,8 @@
 	<div class="flex flex-col gap-4 mdlg:p-6 p-4">
 		<div class="flex justify-between mdlg:justify-center items-center gap-4">
 			<div class="flex flex-col items-start mdlg:items-center">
-				<SofaHeaderText class="!text-xl" content="Choose content" />
-				<SofaNormalText content="All you’ve created are shown below" />
+				<SofaHeading size="title" content="Choose content" />
+				<SofaText content="All you’ve created are shown below" />
 			</div>
 			<SofaIcon class="h-[19px] mdlg:hidden" name="circle-close" @click="close" />
 		</div>
@@ -39,7 +39,6 @@ import { computed, ref } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useUsersMaterials } from '@app/composables/study/users-materials'
 import { StudyMaterial } from '@modules/study'
-import { SofaNormalText } from 'sofa-ui-components'
 
 const props = defineProps<{
 	close: () => void

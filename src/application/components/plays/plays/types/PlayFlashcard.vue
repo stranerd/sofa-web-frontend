@@ -31,8 +31,8 @@
 		">
 		<template #default="{ extras }">
 			<div v-if="isDone" class="flex flex-col gap-1 w-full h-full items-center justify-center">
-				<SofaHeaderText class="!font-bold md:!text-2xl text-lg" color="text-inherit" content="Congratulations!" />
-				<SofaNormalText color="text-inherit" content="You have mastered all flashcards" />
+				<SofaHeading size="title2" color="text-inherit" content="Congratulations!" />
+				<SofaText content="You have mastered all flashcards" />
 			</div>
 			<FlashcardDisplay v-else-if="extras.question" :key="extras.question.id" :question="extras.question" :isDark="false" />
 
@@ -40,7 +40,7 @@
 				<div class="flex flex-col p-4 mdlg:p-6 gap-6 items-center justify-center">
 					<div class="w-full flex flex-col gap-2 items-start">
 						<div class="w-full flex gap-2 justify-between md:justify-center items-center">
-							<SofaHeaderText class="text-xl" content="Flashcards" />
+							<SofaHeading size="title" content="Flashcards" />
 							<SofaIcon class="h-[19px] md:hidden" name="circle-close" @click="close" />
 						</div>
 						<SofaNormalText content="Learning quiz questions and answers" />

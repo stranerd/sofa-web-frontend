@@ -1,7 +1,7 @@
 <template>
 	<component
 		:is="as"
-		class="px-3 py-1.5 text-sub rounded-lg"
+		class="px-3 py-1.5 font-size-sub rounded-lg"
 		:class="{
 			'bg-primaryPurple text-white': color === 'purple' && !inverted,
 			'text-primaryPurple bg-opacity-25': color === 'purple' && inverted,

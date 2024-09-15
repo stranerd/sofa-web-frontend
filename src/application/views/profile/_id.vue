@@ -2,7 +2,7 @@
 	<ExpandedLayout v-if="user" width="mdlg:!w-[85%] lg:!w-[75%]" layoutStyle="mdlg:pt-6">
 		<div class="w-full flex mdlg:hidden items-center gap-3 justify-between bg-white p-4">
 			<SofaIcon class="h-[15px]" name="arrow-left" @click="$utils.goBack()" />
-			<SofaNormalText class="!font-bold !text-base" :content="user.publicName" />
+			<SofaHeading :content="user.publicName" />
 			<div />
 		</div>
 
@@ -13,7 +13,7 @@
 						<SofaAvatar :photoUrl="user.bio.photo?.link" :size="110" class="-mt-[71px]" />
 
 						<div class="flex flex-col">
-							<UserName :user="user" :avatar="false" name class="font-bold text-title" />
+							<UserName :user="user" :avatar="false" name size="title" bold />
 							<SofaNormalText class="capitalize" :content="user.userType.type" />
 						</div>
 					</div>
@@ -41,8 +41,8 @@
 								class="flex mdlg:flex-row mdlg:gap-2 flex-col gap-1 items-center">
 								<SofaIcon :name="item.icon" class="h-[40px]" />
 								<div class="flex flex-col items-center">
-									<SofaNormalText :content="item.title" />
-									<SofaHeaderText :content="item.value.toString()" class="!font-bold" />
+									<SofaText :content="item.title" />
+									<SofaHeading size="title" :content="item.value.toString()" />
 								</div>
 							</div>
 						</div>

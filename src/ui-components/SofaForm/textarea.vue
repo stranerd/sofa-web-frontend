@@ -1,7 +1,7 @@
 <template>
 	<div
 		:data-error="error"
-		class="w-full gap-2 p-3 mdlg:p-4 flex items-start text-sub rounded-xl bg-lightGray border border-darkLightGray group-focus-within:!border-primaryBlue has-error overflow-y-auto">
+		class="w-full gap-2 p-3 mdlg:p-4 flex items-start font-size-sub rounded-xl bg-lightGray border border-darkLightGray group-focus-within:!border-primaryBlue has-error overflow-y-auto">
 		<slot name="prefix" />
 		<VueEditor
 			v-if="richEditor"

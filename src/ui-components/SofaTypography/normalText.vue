@@ -32,7 +32,7 @@ export default defineComponent({
 			[
 				props.content ? 'body flex flex-col items-start' : '',
 				props.color,
-				props.size == 'lg' ? 'lg:text-lg mdlg:text-base text-sm' : '',
+				props.size == 'lg' ? 'lg:text-lg mdlg:text-[16px] text-sm' : '',
 				props.size == 'base' ? 'lg:text-sm mdlg:text-[12px] text-xs' : '',
 				props.size == 'small' ? ' text-xs' : '',
 			].join(' '),

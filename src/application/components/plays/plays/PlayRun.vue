@@ -19,17 +19,14 @@
 					isInModal,
 				}" />
 			<div v-else-if="play.canJoinAfterStart && extras.canJoin" class="flex flex-col h-full items-center justify-center gap-4">
-				<SofaHeaderText
-					:color="play.isDark ? 'text-white' : undefined"
-					class="capitalize"
-					:content="`${play.singularizedType} already started`" />
+				<SofaHeading class="capitalize" size="title" :content="`${play.singularizedType} already started`" />
 				<div class="flex gap-4 items-center">
 					<SofaButton class="px-6 py-3" @click="extras.join(true)">Join Now</SofaButton>
 					<SofaButton class="px-6 py-3" @click="$router.replace(play.resultsPage)">Wait for Results</SofaButton>
 				</div>
 			</div>
 			<div v-else class="flex flex-col h-full items-center justify-center gap-4">
-				<SofaNormalText :content="`You cannot join this ${play.singularizedType} anymore`" />
+				<SofaText :content="`You cannot join this ${play.singularizedType} anymore`" />
 			</div>
 		</template>
 	</PlayWrapper>

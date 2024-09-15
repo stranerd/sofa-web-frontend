@@ -10,7 +10,7 @@ import { computed } from 'vue'
 
 const props = withDefaults(
 	defineProps<{
-		size?: 'title' | 'title2' | 'title3' | 'mid' | 'base' | 'sub'
+		size?: 'title3' | 'title2' | 'title' | 'mid' | 'base' | 'sub'
 		content?: string
 		as?: string
 		bold?: boolean
@@ -28,8 +28,8 @@ const props = withDefaults(
 const cls = computed(() =>
 	[
 		props.content ? 'body flex flex-col items-start' : '',
-		`text-${props.size}`,
-		props.bold ? 'font-bold' : '',
+		`font-size-${props.size}`,
+		props.bold ? (props.as?.startsWith('h') ? 'font-bold' : 'font-semibold') : '',
 		props.clamp ? 'truncate' : '',
 	]
 		.filter(Boolean)

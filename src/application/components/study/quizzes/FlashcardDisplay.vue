@@ -3,10 +3,10 @@
 		<a class="flip-card scrollbar-hide rounded-xl shadow-custom" @click="showAnswer = !showAnswer">
 			<div class="flip-card-inner scrollbar-hide rounded-xl" :style="showAnswer ? 'transform: rotateY(180deg);' : ''">
 				<div class="flip-card-front">
-					<SofaHeaderText class="!font-semibold md:!text-xl text-base" color="text-inherit" :content="question.content" />
+					<SofaHeading size="mid" :content="question.content" />
 				</div>
 				<div class="flip-card-back">
-					<SofaHeaderText class="!font-semibold md:!text-xl text-base" color="text-inherit" :content="question.answer" />
+					<SofaHeading size="mid" :content="question.answer" />
 				</div>
 			</div>
 		</a>

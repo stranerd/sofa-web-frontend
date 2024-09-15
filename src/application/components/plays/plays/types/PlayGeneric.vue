@@ -25,12 +25,12 @@
 		<template #prestart="{ extras }">
 			<div class="w-full my-auto flex flex-col gap-6 items-center">
 				<div class="w-full bg-white text-grayColor p-8 flex flex-col gap-2 items-center">
-					<SofaHeaderText color="text-bodyBlack" class="!font-bold" :content="play.title" size="xl" />
+					<SofaHeading class="text-bodyBlack" :content="play.title" size="title2" />
 					<SofaNormalText color="text-inherit" :content="`${quizProps.questions.length} questions`" size="lg" />
 				</div>
-				<SofaHeaderText content="starting in" size="xl" />
+				<SofaHeading content="starting in" size="title2" />
 				<div class="p-6 aspect-square min-w-[5rem] flex items-center rounded-full justify-center bg-white text-bodyBlack">
-					<SofaHeaderText color="text-inherit" size="xl" :content="`${extras.startCountdown}`" />
+					<SofaHeading size="title2" :content="`${extras.startCountdown}`" />
 				</div>
 			</div>
 		</template>

@@ -2,7 +2,7 @@
 	<SettingsLayout title="Profile">
 		<div v-if="auth" class="w-full flex flex-col gap-5 mdlg:px-0 px-4">
 			<div id="profile" class="w-full flex flex-col gap-4 bg-white rounded-2xl md:p-5 p-4 shadow-custom">
-				<SofaHeaderText size="xl"> Personal info </SofaHeaderText>
+				<SofaHeading size="title"> Personal info </SofaHeading>
 				<div class="w-full flex items-center justify-start py-2 gap-4">
 					<SofaImageLoader class="size-[90px] bg-grayColor rounded-full" :photoUrl="factory.photo?.link">
 						<SofaIcon v-if="!factory.photo" class="h-[50px]" name="user" />
@@ -41,7 +41,7 @@
 			</div>
 
 			<div id="contact" class="w-full flex flex-col gap-4 bg-white rounded-2xl md:p-5 p-4 shadow-custom">
-				<SofaHeaderText size="xl"> Contact info </SofaHeaderText>
+				<SofaHeading size="title"> Contact info </SofaHeading>
 
 				<SofaTextField
 					v-model="auth.email"
@@ -55,15 +55,15 @@
 			</div>
 
 			<div v-if="!userType.isOrg" id="type" class="w-full flex flex-col gap-4 bg-white rounded-2xl md:p-5 p-4 shadow-custom">
-				<SofaHeaderText size="xl">
+				<SofaHeading size="title">
 					{{ userType.isTeacher ? 'Experience' : 'Education' }}
-				</SofaHeaderText>
+				</SofaHeading>
 
 				<AccountSetup :isProfileEducation="true" />
 			</div>
 
 			<div id="socials" class="w-full flex flex-col gap-4 bg-white rounded-2xl md:p-5 p-4 shadow-custom">
-				<SofaHeaderText size="xl"> Social links </SofaHeaderText>
+				<SofaHeading size="title"> Social links </SofaHeading>
 
 				<SocialMediaUpdate :factory="socialsFactory" />
 			</div>

@@ -28,7 +28,7 @@
 					placeholder="Section label"
 					@onBlur="closeLabelSection(sectionIndex)"
 					@onEnter="closeLabelSection(sectionIndex)" />
-				<SofaHeaderText v-else size="base" class="grow truncate">{{ section.label }}</SofaHeaderText>
+				<SofaHeading v-else class="grow">{{ section.label }}</SofaHeading>
 				<SofaIcon v-if="edit" class="h-[16px] fill-grayColor" name="edit" @click.stop.prevent="toggleLabelSection(sectionIndex)" />
 				<SofaIcon v-if="edit" class="h-[16px] fill-grayColor" name="trash" @click.stop.prevent="factory.delete(sectionIndex)" />
 				<SofaIcon v-if="edit" class="h-[20px] sectionHandle fill-grayColor" name="reorder" />

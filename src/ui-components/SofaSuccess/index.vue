@@ -3,9 +3,9 @@
 		<div class="flex flex-col gap-2 relative mdlg:p-6 p-4 py-6 items-center justify-center text-center">
 			<SofaIcon name="success-modal-icon" class="h-[39px]" />
 
-			<SofaHeaderText v-if="title" class="text-xl" :content="title" />
+			<SofaHeading v-if="title" size="title" :content="title" />
 
-			<SofaNormalText v-if="sub" :content="sub" />
+			<SofaText v-if="sub" :content="sub" />
 
 			<SofaButton
 				v-if="!button.hide"
@@ -24,7 +24,6 @@
 import SofaButton from '../SofaButton'
 import SofaIcon from '../SofaIcon'
 import SofaModal from '../SofaModal'
-import { SofaHeaderText, SofaNormalText } from '../SofaTypography'
 
 withDefaults(
 	defineProps<{

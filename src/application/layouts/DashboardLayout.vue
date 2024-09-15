@@ -18,7 +18,7 @@
 					<SofaAvatar :size="84" :photoUrl="user.bio.photo?.link" />
 
 					<div class="flex flex-col">
-						<UserName :user="user" :avatar="false" class="font-bold" />
+						<UserName :user="user" :avatar="false" bold />
 						<SofaText class="capitalize text-grayColor" :content="userType.type" />
 						<SofaText class="text-primaryPink" as="router-link" to="/profile" content="View Profile" />
 					</div>

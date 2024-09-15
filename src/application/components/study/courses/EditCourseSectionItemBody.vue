@@ -3,7 +3,7 @@
 
 	<div v-if="item?.type == Coursable.quiz" class="flex flex-col gap-4">
 		<div class="w-full flex items-center justify-between">
-			<SofaHeaderText> Questions </SofaHeaderText>
+			<SofaHeading size="title"> Questions </SofaHeading>
 			<SofaNormalText color="text-primaryPink" as="a" @click="showAnswers = !showAnswers">
 				{{ showAnswers ? 'Hide' : 'Show' }} answers
 			</SofaNormalText>

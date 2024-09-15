@@ -9,15 +9,15 @@
 		<template v-if="item.type === Coursable.quiz">
 			<div
 				v-if="!quizPlayStarted"
-				class="w-full bg-primaryPurple p-12 grow flex flex-col items-center justify-center gap-3 rounded-custom">
-				<SofaHeaderText color="text-white">
+				class="w-full bg-primaryPurple text-white p-12 grow flex flex-col items-center justify-center gap-3 rounded-custom">
+				<SofaHeading size="title">
 					{{ item.quizMode === PlayTypes.practice ? 'Practice questions' : 'Test yourself' }}
-				</SofaHeaderText>
-				<SofaNormalText color="text-white">
+				</SofaHeading>
+				<SofaText>
 					{{
 						item.quizMode === PlayTypes.practice ? 'Comfortable learning for topic mastery' : 'Evaluate your level of knowledge'
 					}}
-				</SofaNormalText>
+				</SofaText>
 				<SofaNormalText color="text-white">{{ item.quiz.questions.length }} Questions </SofaNormalText>
 				<SofaButton
 					bgColor="bg-white"

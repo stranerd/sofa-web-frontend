@@ -1,7 +1,7 @@
 <template>
 	<div class="flex flex-col gap-6 p-4 md:p-8">
 		<div class="w-full flex items-center gap-4 justify-between text-deepGray">
-			<SofaHeaderText size="xl" class="!font-bold" content="Invite" />
+			<SofaHeading size="title" content="Invite" />
 			<SofaIcon name="circle-close" class="rounded-full h-[32px] fill-current cursor-pointer" @click="close" />
 		</div>
 

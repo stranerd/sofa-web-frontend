@@ -1,7 +1,7 @@
 <template>
 	<form class="flex flex-col gap-4 mdlg:p-6 p-4" @submit.prevent="submit">
 		<div class="w-full hidden flex-col gap-2 justify-center items-center md:flex">
-			<SofaHeaderText class="!text-xl" :content="modTitle" />
+			<SofaHeading size="title" :content="modTitle" />
 		</div>
 
 		<div class="w-full flex justify-between items-center md:hidden">
@@ -9,7 +9,7 @@
 			<SofaIcon class="h-[19px]" name="circle-close" @click="close" />
 		</div>
 
-		<UserName v-if="conversation?.tutor" :user="conversation.tutor" class="font-bold" />
+		<UserName v-if="conversation?.tutor" :user="conversation.tutor" bold />
 
 		<SofaRatings v-model="factory.rating" :readonly="false" size="h-[30px]" class="mb-3 self-center" />
 

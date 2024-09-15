@@ -1,7 +1,7 @@
 <template>
 	<form class="flex flex-col gap-4 mdlg:p-6 p-4" @submit.prevent="submit">
 		<div class="w-full hidden flex-col gap-2 justify-center items-center md:flex">
-			<SofaHeaderText class="!text-xl" content="Upload file" />
+			<SofaHeading class="title" content="Upload file" />
 		</div>
 
 		<div class="w-full flex justify-between items-center md:hidden">
