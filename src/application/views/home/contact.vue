@@ -42,7 +42,6 @@
 									</label>
 									<input
 										v-model="factory.name"
-										type="text"
 										class="border border-[#5A5A5A] h-[50px] rounded-lg bg-transparent p-4 placeholder:text-[#D9D9D9] text-[14px] md:text-[16px]"
 										placeholder="Enter your full name here"
 										required />

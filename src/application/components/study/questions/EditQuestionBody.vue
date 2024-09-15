@@ -179,7 +179,7 @@
 			<SofaTextarea
 				v-model="factory.explanation"
 				:error="factory.errors.explanation"
-				class="!bg-white h-[130px]"
+				class="!bg-white h-[130px] mdlg:h-[180px] shrink-0"
 				placeholder="Explanation"
 				:richEditor="true">
 				<template v-if="!$screen.mobile" #prefix>

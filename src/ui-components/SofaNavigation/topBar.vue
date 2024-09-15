@@ -93,9 +93,9 @@
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import SofaBadge from '../SofaBadge'
-import { handleShowAddMaterial } from '@app/composables/study'
-import { useModals } from '@app/composables/core/modals'
 import { useAuth } from '@app/composables/auth/auth'
+import { useModals } from '@app/composables/core/modals'
+import { handleShowAddMaterial } from '@app/composables/study'
 
 type Action = {
 	label: string

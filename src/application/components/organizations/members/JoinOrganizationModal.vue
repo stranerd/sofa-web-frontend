@@ -8,7 +8,7 @@
 		</div>
 
 		<div class="w-full flex flex-col gap-5 mdlg:px-0 px-4">
-			<SofaInput v-model="joinCode" type="text" placeholder="Enter Join Code" />
+			<SofaInput v-model="joinCode" placeholder="Enter Join Code" />
 		</div>
 
 		<div class="w-full flex justify-between items-center md:gap-0 gap-3 mdlg:p-0 p-4">

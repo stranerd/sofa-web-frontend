@@ -73,10 +73,11 @@
 		<template v-if="currentTab == 'content'">
 			<div class="w-full flex flex-col gap-3 py-4">
 				<div v-if="materials.length" class="w-full mdlg:px-0 px-4">
-					<div class="w-full px-4 py-1 bg-white rounded-custom flex gap-1 items-center justify-start">
-						<SofaIcon name="search-black" class="h-[17px]" />
-						<SofaTextField v-model="searchQuery" customClass="!border-none w-full grow" placeholder="Search" />
-					</div>
+					<SofaInput v-model="searchQuery" placeholder="Search" type="search" class="!bg-white text-bodyBlack">
+						<template #prefix>
+							<SofaIcon name="search-black" class="h-[17px]" />
+						</template>
+					</SofaInput>
 				</div>
 
 				<div class="w-full flex flex-col mdlg:gap-4 gap-3 pl-4 mdlg:pl-0">

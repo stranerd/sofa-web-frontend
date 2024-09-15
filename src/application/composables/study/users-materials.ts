@@ -2,8 +2,8 @@ import { addToArray } from 'valleyed'
 import { Ref, onMounted, onUnmounted, reactive, ref } from 'vue'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
-import { CourseEntity, QuizEntity, CoursesUseCases, QuizzesUseCases } from '@modules/study'
 import { UserEntity, UsersUseCases } from '@modules/users'
+import { CourseEntity, CoursesUseCases, QuizEntity, QuizzesUseCases } from '@modules/study'
 
 const store = {} as Record<
 	string,

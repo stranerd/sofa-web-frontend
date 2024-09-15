@@ -36,7 +36,7 @@
 							:content="option.title" />
 						<SofaIcon :name="selectedhelpOption == option.key ? 'selected' : 'not-selected'" class="h-[20px]" />
 					</a>
-					<SofaTextField v-model="selectedhelpOptionOthers" customClass="border rounded-custom" placeholder="Others" />
+					<SofaInput v-model="selectedhelpOptionOthers" placeholder="Others" class="flex-1" />
 				</div>
 			</template>
 

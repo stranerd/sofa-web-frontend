@@ -33,7 +33,7 @@
 		<form v-if="file" class="flex flex-col gap-4" @submit.prevent="updateFile">
 			<SofaFormGroup>
 				<SofaLabel>Title</SofaLabel>
-				<SofaInput v-model="factory.title" type="text" placeholder="File title" />
+				<SofaInput v-model="factory.title" placeholder="File title" />
 			</SofaFormGroup>
 
 			<SofaFormGroup>

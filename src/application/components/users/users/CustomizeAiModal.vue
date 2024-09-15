@@ -23,9 +23,9 @@
 					</SofaFileInput>
 				</SofaImageLoader>
 
-				<SofaInput v-model="factory.name" type="text" placeholder="Name" :error="factory.errors.name" />
+				<SofaInput v-model="factory.name" placeholder="Name" :error="factory.errors.name" />
 
-				<SofaInput v-model="factory.tagline" type="text" placeholder="Tagline" :error="factory.errors.tagline" />
+				<SofaInput v-model="factory.tagline" placeholder="Tagline" :error="factory.errors.tagline" />
 			</div>
 
 			<div class="w-full flex items-center justify-between">

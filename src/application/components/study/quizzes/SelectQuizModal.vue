@@ -8,15 +8,11 @@
 			<SofaHeading content="Select a quiz" />
 			<SofaIcon class="h-[19px]" name="circle-close" @click="close" />
 		</div>
-		<SofaTextField
-			v-model="searchQuery"
-			class="bg-white border border-darkLightGray rounded-custom flex-1"
-			customClass="!border-none w-full"
-			placeholder="Search for quiz">
-			<template #inner-prefix>
+		<SofaInput v-model="searchQuery" placeholder="Search for quiz" type="search" class="!bg-white text-bodyBlack flex-1">
+			<template #prefix>
 				<SofaIcon name="search-black" class="h-[17px]" />
 			</template>
-		</SofaTextField>
+		</SofaInput>
 		<div class="h-full max-h-[300px] overflow-y-auto flex flex-col gap-2">
 			<a
 				v-for="quiz in filteredQuizzes"

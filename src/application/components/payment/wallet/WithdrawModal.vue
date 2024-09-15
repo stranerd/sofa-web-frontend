@@ -11,7 +11,7 @@
 		</div>
 
 		<div v-if="showAddNewAccount && activeAccountFactory" class="w-full flex flex-col gap-3">
-			<SofaInput v-model="activeAccountFactory.bankNumber" type="text" placeholder="Account number"> </SofaInput>
+			<SofaInput v-model="activeAccountFactory.bankNumber" placeholder="Account number"> </SofaInput>
 
 			<SofaSelect
 				v-model="activeAccountFactory.bankCode"

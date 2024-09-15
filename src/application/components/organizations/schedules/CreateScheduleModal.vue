@@ -9,7 +9,7 @@
 			<SofaIcon class="h-[19px]" name="circle-close" @click="close" />
 		</div>
 
-		<SofaInput v-model="factory.title" type="text" placeholder="Session Title" :error="factory.errors.title" />
+		<SofaInput v-model="factory.title" placeholder="Session Title" :error="factory.errors.title" />
 		<SofaTextarea
 			v-model="factory.description"
 			:error="factory.errors.description"

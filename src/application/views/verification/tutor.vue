@@ -31,9 +31,9 @@
 						</SofaFileInput>
 					</SofaImageLoader>
 
-					<SofaInput v-model="profileFactory.first" type="text" placeholder="First Name" :error="profileFactory.errors.first" />
+					<SofaInput v-model="profileFactory.first" placeholder="First Name" :error="profileFactory.errors.first" />
 
-					<SofaInput v-model="profileFactory.last" type="text" placeholder="Last Name" :error="profileFactory.errors.last" />
+					<SofaInput v-model="profileFactory.last" placeholder="Last Name" :error="profileFactory.errors.last" />
 
 					<SofaTextarea v-model="profileFactory.description" placeholder="Bio" />
 				</div>

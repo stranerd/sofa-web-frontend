@@ -8,30 +8,31 @@
 				can have confidence in the credibility of the creators and the value of the materials.
 			</SofaText>
 
-			<div class="w-[40%] shadow-custom px-4 py-2 bg-white text-bodyBlack rounded-custom flex gap-3 items-center justify-between">
-				<form class="flex gap-2 items-center flex-1" @submit.prevent="handleSearch">
-					<SofaIcon name="filter" class="h-[15px]" @click="$router.push('/marketplace/search')" />
-					<SofaText as="router-link" class="pr-2 border-r border-darkLightGray" content="Filter" to="/marketplace/search" />
-					<SofaTextField
-						v-model="searchQuery"
-						class="flex-1"
-						customClass="!border-none w-full"
-						placeholder="Search for anything" />
-				</form>
-
-				<SofaIcon name="search-black" class="h-[17px] w-[20px]" @click="handleSearch" />
-			</div>
-		</div>
-
-		<div class="w-full p-4 flex mdlg:hidden flex-col">
-			<form
-				class="w-full shadow-custom px-4 py-2 bg-white rounded-custom flex gap-2 items-center justify-start"
-				@submit.prevent="handleSearch">
-				<SofaIcon name="filter" class="h-[15px]" @click="$router.push('/marketplace/search')" />
-				<SofaIcon name="search-black" class="h-[15px]" @click="handleSearch" />
-				<SofaTextField v-model="searchQuery" class="flex-1" customClass="!border-none w-full px-0" placeholder="Search" />
+			<form class="w-[40%] shadow-custom">
+				<SofaInput v-model="searchQuery" placeholder="Search for anything" type="search" class="!bg-white text-bodyBlack">
+					<template #prefix>
+						<SofaIcon name="filter" class="h-[15px]" @click="$router.push('/marketplace/search')" />
+						<SofaText
+							as="router-link"
+							class="pr-2 border-r shrink-0 border-darkLightGray"
+							content="Filter"
+							to="/marketplace/search" />
+					</template>
+					<template #suffix>
+						<SofaIcon name="search-black" class="h-[16px]" @click="handleSearch" />
+					</template>
+				</SofaInput>
 			</form>
 		</div>
+
+		<form class="w-full p-4 mdlg:hidden" @submit.prevent="handleSearch">
+			<SofaInput v-model="searchQuery" placeholder="Search" type="search" class="!bg-white text-bodyBlack">
+				<template #prefix>
+					<SofaIcon name="filter" class="h-[15px]" @click="$router.push('/marketplace/search')" />
+					<SofaIcon name="search-black" class="h-[15px]" @click="handleSearch" />
+				</template>
+			</SofaInput>
+		</form>
 
 		<div class="mdlg:w-[85%] lg:w-[75%] w-full flex flex-col h-full overflow-y-auto gap-8 mdlg:pl-0 pl-4">
 			<template v-for="material in materials" :key="material.title">

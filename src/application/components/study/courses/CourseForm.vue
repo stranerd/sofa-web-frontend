@@ -7,7 +7,7 @@
 
 		<div class="w-full md:grid md:grid-cols-2 flex flex-col-reverse gap-4">
 			<div class="col-span-1 w-full flex flex-col gap-3">
-				<SofaInput v-model="factory.title" type="text" placeholder="Enter title" :error="factory.errors.title" />
+				<SofaInput v-model="factory.title" placeholder="Enter title" :error="factory.errors.title" />
 
 				<SofaTextarea v-model="factory.description" :rows="4" placeholder="Enter description" :error="factory.errors.description" />
 

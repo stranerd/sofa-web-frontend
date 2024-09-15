@@ -4,7 +4,7 @@
 			<AuthProvider :signUp="false" />
 
 			<div class="w-full flex flex-col gap-4">
-				<SofaInput v-model="factory.email" type="text" placeholder="Email" :error="factory.errors.email" />
+				<SofaInput v-model="factory.email" type="email" placeholder="Email" :error="factory.errors.email" />
 				<SofaInput v-model="factory.password" type="password" placeholder="Password" :error="factory.errors.password" />
 			</div>
 

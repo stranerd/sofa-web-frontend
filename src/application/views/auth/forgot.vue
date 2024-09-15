@@ -5,7 +5,7 @@
 			sent ? undefined : 'Enter the email address associated with your account and we’ll send you a link to reset your password'
 		">
 		<form v-if="!sent" class="flex flex-col gap-6 w-full" @submit.prevent="sendResetEmail">
-			<SofaInput v-model="factory.email" type="text" placeholder="Email" :error="factory.errors.email" />
+			<SofaInput v-model="factory.email" type="email" placeholder="Email" :error="factory.errors.email" />
 
 			<SofaButton class="w-full" padding="md:py-4 py-3" type="submit"> Continue </SofaButton>
 		</form>

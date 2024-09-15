@@ -53,19 +53,14 @@
 
 				<div v-if="tab === 'profile'" class="mdlg:w-3/5 grid gap-4">
 					<div class="grid mdlg:grid-cols-2 gap-4">
-						<SofaInput
-							v-model="profileFactory.first"
-							type="text"
-							placeholder="First Name"
-							:error="profileFactory.errors.first" />
+						<SofaInput v-model="profileFactory.first" placeholder="First Name" :error="profileFactory.errors.first" />
 
-						<SofaInput v-model="profileFactory.last" type="text" placeholder="Last Name" :error="profileFactory.errors.last" />
+						<SofaInput v-model="profileFactory.last" placeholder="Last Name" :error="profileFactory.errors.last" />
 					</div>
 
 					<SofaInput
 						v-if="typeFactory.isOrganization"
 						v-model="typeFactory.name"
-						type="text"
 						placeholder="Organization name"
 						:error="typeFactory.errors.name" />
 
@@ -78,7 +73,6 @@
 					<SofaInput
 						v-if="typeFactory.isOrganization"
 						v-model="typeFactory.code"
-						type="text"
 						placeholder="Set organization code"
 						:error="typeFactory.errors.code" />
 
@@ -104,7 +98,6 @@
 				<SofaInput
 					v-if="typeFactory.isTeacher"
 					v-model="typeFactory.degree"
-					type="text"
 					:error="typeFactory.errors.degree"
 					placeholder="What acdemy degree(s) do you have?" />
 
@@ -112,7 +105,6 @@
 					v-if="typeFactory.isTeacher"
 					v-model="typeFactory.workplace"
 					customClass="rounded-custom !bg-lightGray"
-					type="text"
 					placeholder="Where do you teach now?"
 					:error="typeFactory.errors.workplace" />
 

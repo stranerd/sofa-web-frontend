@@ -13,7 +13,7 @@
 			<template v-if="stage === 1">
 				<SofaFormGroup>
 					<SofaLabel>Title</SofaLabel>
-					<SofaInput v-model="factory.title" type="text" placeholder="Enter course title" :error="factory.errors.title" />
+					<SofaInput v-model="factory.title" placeholder="Enter course title" :error="factory.errors.title" />
 				</SofaFormGroup>
 			</template>
 			<template v-if="stage === 2">
