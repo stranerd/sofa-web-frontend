@@ -2,14 +2,14 @@
 	<div>
 		<div v-if="userType.isTeacher && requests.length" class="w-full flex flex-col gap-2 mdlg:pt-1 pt-0 mdlg:pb-2 pb-4">
 			<a class="w-full flex items-center justify-between" :class="extraStyle" @click.stop="showRequests = !showRequests">
-				<SofaHeaderText customClass="text-left mdlg:!text-base text-sm" :content="`Requests (${requests.length})`" />
+				<SofaHeading :content="`Requests (${requests.length})`" />
 				<SofaIcon name="chevron-down" class="h-[7px]" :class="{ 'rotate-180': showRequests }" />
 			</a>
 			<div v-if="showRequests" class="w-full flex flex-col gap-3 mdlg:gap-0">
 				<Chat
 					v-for="request in requests"
 					:key="request.hash"
-					:customClass="customClass"
+					:class="chatClass"
 					:chat="{
 						route: `/chats/requests/${request.id}`,
 						title: request.user.bio.publicName,
@@ -21,7 +21,7 @@
 		</div>
 		<div v-if="pending.length" class="w-full flex flex-col gap-2 mdlg:pt-1 pt-0 mdlg:pb-2 pb-4">
 			<a class="w-full flex items-center justify-between" :class="extraStyle" @click.stop="showPending = !showPending">
-				<SofaHeaderText customClass="text-left mdlg:!text-base text-sm" :content="`Pending (${pending.length})`" />
+				<SofaHeading :content="`Pending (${pending.length})`" />
 				<SofaIcon name="chevron-down" class="h-[7px]" :class="{ 'rotate-180': showPending }" />
 			</a>
 			<div v-if="showPending" class="w-full flex flex-col gap-3 mdlg:gap-0">
@@ -29,7 +29,7 @@
 					v-for="request in pending.slice(0, limit)"
 					:key="request.hash"
 					t
-					:customClass="customClass"
+					:class="chatClass"
 					:chat="{
 						route: `/chats/${request.id}`,
 						title: request.user.bio.publicName,
@@ -43,7 +43,7 @@
 			<Chat
 				v-for="chat in conversations.slice(0, limit)"
 				:key="chat.hash"
-				:customClass="customClass"
+				:class="chatClass"
 				:chat="{
 					route: `/chats/${chat.id}`,
 					title: chat.title,
@@ -68,12 +68,12 @@ import { useConversationsList } from '@app/composables/conversations/conversatio
 
 withDefaults(
 	defineProps<{
-		customClass?: string
+		chatClass?: string
 		extraStyle?: string
 		limit?: number
 	}>(),
 	{
-		customClass: '',
+		chatClass: '',
 		extraStyle: '',
 		limit: undefined,
 	},

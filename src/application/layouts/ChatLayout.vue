@@ -10,12 +10,12 @@
 					v-if="userType.isStudent"
 					class="w-full flex items-center justify-start pt-7 top-0 left-0 sticky bg-white z-30 gap-3 p-3"
 					to="/chats/new">
-					<SofaIcon name="add" customClass="h-[17px] fill-primaryPink" />
+					<SofaIcon name="add" class="h-[17px] fill-primaryPink" />
 					<SofaNormalText color="text-primaryPink"> New chat </SofaNormalText>
 				</router-link>
 
 				<div v-if="conversations.length && userType.isTeacher" class="w-full flex justify-start pt-4 pb-2">
-					<SofaHeaderText customClass="text-left mdlg:!text-base text-sm" content="All Chats" />
+					<SofaHeading content="All Chats" />
 				</div>
 
 				<!-- Chat list -->
@@ -40,15 +40,15 @@
 							class="w-[64px] h-[64px] flex flex-row items-center justify-center bg-cover bg-center rounded-full"></div>
 
 						<div class="flex flex-col gap-1">
-							<SofaHeaderText customClass="!text-base !font-bold" :content="userAi.name" />
+							<SofaHeading :content="userAi.name" />
 						</div>
 					</div>
 					<div class="w-full flex flex-row justify-start px-4 py-4 rounded-[8px] bg-fadedPurple">
-						<SofaNormalText customClass="text-left" color="text-deepGray">
+						<SofaText class="text-deepGray">
 							Hello! I am here to respond to your messages in every chat 24/7.
 							<br /><br />
 							Let us work towards your highest ever academic achievements.
-						</SofaNormalText>
+						</SofaText>
 					</div>
 				</div>
 			</slot>

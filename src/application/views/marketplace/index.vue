@@ -1,17 +1,17 @@
 <template>
 	<ExpandedLayout layoutStyle="mdlg:pb-4">
-		<div class="w-full mdlg:flex hidden flex-col gap-5 pt-8 pb-14 bg-primaryPurple justify-center items-center">
-			<SofaHeaderText color="text-white" size="xl" class="!font-extrabold" content="All contents made by verified creators" />
+		<div class="w-full mdlg:flex hidden flex-col gap-5 pt-8 pb-14 bg-primaryPurple text-white justify-center items-center">
+			<SofaHeading size="title" content="All contents made by verified creators" />
 
-			<SofaNormalText color="text-white" customClass="w-[48%] text-center flex items-center justify-center">
+			<SofaText class="w-[48%] text-center flex items-center justify-center">
 				Everything here is carefully reviewed to ensure the highest quality and accuracy. By purchasing from our marketplace, you
 				can have confidence in the credibility of the creators and the value of the materials.
-			</SofaNormalText>
+			</SofaText>
 
-			<div class="w-[40%] shadow-custom px-4 py-2 bg-white rounded-custom flex gap-3 items-center justify-between">
+			<div class="w-[40%] shadow-custom px-4 py-2 bg-white text-bodyBlack rounded-custom flex gap-3 items-center justify-between">
 				<form class="flex gap-2 items-center flex-1" @submit.prevent="handleSearch">
 					<SofaIcon name="filter" class="h-[15px]" @click="$router.push('/marketplace/search')" />
-					<SofaNormalText as="router-link" class="pr-2 border-r border-darkLightGray" content="Filter" to="/marketplace/search" />
+					<SofaText as="router-link" class="pr-2 border-r border-darkLightGray" content="Filter" to="/marketplace/search" />
 					<SofaTextField
 						v-model="searchQuery"
 						class="flex-1"
@@ -19,7 +19,7 @@
 						placeholder="Search for anything" />
 				</form>
 
-				<SofaIcon name="search-black" class="h-[17px] cursor-pointer w-[20px]" @click="handleSearch" />
+				<SofaIcon name="search-black" class="h-[17px] w-[20px]" @click="handleSearch" />
 			</div>
 		</div>
 
@@ -28,8 +28,8 @@
 				class="w-full shadow-custom px-4 py-2 bg-white rounded-custom flex gap-2 items-center justify-start"
 				@submit.prevent="handleSearch">
 				<SofaIcon name="filter" class="h-[15px]" @click="$router.push('/marketplace/search')" />
-				<SofaIcon name="search-black" class="h-[15px] cursor-pointer" @click="handleSearch" />
-				<SofaTextField v-model="searchQuery" class="flex-1" customClass="!border-none w-full !px-0" placeholder="Search" />
+				<SofaIcon name="search-black" class="h-[15px]" @click="handleSearch" />
+				<SofaTextField v-model="searchQuery" class="flex-1" customClass="!border-none w-full px-0" placeholder="Search" />
 			</form>
 		</div>
 
@@ -37,13 +37,8 @@
 			<template v-for="material in materials" :key="material.title">
 				<div class="w-full flex flex-col mdlg:gap-4 gap-3">
 					<div class="w-full flex gap-2 pr-4 mdlg:pr-0 items-center justify-between">
-						<SofaNormalText class="!font-bold" :content="material.title" />
-						<SofaNormalText
-							color="text-primaryPink"
-							as="router-link"
-							to="/marketplace/search"
-							class="mdlg:hidden"
-							content="View all" />
+						<SofaHeading :content="material.title" />
+						<SofaText as="router-link" to="/marketplace/search" class="text-primaryPink mdlg:hidden" content="View all" />
 					</div>
 
 					<div
@@ -52,7 +47,7 @@
 						<StudyMaterialCard v-for="m in material.list" :key="m.id" wrapped :material="m" class="mdlg:w-[20%]" />
 					</div>
 					<div v-else class="pr-4 mdlg:pr-0">
-						<SofaEmptyState :title="material.emptyTitle" :subTitle="material.emptySub" customClass="!h-[230px]" />
+						<SofaEmptyState :title="material.emptyTitle" :subTitle="material.emptySub" class="!h-[230px]" />
 					</div>
 				</div>
 			</template>

@@ -23,7 +23,7 @@
 					bgColor="bg-white"
 					textColor="text-primaryPurple"
 					padding="py-3 px-9"
-					customClass="font-bold"
+					class="font-bold"
 					@click="startQuizPlay(item.quiz, item.quizMode)">
 					Start
 				</SofaButton>

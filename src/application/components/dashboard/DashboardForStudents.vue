@@ -5,14 +5,14 @@
 				v-if="task.list.find((s) => !s.isDone)"
 				class="w-full mdlg:shadow-custom mdlg:p-4 pl-4 py-1 mdlg:!bg-white rounded-2xl flex flex-col mdlg:gap-4 gap-1">
 				<div class="w-full flex gap-2 items-center">
-					<SofaNormalText class="!font-bold" :content="task.title" />
+					<SofaHeading :content="task.title" />
 				</div>
 
 				<div
 					class="mdlg:flex-col mdlg:gap-4 flex gap-3 mdlg:p-0 py-2 pr-4 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
 					<SofaIconCard v-for="item in task.list" :key="item.title" :data="item" class="shrink-0" @click="item.action?.()">
 						<template #title>
-							<SofaNormalText customClass="!font-bold" :content="item.title" />
+							<SofaHeading :content="item.title" />
 						</template>
 					</SofaIconCard>
 				</div>
@@ -22,8 +22,8 @@
 		<template v-for="material in materials" :key="material.title">
 			<div class="w-full mdlg:shadow-custom mdlg:p-4 pl-4 py-1 mdlg:bg-white rounded-2xl flex flex-col gap-4">
 				<div class="w-full flex gap-2 pr-4 mdlg:pr-0 items-center justify-between">
-					<SofaNormalText class="!font-bold" :content="material.title" />
-					<SofaNormalText color="text-primaryPink" as="router-link" to="/marketplace" class="mdlg:hidden" content="View all" />
+					<SofaHeading :content="material.title" />
+					<SofaText as="router-link" to="/marketplace" class="text-primaryPink mdlg:hidden" content="View all" />
 				</div>
 
 				<div
@@ -32,13 +32,12 @@
 					<StudyMaterialCard v-for="m in material.list.slice(0, 4)" :key="m.hash" :material="m" class="mdlg:bg-lightGray" />
 				</div>
 				<div v-else class="pr-4 mdlg:pr-0">
-					<SofaEmptyState :title="material.emptyTitle" :subTitle="material.emptySub" customClass="!h-[230px]" />
+					<SofaEmptyState :title="material.emptyTitle" :subTitle="material.emptySub" class="!h-[230px]" />
 				</div>
 
-				<SofaNormalText
+				<SofaText
 					v-if="material.list.length"
-					color="text-primaryPink"
-					class="pr-4 hidden mdlg:inline"
+					class="pr-4 hidden mdlg:inline text-primaryPink"
 					as="router-link"
 					to="/marketplace"
 					content="View all" />

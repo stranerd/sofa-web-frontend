@@ -12,9 +12,7 @@
 				name="Emails"
 				placeholder="Email, comma seperated"
 				borderColor="border-transparent" />
-			<SofaButton customClass="font-semibold" padding="py-3 px-6" bgColor="bg-primaryBlue" textColor="text-white" @click="addUsers">
-				Add
-			</SofaButton>
+			<SofaButton padding="py-3 px-6" bgColor="bg-primaryBlue" textColor="text-white" @click="addUsers"> Add </SofaButton>
 		</div>
 
 		<template v-if="requests.length">

@@ -19,9 +19,9 @@
 		<a
 			class="w-full flex items-center justify-between gap-3 p-3 rounded-custom border-2 border-darkLightGray"
 			@click="showAddNewItems = !showAddNewItems">
-			<div class="flex items-center gap-3">
-				<SofaIcon name="add" class="h-[20px] fill-grayColor" />
-				<SofaNormalText color="text-grayColor" content="Add link" />
+			<div class="flex items-center gap-3 text-grayColor">
+				<SofaIcon name="add" class="h-[20px] fill-current" />
+				<SofaText content="Add link" />
 			</div>
 
 			<SofaIcon name="chevron-down" class="h-[7px]" :class="{ 'rotate-180': showAddNewItems }" />
@@ -31,10 +31,10 @@
 			<a
 				v-for="(icon, key) in socials"
 				:key="key"
-				class="w-full flex items-center justify-start gap-3 p-3 rounded-custom border-2 border-darkLightGray"
+				class="w-full flex items-center justify-start gap-3 p-3 rounded-custom border-2 border-darkLightGray text-grayColor"
 				@click="factory.addNewSocial(key)">
 				<SofaIcon :name="icon" class="h-5 fill-deepGray" />
-				<SofaNormalText color="text-grayColor" class="capitalize" :content="key" />
+				<SofaText class="capitalize" :content="key" />
 			</a>
 		</div>
 	</div>

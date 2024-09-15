@@ -18,14 +18,6 @@ export default defineComponent({
 			type: String,
 			default: 'text-bodyBlack',
 		},
-		customClass: {
-			type: String,
-			default: '',
-		},
-		isHtml: {
-			type: Boolean,
-			default: false,
-		},
 		content: {
 			type: String,
 			default: '',
@@ -39,7 +31,6 @@ export default defineComponent({
 		const cls = computed(() =>
 			[
 				props.content ? 'body flex flex-col items-start' : '',
-				props.customClass,
 				props.color,
 				props.size == 'lg' ? 'lg:text-lg mdlg:text-base text-sm' : '',
 				props.size == 'base' ? 'lg:text-sm mdlg:text-[12px] text-xs' : '',

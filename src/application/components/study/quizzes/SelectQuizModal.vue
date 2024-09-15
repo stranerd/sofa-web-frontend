@@ -1,11 +1,11 @@
 <template>
 	<div class="flex flex-col gap-4 mdlg:p-6 p-4 overflow-hidden">
 		<div class="w-full hidden flex-col gap-2 justify-center items-center md:flex">
-			<SofaHeaderText class="!text-xl" content="Select a quiz" />
+			<SofaHeading size="title" content="Select a quiz" />
 		</div>
 
 		<div class="w-full flex justify-between items-center md:hidden">
-			<SofaNormalText class="!font-bold" content="Select a quiz" />
+			<SofaHeading content="Select a quiz" />
 			<SofaIcon class="h-[19px]" name="circle-close" @click="close" />
 		</div>
 		<SofaTextField
@@ -25,12 +25,12 @@
 				class="p-4 flex items-center gap-2 rounded-custom"
 				@click="selectedQuiz = quiz">
 				<SofaRadio v-model="selectedQuiz" name="quiz" :value="quiz" />
-				<SofaNormalText :content="quiz.title" />
+				<SofaText :content="quiz.title" />
 			</a>
-			<SofaHeaderText v-if="!filteredQuizzes.length" class="!text-center" content="No quizzes found" />
+			<SofaHeading v-if="!filteredQuizzes.length" class="!text-center" content="No quizzes found" />
 		</div>
 		<div class="w-full flex items-center justify-between">
-			<SofaButton bgColor="bg-grayColor" textColor="text-white" padding="py-3 px-6" customClass="hidden mdlg:block" @click="close">
+			<SofaButton bgColor="bg-grayColor" textColor="text-white" padding="py-3 px-6" class="hidden mdlg:block" @click="close">
 				Cancel
 			</SofaButton>
 			<SofaButton
@@ -39,7 +39,7 @@
 				:disabled="!selectedQuiz"
 				textColor="text-white"
 				padding="py-3 px-6"
-				customClass="w-full mdlg:w-auto"
+				class="w-full mdlg:w-auto"
 				@click="select(selectedQuiz)">
 				Done
 			</SofaButton>

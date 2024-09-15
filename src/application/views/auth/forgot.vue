@@ -13,9 +13,7 @@
 				placeholder="Email"
 				:error="factory.errors.email" />
 
-			<div class="w-full flex flex-col">
-				<SofaButton customClass="w-full" padding="md:py-4 py-3" type="submit"> Continue </SofaButton>
-			</div>
+			<SofaButton class="w-full" padding="md:py-4 py-3" type="submit"> Continue </SofaButton>
 		</form>
 
 		<form v-else class="flex flex-col gap-6 w-full" @submit.prevent="resetPassword">
@@ -45,16 +43,12 @@
 					:error="factory.errors.cPassword" />
 			</div>
 
-			<div class="w-full flex flex-col">
-				<SofaButton customClass="w-full" padding="md:py-4 py-3" type="submit"> Continue </SofaButton>
-			</div>
+			<SofaButton class="w-full" padding="md:py-4 py-3" type="submit"> Continue </SofaButton>
 		</form>
 
 		<div class="flex items-center gap-2 pt-3">
-			<SofaNormalText color="text-grayColor">Don’t have an account?</SofaNormalText>
-			<router-link to="/auth/signup">
-				<SofaNormalText color="!text-primaryBlue">Sign up</SofaNormalText>
-			</router-link>
+			<SofaText class="text-grayColor">Don’t have an account?</SofaText>
+			<SofaText as="router-link" to="/auth/signup" class="text-primaryBlue"> Sign up </SofaText>
 		</div>
 	</AuthLayout>
 </template>

@@ -2,7 +2,6 @@
 	<router-link
 		:to="chat.route"
 		class="w-full flex items-center justify-between relative gap-3 p-3 mdlg:px-0 rounded-custom hover:bg-lightBlue"
-		:class="customClass"
 		exactActiveClass="bg-lightBlue">
 		<div class="flex gap-2 w-full">
 			<SofaAvatar :photoUrl="chat.photoUrl" :size="40" />
@@ -32,10 +31,6 @@ export default defineComponent({
 				photoUrl: string | null
 			},
 			required: true,
-		},
-		customClass: {
-			type: String,
-			default: '',
 		},
 	},
 	setup() {

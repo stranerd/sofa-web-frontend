@@ -5,16 +5,12 @@
 				<SofaOtpInput v-model="token" />
 			</div>
 
-			<div class="w-full flex flex-col">
-				<SofaButton customClass="w-full" padding="md:py-4 py-3" type="submit"> Verify </SofaButton>
-			</div>
+			<SofaButton class="w-full" padding="md:py-4 py-3" type="submit"> Verify </SofaButton>
 		</form>
 
 		<div class="flex items-center gap-2 pt-3">
-			<SofaNormalText color="text-grayColor">Have an account?</SofaNormalText>
-			<router-link to="/auth/signin">
-				<SofaNormalText color="!text-primaryBlue">Sign in</SofaNormalText>
-			</router-link>
+			<SofaText class="text-grayColor">Have an account?</SofaText>
+			<SofaText as="router-link" to="/auth/signin" class="text-primaryBlue"> Sign in </SofaText>
 		</div>
 	</AuthLayout>
 </template>

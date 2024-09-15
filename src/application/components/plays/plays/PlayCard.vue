@@ -5,18 +5,18 @@
 		<SofaImageLoader class="w-[110px] h-[80px] rounded-custom" :photoUrl="quiz?.picture ?? '/images/default.svg'" />
 		<div class="flex flex-col w-full gap-2">
 			<SofaHeading clamp>{{ play.title }}</SofaHeading>
-			<SofaNormalText color="text-grayColor" class="capitalize">
+			<SofaText class="capitalize">
 				{{ play.singularizedType }}
-			</SofaNormalText>
+			</SofaText>
 
 			<div class="w-full flex items-center justify-between">
-				<SofaNormalText :color="play.getResultColor(id)" customClass="font-semibold">
+				<SofaHeading :color="play.getResultColor(id)">
 					{{ play.getCardLabel(id) }}
-				</SofaNormalText>
+				</SofaHeading>
 				<div v-if="play.isGames()" class="flex items-center gap-2">
-					<SofaNormalText color="text-grayColor">
+					<SofaText class="text-grayColor">
 						{{ play.participants.length }}
-					</SofaNormalText>
+					</SofaText>
 					<SofaIcon name="participant" class="h-[15px]" />
 				</div>
 			</div>

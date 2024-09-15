@@ -8,7 +8,7 @@
 			<SofaText class="text-primaryPink" content="New chat" />
 		</router-link>
 
-		<ChatList customClass="!rounded-none" extraStyle="px-3" />
+		<ChatList chatClass="!rounded-none" extraStyle="px-3" />
 
 		<div
 			v-if="conversation.user.id === id"

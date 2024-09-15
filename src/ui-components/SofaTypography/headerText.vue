@@ -19,10 +19,6 @@ export default defineComponent({
 			type: String,
 			default: 'text-darkBody',
 		},
-		customClass: {
-			type: String,
-			default: '',
-		},
 		content: {
 			type: String,
 			default: '',
@@ -42,7 +38,6 @@ export default defineComponent({
 				props.size == 'lg' ? 'lg:text-xl mdlg:text-lg text-base' : '',
 				props.size == 'base' ? 'lg:text-base mdlg:text-[13px] text-sm' : '',
 				props.size == 'xs' ? 'mdlg:!text-[12px] text-xs' : '',
-				props.customClass,
 				props.color,
 			].join(' '),
 		)

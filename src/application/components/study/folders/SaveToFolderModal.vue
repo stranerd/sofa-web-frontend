@@ -15,7 +15,7 @@
 				:key="folder.hash"
 				class="w-full flex items-center gap-3 justify-between p-4 rounded-custom bg-lightGray">
 				<div class="flex items-center w-full gap-3">
-					<SofaIcon name="folder" customClass="h-[18px]" />
+					<SofaIcon name="folder" class="h-[18px]" />
 
 					<SofaCustomInput
 						v-if="folder.id === factory.entityId"

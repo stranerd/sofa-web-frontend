@@ -7,7 +7,6 @@
 			[padding]: true,
 			[bgColor]: true,
 			[textColor]: true,
-			[customClass]: true,
 		}">
 		<slot />
 	</button>
@@ -26,10 +25,6 @@ export default defineComponent({
 		textColor: {
 			type: String,
 			default: 'text-white',
-		},
-		customClass: {
-			type: String,
-			default: '',
 		},
 		padding: {
 			type: String,

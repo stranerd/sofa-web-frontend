@@ -68,8 +68,7 @@
 								padding="px-5 py-2"
 								bgColor="bg-white"
 								textColor="text-grayColor"
-								class="hidden mdlg:inline-block"
-								customClass="border border-gray-100"
+								class="hidden mdlg:inline-block border border-gray-100"
 								@click="close">
 								Exit
 							</SofaButton>

@@ -4,18 +4,6 @@
 			<AuthProvider :signUp="true" />
 
 			<div class="w-full flex flex-col gap-4">
-				<!-- <div class="flex gap-4 items-center">
-					<SofaTextField
-						v-model="factory.first"
-						customClass="rounded-custom !bg-lightGray w-full"
-						placeholder="First Name"
-						:error="factory.errors.first" />
-					<SofaTextField
-						v-model="factory.last"
-						customClass="rounded-custom !bg-lightGray w-full"
-						placeholder="Last Name"
-						:error="factory.errors.last" />
-				</div> -->
 				<SofaTextField
 					v-model="factory.email"
 					customClass="rounded-custom !bg-lightGray"
@@ -36,35 +24,21 @@
 					:error="factory.errors.cPassword" />
 
 				<SofaCheckbox v-model="factory.termsAccepted">
-					<span class="text-grayColor text-left flex flex-wrap gap-[4px]">
-						I accepts Stranerd's
-						<SofaNormalText
-							color="text-primaryBlue"
-							as="router-link"
-							to="/legal/terms-of-service"
-							class="hover:underline"
-							content="Terms of Service" />
+					<span class="text-grayColor text-left flex flex-wrap gap-1">
+						<span>I accepts Stranerd's </span>
+						<SofaText as="router-link" to="/legal/terms-of-service" class="text-primaryBlue" content="Terms of Service" />
 						<span> and </span>
-						<SofaNormalText
-							color="text-primaryBlue"
-							as="router-link"
-							to="/legal/privacy-policy"
-							class="hover:underline"
-							content="Privacy Policy" />
+						<SofaText class="text-primaryBlue" as="router-link" to="/legal/privacy-policy" content="Privacy Policy" />
 					</span>
 				</SofaCheckbox>
 			</div>
 
-			<div class="w-full flex flex-col">
-				<SofaButton :disabled="!factory.valid" customClass="w-full" padding="md:py-4 py-3" type="submit"> Sign Up </SofaButton>
-			</div>
+			<SofaButton :disabled="!factory.valid" class="w-full" padding="md:py-4 py-3" type="submit"> Sign Up </SofaButton>
 		</form>
 
 		<div class="flex items-center gap-2 pt-3">
-			<SofaNormalText color="text-grayColor">Have an account?</SofaNormalText>
-			<router-link to="/auth/signin">
-				<SofaNormalText color="!text-primaryBlue">Sign in</SofaNormalText>
-			</router-link>
+			<SofaText class="text-grayColor">Have an account?</SofaText>
+			<SofaText as="router-link" to="/auth/signin" class="text-primaryBlue"> Sign in </SofaText>
 		</div>
 	</AuthLayout>
 </template>

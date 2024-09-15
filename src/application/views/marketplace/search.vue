@@ -4,7 +4,7 @@
 			<div class="w-full shadow-custom bg-white rounded-2xl flex flex-col h-full gap-4 p-4">
 				<div class="flex items-center gap-2 shrink-0">
 					<SofaIcon class="h-[14px]" name="filter" />
-					<SofaNormalText class="!font-bold" content="Filter" />
+					<SofaHeading content="Filter" />
 				</div>
 
 				<span class="h-0.5 bg-lightGray" />
@@ -19,24 +19,24 @@
 					<SofaIcon class="h-[15px] mdlg:hidden" name="arrow-left" @click="$utils.goBack()" />
 					<div class="flex mdlg:flex-row-reverse items-center grow bg-white rounded-custom px-3 gap-3">
 						<SofaIcon name="search-black" class="h-[17px]" />
-						<SofaTextField v-model="query" customClass="bg-transparent !px-0 !border-none" placeholder="Search for anything" />
+						<SofaTextField v-model="query" customClass="bg-transparent px-0 !border-none" placeholder="Search for anything" />
 					</div>
 				</div>
 
 				<div class="flex gap-3 items-center">
-					<a
+					<SofaHeading
 						v-for="(item, index) in filterOptions"
 						:key="index"
+						as="a"
+						:content="item.name"
 						class="px-6 py-2 rounded-custom flex items-center justify-center gap-1"
 						:class="item.id == selectedFilterOption ? 'bg-primaryPurple text-white' : 'bg-white text-deepGray'"
-						@click="selectedFilterOption = item.id">
-						<SofaNormalText color="text-current" class="!font-semibold" :content="item.name" />
-					</a>
+						@click="selectedFilterOption = item.id" />
 				</div>
 
 				<div class="flex flex-col grow overflow-y-auto gap-6">
 					<div v-if="selectedFilterOption === 'all' || selectedFilterOption === 'courses'" class="flex flex-col gap-3">
-						<SofaNormalText v-if="selectedFilterOption == 'all'" class="font-bold"> Courses </SofaNormalText>
+						<SofaHeading v-if="selectedFilterOption == 'all'"> Courses </SofaHeading>
 
 						<div v-if="courses.length" class="w-full flex flex-nowrap overflow-x-auto scrollbar-hide gap-3 mdlg:gap-4">
 							<StudyMaterialCard
@@ -56,7 +56,7 @@
 					</div>
 
 					<div v-if="selectedFilterOption === 'all' || selectedFilterOption === 'quizzes'" class="flex flex-col gap-3">
-						<SofaNormalText v-if="selectedFilterOption == 'all'" class="font-bold"> Quizzes </SofaNormalText>
+						<SofaHeading v-if="selectedFilterOption == 'all'"> Quizzes </SofaHeading>
 
 						<div v-if="quizzes.length" class="w-full flex flex-nowrap overflow-x-auto scrollbar-hide gap-3 mdlg:gap-4">
 							<StudyMaterialCard
@@ -82,9 +82,9 @@
 					class="bg-primaryPurple text-white rounded-custom py-3 flex items-center justify-center gap-2"
 					@click="showFilter = true">
 					<SofaIcon class="h-[14px] fill-current" name="filter" />
-					<SofaNormalText class="!font-semibold !text-sm" color="text-current">Filter</SofaNormalText>
+					<SofaHeading size="sub">Filter</SofaHeading>
 					<span class="px-2 bg-white rounded-full aspect-square flex justify-center items-center text-primaryPurple">
-						<SofaNormalText color="text-current">{{ selectedOptions.length }}</SofaNormalText>
+						<SofaText>{{ selectedOptions.length }}</SofaText>
 					</span>
 				</SofaButton>
 			</div>
@@ -94,7 +94,7 @@
 		<div class="flex flex-col h-full gap-4 p-4">
 			<div class="flex gap-3 items-center">
 				<SofaIcon class="h-[13px]" name="filter" />
-				<SofaNormalText class="!font-bold !text-base" content="Filters" />
+				<SofaHeading content="Filters" />
 				<SofaIcon class="h-[19px] ml-auto" name="circle-close" @click="showFilter = false" />
 			</div>
 
@@ -111,9 +111,8 @@
 import { useHead } from '@unhead/vue'
 import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import MarketplaceFilter, { SelectedOption } from '@app/components/marketplace/Filter.vue'
 import { useSearch } from '@app/composables/search'
-import { SofaNormalText } from 'sofa-ui-components'
+import MarketplaceFilter, { SelectedOption } from '@app/components/marketplace/Filter.vue'
 
 useHead({
 	title: 'Search',

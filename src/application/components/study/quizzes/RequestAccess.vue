@@ -1,9 +1,8 @@
 <template>
 	<div class="flex flex-col items-center gap-2 p-4 md:p-8">
 		<SofaIcon v-if="hasRequested" name="checkmark-circle" class="rounded-full h-[40px]" />
-		<SofaHeaderText size="xl" class="!font-bold text-deepGray" :content="hasRequested ? 'Request sent' : 'Request editing access'" />
-		<SofaNormalText
-			color="text-inherit"
+		<SofaHeading size="title" class="text-deepGray" :content="hasRequested ? 'Request sent' : 'Request editing access'" />
+		<SofaText
 			:content="
 				hasRequested ? 'You will get notified when the quiz owner responds' : 'You do not have access to collaborate on this quiz'
 			" />
@@ -12,7 +11,6 @@
 			<SofaButton
 				v-if="hasRequested"
 				class="w-full md:w-auto"
-				customClass="md:font-semibold"
 				padding="py-3 md:px-6"
 				bgColor="bg-primaryBlue"
 				textColor="text-white"
@@ -22,7 +20,6 @@
 			<SofaButton
 				v-if="!hasRequested"
 				class="w-full md:w-auto mr-auto"
-				customClass="md:font-semibold"
 				padding="py-3 md:px-6"
 				bgColor="bg-white border border-gray-100"
 				textColor="text-grayColor"
@@ -32,7 +29,6 @@
 			<SofaButton
 				v-if="!hasRequested"
 				class="w-full md:w-auto ml-auto"
-				customClass="md:font-semibold"
 				padding="py-3 md:px-6"
 				bgColor="bg-primaryBlue"
 				textColor="text-white"

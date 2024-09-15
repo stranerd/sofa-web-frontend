@@ -3,7 +3,6 @@
 		:is="as"
 		class="px-3 py-1.5 text-sub rounded-lg"
 		:class="{
-			[customClass]: true,
 			'bg-primaryPurple text-white': color === 'purple' && !inverted,
 			'text-primaryPurple bg-opacity-25': color === 'purple' && inverted,
 			'bg-primaryRed text-white': color === 'red' && !inverted,
@@ -26,13 +25,11 @@
 withDefaults(
 	defineProps<{
 		color?: 'purple' | 'green' | 'blue' | 'orange' | 'gray' | 'pink' | 'red'
-		customClass?: string
 		inverted?: boolean
 		as?: string
 	}>(),
 	{
 		color: 'purple',
-		customClass: '',
 		inverted: false,
 		as: 'span',
 	},

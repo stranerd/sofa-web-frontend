@@ -1,5 +1,5 @@
 <template>
-	<div :class="`w-full flex flex-col gap-3 justify-center items-center py-9 px-6 rounded-custom bg-primaryPurple ${customClass}`">
+	<div class="w-full flex flex-col gap-3 justify-center items-center py-9 px-6 rounded-custom bg-primaryPurple">
 		<SofaIcon v-if="icon" :class="icon.size" :name="icon.name" />
 		<svg v-else width="30" height="30" viewBox="0 0 30 30" class="h-[28px]" fill="white">
 			<path
@@ -35,10 +35,6 @@ import { defineComponent } from 'vue'
 export default defineComponent({
 	name: 'SofaEmptyState',
 	props: {
-		customClass: {
-			type: String,
-			default: '',
-		},
 		title: {
 			type: String,
 			default: '',

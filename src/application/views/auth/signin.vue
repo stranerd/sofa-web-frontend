@@ -20,22 +20,16 @@
 					:error="factory.errors.password" />
 			</div>
 
-			<div class="w-full flex flex-col">
-				<SofaButton :disabled="!factory.valid" customClass="w-full" padding="md:py-4 py-3" type="submit"> Login </SofaButton>
-			</div>
+			<SofaButton :disabled="!factory.valid" class="w-full" padding="md:py-4 py-3" type="submit"> Login </SofaButton>
 		</form>
 
 		<div class="w-full flex items-center justify-center pt-3">
-			<router-link to="/auth/forgot">
-				<SofaNormalText color="!text-primaryBlue">Forgot password?</SofaNormalText>
-			</router-link>
+			<SofaText as="router-link" to="/auth/forgot" class="text-primaryBlue"> Forgot password? </SofaText>
 		</div>
 
 		<div class="flex items-center gap-2 pt-3">
-			<SofaNormalText color="text-grayColor">Don’t have an account?</SofaNormalText>
-			<router-link to="/auth/signup">
-				<SofaNormalText color="!text-primaryBlue">Sign up</SofaNormalText>
-			</router-link>
+			<SofaText class="text-grayColor">Don’t have an account?</SofaText>
+			<SofaText as="router-link" to="/auth/signup" class="text-primaryBlue"> Sign up </SofaText>
 		</div>
 	</AuthLayout>
 </template>

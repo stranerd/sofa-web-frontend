@@ -235,12 +235,12 @@
 					<SofaHeading v-if="typeFactory.isOrganization" content="What exams does your organization cover?" />
 
 					<div class="w-full flex justify-center items-center flex-wrap gap-3">
-						<SofaBadge customClass="flex items-center gap-2" color="gray">Enter exam</SofaBadge>
+						<SofaBadge class="flex items-center gap-2" color="gray">Enter exam</SofaBadge>
 						<SofaBadge
 							v-for="exam in gatewayExams.map((s) => ({ key: s.id, value: s.title }))"
 							:key="exam.key"
 							:color="typeFactory.institutions.includes(exam.key) ? 'purple' : 'gray'"
-							customClass="flex items-center gap-2"
+							class="flex items-center gap-2"
 							as="a"
 							@click.prevent="toggleInstitution(exam.key)">
 							{{ exam.value }}
@@ -260,14 +260,14 @@
 				<SofaHeading v-if="typeFactory.isTeacher" content="What subjects do you teach?" />
 				<SofaHeading v-if="typeFactory.isOrganization" content="What subjects does your organization cover?" />
 				<div class="w-full flex justify-center items-center flex-wrap gap-3 py-2">
-					<SofaBadge customClass="flex items-center gap-2" color="gray">Enter exam</SofaBadge>
+					<SofaBadge class="flex items-center gap-2" color="gray">Enter exam</SofaBadge>
 					<SofaBadge
 						v-for="course in courses
 							.filter((c) => c.institutionId === typeFactory.activeInst)
 							.map((s) => ({ key: s.id, value: s.title }))"
 						:key="course.key"
 						:color="typeFactory.getInstitution(typeFactory.activeInst).courseIds.includes(course.key) ? 'purple' : 'gray'"
-						customClass="flex items-center gap-2"
+						class="flex items-center gap-2"
 						as="a"
 						@click="toggleCourse(course.key)">
 						{{ course.value }}
