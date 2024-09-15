@@ -5,7 +5,6 @@
 
 			<div class="w-full flex flex-col gap-4">
 				<SofaTextField
-					ref="email"
 					v-model="factory.email"
 					customClass="rounded-custom !bg-lightGray"
 					type="text"
@@ -13,7 +12,6 @@
 					placeholder="Email"
 					:error="factory.errors.email" />
 				<SofaTextField
-					ref="password"
 					v-model="factory.password"
 					customClass="rounded-custom !bg-lightGray"
 					type="password"

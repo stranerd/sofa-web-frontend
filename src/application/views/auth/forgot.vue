@@ -6,7 +6,6 @@
 		">
 		<form v-if="!sent" class="flex flex-col gap-6 w-full" @submit.prevent="sendResetEmail">
 			<SofaTextField
-				ref="email"
 				v-model="factory.email"
 				customClass="rounded-custom !bg-lightGray"
 				type="text"
@@ -22,7 +21,6 @@
 		<form v-else class="flex flex-col gap-6 w-full" @submit.prevent="resetPassword">
 			<div class="w-full flex flex-col gap-4">
 				<SofaTextField
-					ref="token"
 					v-model="factory.token"
 					customClass="rounded-custom !bg-lightGray"
 					type="number"
@@ -31,7 +29,6 @@
 					:error="factory.errors.token" />
 
 				<SofaTextField
-					ref="new_password"
 					v-model="factory.password"
 					customClass="rounded-custom !bg-lightGray"
 					type="password"
@@ -40,7 +37,6 @@
 					:error="factory.errors.password" />
 
 				<SofaTextField
-					ref="confirm_new_password"
 					v-model="factory.cPassword"
 					customClass="rounded-custom !bg-lightGray"
 					type="password"

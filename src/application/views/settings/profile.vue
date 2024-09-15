@@ -44,7 +44,6 @@
 				<SofaHeaderText size="xl"> Contact info </SofaHeaderText>
 
 				<SofaTextField
-					ref="name.first"
 					v-model="auth.email"
 					customClass="rounded-custom !bg-lightGray"
 					type="text"
