@@ -35,6 +35,7 @@ export type UserSchool =
 	| {
 			type: UserSchoolType.graduate
 	  }
+	| null
 
 export type UserTypeData =
 	| {
@@ -72,11 +73,14 @@ export enum RankingTimes {
 
 export type EmbeddedUser = {
 	id: string
-	bio: Pick<UserBio, 'name' | 'photo'> & {
-		publicName: string
-	}
+	bio: Pick<UserBio, 'name' | 'photo'> & { publicName: string }
 	roles: AuthRoleType
-	type: UserTypeData | null
+	type:
+		| Pick<Extract<UserTypeData, { type: UserType.agent }>, 'type'>
+		| Pick<Extract<UserTypeData, { type: UserType.student }>, 'type'>
+		| Pick<Extract<UserTypeData, { type: UserType.teacher }>, 'type'>
+		| Pick<Extract<UserTypeData, { type: UserType.organization }>, 'type' | 'name'>
+		| null
 }
 
 enum UserMeta {

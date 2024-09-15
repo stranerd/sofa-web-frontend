@@ -93,7 +93,7 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 			.min(1)
 			.requiredIf(() => this.isOrganization),
 	}
-	reserved = ['type', 'schoolType']
+	reserved = ['type']
 	extras = reactive({
 		insts: [] as string[],
 		activeInst: null as string | null,
@@ -111,18 +111,17 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 	constructor() {
 		super({
 			type: UserType.student,
-			schoolType: UserSchoolType.graduate,
+			schoolType: UserSchoolType.aspirant,
 			institutionId: '',
 			facultyId: '',
 			departmentId: '',
 			exams: [],
-			sellMaterials: false,
+			opLength: '',
+			sellsMaterials: false,
 			degree: '',
 			workplace: '',
-			teachingYears: '',
 			name: '',
 			code: '',
-			opLength: '',
 			teachersSize: '',
 			studentsSize: '',
 		})
@@ -206,7 +205,7 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 		this.entityId = entity.id
 		if (!entity.type) return
 		this.type = entity.type.type
-		if ('school' in entity.type) {
+		if ('school' in entity.type && entity.type.school) {
 			const school = entity.type.school
 			this.schoolType = school.type
 			if (school.type === UserSchoolType.college) {

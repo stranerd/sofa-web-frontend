@@ -1,5 +1,6 @@
 import { RouteLocationNormalized } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
+import { UserTypeFactory } from '@modules/users'
 
 type MiddleWareArgs = {
 	to: RouteLocationNormalized
@@ -40,7 +41,12 @@ export const isAuthenticated = defineMiddleware(async ({ to }) => {
 export const isOnboarding = defineMiddleware(async ({ to, goBackToNonAuth }) => {
 	const redirect = await checkAuthUser(to.fullPath)
 	if (redirect) return redirect
-	if (useAuth().user.value?.type) return goBackToNonAuth()
+	const user = useAuth().user.value
+	if (user) {
+		const userTypeFactory = new UserTypeFactory()
+		userTypeFactory.load(user)
+		if (userTypeFactory.valid) return goBackToNonAuth()
+	}
 })
 export const isSubscribed = defineMiddleware(async ({ goBackToNonAuth }) => {
 	if (!useAuth().isSubscribed.value) return goBackToNonAuth()
