@@ -17,21 +17,9 @@
 					<SofaButton padding="px-5 py-2" @click="$router.push('/profile')">View profile</SofaButton>
 				</div>
 
-				<SofaTextField
-					v-model="factory.first"
-					customClass="rounded-custom !bg-lightGray"
-					type="text"
-					placeholder="First Name"
-					:error="factory.errors.first"
-					borderColor="border-transparent" />
+				<SofaInput v-model="factory.first" type="text" placeholder="First Name" :error="factory.errors.first" />
 
-				<SofaTextField
-					v-model="factory.last"
-					customClass="rounded-custom !bg-lightGray"
-					type="text"
-					placeholder="Last Name"
-					:error="factory.errors.last"
-					borderColor="border-transparent" />
+				<SofaInput v-model="factory.last" type="text" placeholder="Last Name" :error="factory.errors.last" />
 
 				<SofaTextarea
 					v-model="factory.description"
@@ -43,13 +31,7 @@
 			<div id="contact" class="w-full flex flex-col gap-4 bg-white rounded-2xl md:p-5 p-4 shadow-custom">
 				<SofaHeading size="title"> Contact info </SofaHeading>
 
-				<SofaTextField
-					v-model="auth.email"
-					customClass="rounded-custom !bg-lightGray"
-					type="text"
-					placeholder="Email"
-					:disabled="true"
-					borderColor="border-transparent" />
+				<SofaInput v-model="auth.email" type="text" placeholder="Email" :disabled="true" />
 
 				<AccountSetup v-if="false" :isProfilePhone="true" />
 			</div>

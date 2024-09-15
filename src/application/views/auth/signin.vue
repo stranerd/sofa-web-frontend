@@ -4,20 +4,8 @@
 			<AuthProvider :signUp="false" />
 
 			<div class="w-full flex flex-col gap-4">
-				<SofaTextField
-					v-model="factory.email"
-					customClass="rounded-custom !bg-lightGray"
-					type="text"
-					name="Email"
-					placeholder="Email"
-					:error="factory.errors.email" />
-				<SofaTextField
-					v-model="factory.password"
-					customClass="rounded-custom !bg-lightGray"
-					type="password"
-					placeholder="Password"
-					name="Password"
-					:error="factory.errors.password" />
+				<SofaInput v-model="factory.email" type="text" placeholder="Email" :error="factory.errors.email" />
+				<SofaInput v-model="factory.password" type="password" placeholder="Password" :error="factory.errors.password" />
 			</div>
 
 			<SofaButton :disabled="!factory.valid" class="w-full" padding="md:py-4 py-3" type="submit"> Login </SofaButton>

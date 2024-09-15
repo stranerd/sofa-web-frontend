@@ -11,13 +11,7 @@
 		</div>
 
 		<div v-if="showAddNewAccount && activeAccountFactory" class="w-full flex flex-col gap-3">
-			<SofaTextField
-				v-model="activeAccountFactory.bankNumber"
-				customClass="rounded-custom !bg-lightGray"
-				type="text"
-				placeholder="Account number"
-				borderColor="border-transparent">
-			</SofaTextField>
+			<SofaInput v-model="activeAccountFactory.bankNumber" type="text" placeholder="Account number"> </SofaInput>
 
 			<SofaSelect
 				v-model="activeAccountFactory.bankCode"
@@ -29,18 +23,13 @@
 		</div>
 
 		<div v-else class="w-full flex flex-col gap-3">
-			<SofaTextField
-				v-model="withdrawalFactory.amount"
-				customClass="rounded-custom !bg-lightGray"
-				type="number"
-				placeholder="Amount"
-				borderColor="border-transparent">
-				<template #inner-prefix>
+			<SofaInput v-model="withdrawalFactory.amount" type="number" placeholder="Amount">
+				<template #prefix>
 					<SofaText>
 						{{ $utils.getCurrency(wallet.balance.currency) }}
 					</SofaText>
 				</template>
-			</SofaTextField>
+			</SofaInput>
 
 			<label
 				v-for="(account, index) in wallet.accounts"

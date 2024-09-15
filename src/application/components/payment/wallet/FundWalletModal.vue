@@ -11,16 +11,11 @@
 		</div>
 
 		<div class="w-full flex flex-col gap-5">
-			<SofaTextField
-				v-model="factory.amount"
-				customClass="rounded-custom !bg-lightGray"
-				type="number"
-				placeholder="Amount"
-				borderColor="border-transparent">
-				<template #inner-prefix>
+			<SofaInput v-model="factory.amount" type="number" placeholder="Amount">
+				<template #prefix>
 					<SofaText>₦</SofaText>
 				</template>
-			</SofaTextField>
+			</SofaInput>
 
 			<SelectPaymentMethod
 				v-model="factory.methodId"

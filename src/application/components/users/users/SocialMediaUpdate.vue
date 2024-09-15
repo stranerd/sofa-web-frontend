@@ -1,19 +1,18 @@
 <template>
-	<SofaTextField
+	<SofaInput
 		v-for="(item, index) in factory.getSocials()"
 		:key="index"
 		v-model="item.link"
 		:placeholder="`Enter ${item.ref} link`"
 		type="url"
-		:error="item.error"
-		customClass="rounded-custom !bg-lightGray">
-		<template #inner-prefix>
+		:error="item.error">
+		<template #prefix>
 			<SofaIcon :name="socials[item.ref]" class="h-5 fill-deepGray" />
 		</template>
-		<template #inner-suffix>
+		<template #suffix>
 			<SofaIcon name="trash" class="h-[16px]" @click="deleteItem(index)" />
 		</template>
-	</SofaTextField>
+	</SofaInput>
 
 	<div class="w-full flex flex-col gap-3">
 		<a

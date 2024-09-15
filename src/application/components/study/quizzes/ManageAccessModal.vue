@@ -6,12 +6,7 @@
 		</div>
 
 		<div class="flex gap-4 items-center">
-			<SofaTextField
-				v-model="searchValue"
-				customClass="rounded-custom !bg-lightGray"
-				name="Emails"
-				placeholder="Email, comma seperated"
-				borderColor="border-transparent" />
+			<SofaInput v-model="searchValue" name="Emails" placeholder="Email, comma seperated" />
 			<SofaButton padding="py-3 px-6" bgColor="bg-primaryBlue" textColor="text-white" @click="addUsers"> Add </SofaButton>
 		</div>
 

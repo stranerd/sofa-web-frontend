@@ -31,21 +31,9 @@
 						</SofaFileInput>
 					</SofaImageLoader>
 
-					<SofaTextField
-						v-model="profileFactory.first"
-						customClass="rounded-custom !bg-lightGray"
-						type="text"
-						placeholder="First Name"
-						:error="profileFactory.errors.first"
-						borderColor="border-transparent" />
+					<SofaInput v-model="profileFactory.first" type="text" placeholder="First Name" :error="profileFactory.errors.first" />
 
-					<SofaTextField
-						v-model="profileFactory.last"
-						customClass="rounded-custom !bg-lightGray"
-						type="text"
-						placeholder="Last Name"
-						:error="profileFactory.errors.last"
-						borderColor="border-transparent" />
+					<SofaInput v-model="profileFactory.last" type="text" placeholder="Last Name" :error="profileFactory.errors.last" />
 
 					<SofaTextarea v-model="profileFactory.description" placeholder="Bio" />
 				</div>

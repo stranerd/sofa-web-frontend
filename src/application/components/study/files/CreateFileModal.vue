@@ -9,12 +9,7 @@
 			<SofaIcon class="h-[19px]" name="circle-close" @click="close" />
 		</div>
 
-		<SofaTextField
-			v-model="factory.title"
-			customClass="rounded-custom !bg-lightGray"
-			:error="factory.errors.title"
-			placeholder="File title"
-			borderColor="border-transparent" />
+		<SofaInput v-model="factory.title" :error="factory.errors.title" placeholder="File title" />
 
 		<SofaTextarea v-model="factory.description" padding="p-4" placeholder="Description..." :error="factory.errors.description" />
 

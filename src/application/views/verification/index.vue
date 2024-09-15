@@ -38,21 +38,13 @@
 				<SofaFormGroup>
 					<SofaLabel>First Name</SofaLabel>
 
-					<SofaTextField
-						v-model="profileFactory.first"
-						placeholder="Enter first name"
-						customClass="rounded-custom !bg-lightGray"
-						:error="profileFactory.errors.first" />
+					<SofaInput v-model="profileFactory.first" placeholder="Enter first name" :error="profileFactory.errors.first" />
 				</SofaFormGroup>
 
 				<SofaFormGroup>
 					<SofaLabel>Last Name</SofaLabel>
 
-					<SofaTextField
-						v-model="profileFactory.last"
-						placeholder="Enter last name"
-						customClass="rounded-custom !bg-lightGray"
-						:error="profileFactory.errors.last" />
+					<SofaInput v-model="profileFactory.last" placeholder="Enter last name" :error="profileFactory.errors.last" />
 				</SofaFormGroup>
 
 				<SofaFormGroup>

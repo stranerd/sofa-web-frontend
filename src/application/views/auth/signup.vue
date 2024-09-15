@@ -4,24 +4,9 @@
 			<AuthProvider :signUp="true" />
 
 			<div class="w-full flex flex-col gap-4">
-				<SofaTextField
-					v-model="factory.email"
-					customClass="rounded-custom !bg-lightGray"
-					type="email"
-					placeholder="Email"
-					:error="factory.errors.email" />
-				<SofaTextField
-					v-model="factory.password"
-					customClass="rounded-custom !bg-lightGray"
-					type="password"
-					placeholder="Password"
-					:error="factory.errors.password" />
-				<SofaTextField
-					v-model="factory.cPassword"
-					customClass="rounded-custom !bg-lightGray"
-					type="password"
-					placeholder="Confirm password"
-					:error="factory.errors.cPassword" />
+				<SofaInput v-model="factory.email" type="email" placeholder="Email" :error="factory.errors.email" />
+				<SofaInput v-model="factory.password" type="password" placeholder="Password" :error="factory.errors.password" />
+				<SofaInput v-model="factory.cPassword" type="password" placeholder="Confirm password" :error="factory.errors.cPassword" />
 
 				<SofaCheckbox v-model="factory.termsAccepted">
 					<span class="text-grayColor text-left flex flex-wrap gap-1">

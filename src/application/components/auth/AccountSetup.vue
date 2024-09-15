@@ -36,16 +36,8 @@
 			</div>
 		</div>
 
-		<div
-			:class="{
-				'flex flex-col mdlg:flex-row items-center min-w-full':
-					tab === 'profile' || (tab === 'type' && (typeFactory.isStudent || typeFactory.isTeacher || typeFactory.isOrganization)),
-			}">
-			<div
-				v-if="
-					tab === 'profile' || (tab === 'type' && (typeFactory.isStudent || typeFactory.isTeacher || typeFactory.isOrganization))
-				"
-				class="w-full flex flex-col mdlg:flex-row gap-4 py-3">
+		<div :class="{ 'flex flex-col mdlg:flex-row items-center min-w-full': tab === 'profile' || tab === 'type' }">
+			<div v-if="tab === 'profile' || tab === 'type'" class="w-full flex flex-col mdlg:flex-row gap-4 py-3">
 				<div class="flex flex-col items-center justify-center pt-3">
 					<SofaImageLoader class="size-[90px] mdlg:size-[200px] bg-grayColor rounded-full" :photoUrl="profileFactory.photo?.link">
 						<SofaIcon v-if="!profileFactory.photo" class="h-[50px] mdlg:h-[150px]" name="user" />
@@ -61,31 +53,21 @@
 
 				<div v-if="tab === 'profile'" class="mdlg:w-3/5 grid gap-4">
 					<div class="grid mdlg:grid-cols-2 gap-4">
-						<SofaTextField
+						<SofaInput
 							v-model="profileFactory.first"
-							customClass="rounded-custom !bg-lightGray"
 							type="text"
 							placeholder="First Name"
-							:error="profileFactory.errors.first"
-							borderColor="border-transparent" />
+							:error="profileFactory.errors.first" />
 
-						<SofaTextField
-							v-model="profileFactory.last"
-							customClass="rounded-custom !bg-lightGray"
-							type="text"
-							placeholder="Last Name"
-							:error="profileFactory.errors.last"
-							borderColor="border-transparent" />
+						<SofaInput v-model="profileFactory.last" type="text" placeholder="Last Name" :error="profileFactory.errors.last" />
 					</div>
 
-					<SofaTextField
+					<SofaInput
 						v-if="typeFactory.isOrganization"
 						v-model="typeFactory.name"
-						customClass="rounded-custom !bg-lightGray"
 						type="text"
 						placeholder="Organization name"
-						:error="typeFactory.errors.name"
-						borderColor="border-transparent" />
+						:error="typeFactory.errors.name" />
 
 					<SofaTextarea
 						v-model="profileFactory.description"
@@ -93,26 +75,24 @@
 						:error="profileFactory.errors.description"
 						:placeholder="typeFactory.isOrganization ? 'About the organization' : 'Bio'" />
 
-					<SofaTextField
+					<SofaInput
 						v-if="typeFactory.isOrganization"
 						v-model="typeFactory.code"
-						customClass="rounded-custom !bg-lightGray"
 						type="text"
 						placeholder="Set organization code"
-						:error="typeFactory.errors.code"
-						borderColor="border-transparent" />
+						:error="typeFactory.errors.code" />
 
 					<div class="w-full grid grid-cols-2 gap-4">
 						<SofaSelect
 							v-model="locationFactory.country"
-							class="col-span-1"
+							class="col-span-1 capitalize"
 							placeholder="Country"
 							:error="locationFactory.errors.country"
 							:options="countries.map((c) => ({ key: c, value: c }))" />
 
 						<SofaSelect
 							v-model="locationFactory.state"
-							class="col-span-1"
+							class="col-span-1 capitalize"
 							placeholder="State"
 							:error="locationFactory.errors.state"
 							:options="states.map((s) => ({ key: s, value: s }))" />
@@ -121,61 +101,58 @@
 			</div>
 
 			<div v-if="tab === 'type'" class="w-full flex flex-col gap-4 py-3">
-				<SofaTextField
+				<SofaInput
 					v-if="typeFactory.isTeacher"
 					v-model="typeFactory.degree"
-					customClass="rounded-custom !bg-lightGray"
 					type="text"
 					:error="typeFactory.errors.degree"
-					placeholder="What acdemy degree(s) do you have?"
-					borderColor="border-transparent" />
+					placeholder="What acdemy degree(s) do you have?" />
 
-				<SofaTextField
+				<SofaInput
 					v-if="typeFactory.isTeacher"
-					v-model="typeFactory.school"
+					v-model="typeFactory.workplace"
 					customClass="rounded-custom !bg-lightGray"
 					type="text"
 					placeholder="Where do you teach now?"
-					:error="typeFactory.errors.school"
-					borderColor="border-transparent" />
+					:error="typeFactory.errors.workplace" />
 
 				<SofaSelect
 					v-if="typeFactory.isTeacher"
-					v-model="typeFactory.teachingYears"
+					v-model="typeFactory.opLength"
 					placeholder="How long have you been teaching?"
 					:options="[]"
-					:error="typeFactory.errors.teachingYears"
-					class="text-grayColor" />
+					:error="typeFactory.errors.opLength"
+					class="text-grayColor capitalize" />
 				<!-- Organization -->
 				<SofaSelect
 					v-if="typeFactory.isOrganization"
-					v-model="typeFactory.orgLength"
+					v-model="typeFactory.opLength"
 					placeholder="How long has your organization been operating?"
-					:error="typeFactory.errors.orgLength"
+					:error="typeFactory.errors.opLength"
 					:options="[]"
-					class="text-grayColor" />
+					class="text-grayColor capitalize" />
 				<SofaSelect
 					v-if="typeFactory.isOrganization"
-					v-model="typeFactory.orgTeachersLength"
+					v-model="typeFactory.teachersSize"
 					placeholder="How many teachers do you have?"
-					:error="typeFactory.errors.orgTeachersLength"
+					:error="typeFactory.errors.teachersSize"
 					:options="[]"
-					class="text-grayColor" />
+					class="text-grayColor capitalize" />
 				<SofaSelect
 					v-if="typeFactory.isOrganization"
-					v-model="typeFactory.orgStudentsLength"
+					v-model="typeFactory.studentsSize"
 					placeholder="How many students do you have?"
-					:error="typeFactory.errors.orgStudentsLength"
+					:error="typeFactory.errors.studentsSize"
 					:options="[]"
-					class="text-grayColor" />
+					class="text-grayColor capitalize" />
 				<!-- Organization & Teachers -->
 				<SofaSelect
 					v-if="typeFactory.isTeacher || typeFactory.isOrganization"
-					v-model="typeFactory.sellMaterials"
+					v-model="typeFactory.sellsMaterials"
 					placeholder="Do you sell study materials?"
 					:options="[]"
-					:error="typeFactory.errors.sellMaterials"
-					class="text-grayColor" />
+					:error="typeFactory.errors.sellsMaterials"
+					class="text-grayColor capitalize" />
 
 				<div
 					v-if="typeFactory.isStudent"
@@ -198,7 +175,7 @@
 							name="studentType"
 							:value="studentType.value"
 							:error="typeFactory.errors.schoolType"
-							color="text-primaryPurple ring-primaryPurple" />
+							class="text-primaryPurple ring-primaryPurple" />
 					</label>
 				</div>
 
