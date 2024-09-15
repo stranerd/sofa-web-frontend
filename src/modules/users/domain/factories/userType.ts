@@ -99,6 +99,9 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 		activeInst: null as string | null,
 	})
 	protected onSet = {
+		type: () => {
+			this.resetProp('schoolType')
+		},
 		institutionId: () => {
 			this.resetProp('facultyId')
 			this.resetProp('departmentId')

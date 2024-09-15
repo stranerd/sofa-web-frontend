@@ -332,8 +332,8 @@ const props = defineProps<{
 	isProfilePhone?: boolean
 }>()
 
-const { auth, user } = useAuth()
 const router = useRouter()
+const { auth, user } = useAuth()
 const { factory: profileFactory, updateProfile } = useProfileUpdate()
 const { factory: locationFactory, countries, states, updateLocation } = useUserLocationUpdate()
 const { factory: typeFactory, updateType } = useUserTypeUpdate()
@@ -347,7 +347,7 @@ const isDisabled = computed(() => {
 	else if (tab.value === 'phone') return !phoneFactory.valid
 	else if (tab.value === 'phone-verify') return !token.value
 	else if (tab.value === 'type') return !typeFactory.isValidExcept('exams')
-	else if (tab.value === 'exams') return !typeFactory.isValidExceptExams
+	else if (tab.value === 'exams') return !typeFactory.isValidExcept('exams')
 	else if (tab.value === 'subjects') return !typeFactory.valid
 	return false
 })
@@ -357,25 +357,7 @@ const accountSetupOptions = computed<{ name: string; id: Tab; hide: boolean; don
 		name: 'Profile',
 		id: 'profile',
 		hide: false,
-		done: !!auth.value?.description && !!user.value?.location && (typeFactory.isOrganization ? user.value?.userType.isOrg : true),
-	},
-	{
-		name: typeFactory.isStudent ? 'Education' : 'Experience',
-		id: 'type',
-		hide: false,
-		done: !!user.value?.type || typeFactory.isValidExceptExams,
-	},
-	{
-		name: 'Exams',
-		id: 'exams',
-		hide: typeFactory.isStudent && (typeFactory.isCollegeType || typeFactory.isUniversityType),
-		done: !!user.value?.type || typeFactory.isValidExceptExams,
-	},
-	{
-		name: 'Subjects',
-		id: 'subjects',
-		hide: typeFactory.isStudent && (typeFactory.isCollegeType || typeFactory.isUniversityType),
-		done: !!user.value?.type || typeFactory.isValidExceptExams,
+		done: !!auth.value?.description && !!user.value?.location,
 	},
 	/* {
 		name: 'Phone',
@@ -383,40 +365,49 @@ const accountSetupOptions = computed<{ name: string; id: Tab; hide: boolean; don
 		hide: false,
 		done: !!auth.value?.phone,
 	}, */
+	{
+		name: typeFactory.isStudent ? 'Education' : 'Experience',
+		id: 'type',
+		hide: false,
+		done: !!user.value?.type || typeFactory.isValidExcept('exams'),
+	},
+	{
+		name: 'Exams',
+		id: 'exams',
+		hide: !typeFactory.canSetSchool || !typeFactory.isAspirantType,
+		done: !!user.value?.type || typeFactory.isValidExcept('exams'),
+	},
+	{
+		name: 'Subjects',
+		id: 'subjects',
+		hide: !typeFactory.canSetSchool || !typeFactory.isAspirantType,
+		done: !!user.value?.type || typeFactory.isValidExcept('exams'),
+	},
 ])
 
 const handleAccountSetup = async () => {
 	if (isDisabled.value) return
-	if (tab.value === 'profile')
-		await Promise.all([updateProfile(), updateLocation()]).then((res) => {
-			// if (res.every(Boolean)) tab.value = 'phone'
-			if (res.every(Boolean)) tab.value = 'type'
-		})
-	else if (tab.value === 'phone')
-		await sendVerificationText().then((res) => {
-			if (res) tab.value = 'phone-verify'
-		})
-	else if (tab.value === 'phone-verify')
-		await completeVerification().then((res) => {
-			if (!res) return
-			if (props.isProfilePhone) tab.value = 'phone'
-			else tab.value = 'type'
-		})
-	else if (tab.value === 'type') {
-		if (typeFactory.isStudent && (typeFactory.isUniversityType || typeFactory.isCollegeType)) {
-			await updateType().then((res) => {
-				if (res && !props.isProfileEducation) complete()
-			})
-		}
-		if ((typeFactory.isStudent && typeFactory.isAspirantType) || typeFactory.isTeacher || typeFactory.isOrganization) {
+	if (tab.value === 'profile') {
+		const res = await Promise.all([updateProfile(), updateLocation()])
+		if (res.every(Boolean)) tab.value = 'type' // 'phone'
+	} else if (tab.value === 'phone') {
+		const res = await sendVerificationText()
+		if (res) tab.value = 'phone-verify'
+	} else if (tab.value === 'phone-verify') {
+		const res = await completeVerification()
+		if (res) tab.value = props.isProfilePhone ? 'phone' : 'type'
+	} else if (tab.value === 'type') {
+		if (typeFactory.canSetSchool && typeFactory.isAspirantType) {
 			tab.value = 'exams'
+		} else {
+			const res = await updateType()
+			if (res && !props.isProfileEducation) complete()
 		}
 	} else if (tab.value === 'exams') {
 		tab.value = 'subjects'
 	} else if (tab.value === 'subjects') {
-		await updateType().then((res) => {
-			if (res && !props.isProfileEducation) complete()
-		})
+		const res = await updateType()
+		if (res) props.isProfileEducation ? (tab.value = 'type') : complete()
 	}
 }
 
@@ -425,7 +416,9 @@ const complete = async () => {
 }
 
 const toggleCourse = (key: string) => {
-	const institution = typeFactory.getInstitution(typeFactory.activeInst)
+	const activeInst = typeFactory.activeInst
+	if (!activeInst) return
+	const institution = typeFactory.getInstitution(activeInst)
 	const index = institution.courseIds.indexOf(key)
 	index === -1 ? institution.courseIds.push(key) : institution.courseIds.splice(index, 1)
 }
