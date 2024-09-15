@@ -1,7 +1,6 @@
 import { v } from 'valleyed'
 import { QuestionToModel } from '../../data/models/questions'
 import { QuestionEntity } from '../entities/questions'
-import { indicator } from '../entities/questions-extras'
 import { QuestionTypes } from '../types'
 import { BaseFactory } from '@modules/core'
 
@@ -101,7 +100,7 @@ export class QuestionFactory extends BaseFactory<QuestionEntity, QuestionToModel
 			trueOrFalseAnswer: true,
 			writeAnswerAnswers: [],
 			sequenceAnswers: [],
-			indicator: indicator,
+			indicator: '----------',
 			fillInBlanksAnswers: [],
 			dragAnswersAnswers: [],
 			matchSet: [],

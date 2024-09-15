@@ -19,7 +19,7 @@
 					v-if="hasShowMore"
 					name="more-options-horizontal"
 					class="w-[20px] h-3"
-					@click.stop.prevent="(e) => handleShowMaterialMoreOptions(e)" />
+					@click.stop.prevent="handleShowMaterialMoreOptions" />
 				<slot name="side-icons" />
 			</div>
 			<div class="flex gap-2 items-center whitespace-nowrap line-clamp-1" :class="[color]">

@@ -30,7 +30,7 @@ const cls = computed(() =>
 		props.content ? 'body flex flex-col items-start' : '',
 		`text-${props.size}`,
 		props.bold ? 'font-bold' : '',
-		props.clamp ? '!line-clamp-1' : '',
+		props.clamp ? 'truncate' : '',
 	]
 		.filter(Boolean)
 		.join(' '),
@@ -56,6 +56,8 @@ const cls = computed(() =>
 		word-wrap: break-word;
 		word-break: break-word;
 		overflow-wrap: break-word;
+		background-color: unset !important;
+		color: unset !important;
 	}
 }
 </style>
