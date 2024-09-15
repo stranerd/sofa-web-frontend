@@ -23,7 +23,6 @@
 
 <script lang="ts" setup generic="T">
 import { ref } from 'vue'
-import SofaIcon from '../SofaIcon'
 
 withDefaults(
 	defineProps<{

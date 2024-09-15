@@ -35,7 +35,7 @@
 					<div class="w-full shadow-custom bg-white rounded-2xl p-4 gap-4 flex flex-col h-full overflow-y-auto">
 						<div class="w-full flex mdlg:hidden justify-between items-center">
 							<SofaIcon class="h-[19px]" name="circle-close" @click="$utils.goBack()" />
-							<SofaNormalText class="!font-bold !text-sm" content="Content" />
+							<SofaHeading content="Content" />
 							<SofaIcon class="h-[18px]" name="cog" @click="openEditModal({ course })" />
 						</div>
 
@@ -54,7 +54,7 @@
 			<SofaModal v-if="showBody && !$screen.desktop" :close="() => (showBody = false)">
 				<div class="flex flex-col gap-4 p-4 justify-between">
 					<div class="mdlg:hidden flex gap-2 items-center border-b border-lightGray">
-						<SofaNormalText class="!text-sm !font-bold" content="Details" />
+						<SofaHeading content="Details" />
 						<SofaIcon class="h-[6px] ml-auto" name="more-options-horizontal" @click="showMoreOptions = true" />
 						<SofaIcon class="h-[19px]" name="circle-close" @click="showBody = false" />
 					</div>
@@ -66,7 +66,7 @@
 			<SofaModal v-if="showMoreOptions" :close="() => (showMoreOptions = false)">
 				<div class="flex flex-col gap-4 p-4 justify-between">
 					<div class="mdlg:hidden flex gap-2 justify-between items-center border-b border-lightGray">
-						<SofaNormalText class="!text-sm !font-bold" content="Summary" />
+						<SofaHeading content="Summary" />
 						<SofaIcon class="h-[19px]" name="circle-close" @click="showMoreOptions = false" />
 					</div>
 

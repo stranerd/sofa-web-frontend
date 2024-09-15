@@ -45,13 +45,11 @@
 		</template>
 
 		<div class="w-full mdlg:shadow-custom px-4 mdlg:p-0 mdlg:bg-white rounded-2xl flex flex-col gap-4">
-			<div class="w-full flex flex-col gap-3 justify-center items-center py-9 px-6 rounded-lg bg-primaryPurple">
+			<div class="w-full flex flex-col gap-3 justify-center items-center py-9 px-6 rounded-lg bg-primaryPurple text-white">
 				<SofaIcon class="h-[28px] fill-white" name="search" />
 				<div class="w-full flex flex-col gap-2 justify-center items-center py-2">
-					<SofaNormalText color="text-white" class="!font-bold" content="Discover more" />
-					<SofaNormalText color="text-white" class="!font-semibold">
-						There are lots of quizzes and courses that you can learn from, so start searching!
-					</SofaNormalText>
+					<SofaHeading content="Discover more" />
+					<SofaText> There are lots of quizzes and courses that you can learn from, so start searching! </SofaText>
 				</div>
 				<SofaButton bgColor="bg-white" padding="py-1 px-3" textColor="text-deepGray" @click="$router.push('/marketplace')">
 					Explore more

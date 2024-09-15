@@ -21,10 +21,6 @@
 </template>
 
 <script lang="ts" setup>
-import SofaButton from '../SofaButton'
-import SofaIcon from '../SofaIcon'
-import SofaModal from '../SofaModal'
-
 withDefaults(
 	defineProps<{
 		close: () => void

@@ -4,8 +4,8 @@
 			<div class="w-full flex flex-col gap-4">
 				<a class="w-full flex items-center gap-2" @click="toggleOpen('type')">
 					<SofaIcon class="h-[18px]" name="question-type" />
-					<SofaNormalText class="!font-bold" content="Question type" />
-					<SofaNormalText :content="QuestionEntity.getLabel(factory.type)" class="ml-auto" />
+					<SofaHeading content="Question type" />
+					<SofaText :content="QuestionEntity.getLabel(factory.type)" class="ml-auto" />
 					<SofaIcon class="h-[7px]" name="chevron-down" :class="{ 'rotate-180': isOpen('type') }" />
 				</a>
 
@@ -17,7 +17,7 @@
 						:class="factory.type === type.value ? 'bg-lightBlue' : 'bg-[#F2F5F8]'"
 						@click="factory.type = type.value">
 						<SofaIcon :name="type.icon" class="h-[50px]" />
-						<SofaNormalText class="text-center" :content="type.label" />
+						<SofaText class="text-center" :content="type.label" />
 					</a>
 				</div>
 			</div>
@@ -25,8 +25,8 @@
 			<div class="w-full flex flex-col gap-4">
 				<a class="w-full flex items-center gap-2" @click="toggleOpen('timeLimit')">
 					<SofaIcon class="h-[18px]" name="time-limit" />
-					<SofaNormalText class="!font-bold" content="Time limit" />
-					<SofaNormalText :content="$utils.getDigitalTime(factory.timeLimit)" class="ml-auto" />
+					<SofaHeading content="Time limit" />
+					<SofaText :content="$utils.getDigitalTime(factory.timeLimit)" class="ml-auto" />
 					<SofaIcon class="h-[7px]" name="chevron-down" :class="{ 'rotate-180': isOpen('timeLimit') }" />
 				</a>
 
@@ -37,7 +37,7 @@
 						class="rounded-lg flex px-4 py-2 items-center justify-center gap-1"
 						:class="factory.timeLimit === time ? 'bg-primaryPurple text-white' : 'bg-[#F2F5F8] text-deepGray'"
 						@click="factory.timeLimit = time">
-						<SofaNormalText class="text-center" color="text-inherit" :content="$utils.getDigitalTime(time)" />
+						<SofaText class="text-center" :content="$utils.getDigitalTime(time)" />
 					</a>
 				</div>
 			</div>
@@ -46,7 +46,7 @@
 		<div class="rounded-b-xl w-full p-4 mdlg:pb-0 mdlg:px-0 border-t-2 border-[#F2F5F8] flex flex-col gap-4 text-bodyBlack">
 			<a class="w-full flex mdlg:hidden items-center justify-start gap-3" @click="emits('showCurrentlyEditing')">
 				<SofaIcon name="edit" class="h-[16px] fill-grayColor" />
-				<SofaNormalText color="text-inherit" content="Currently editing" />
+				<SofaText content="Currently editing" />
 				<div class="flex flex-row-reverse items-center ml-auto">
 					<template v-for="(user, index) in users[question.id] ?? []" :key="user.id">
 						<SofaAvatar v-if="index < 3" :photoUrl="user.bio.photo?.link" :size="28" class="-ml-1" />
@@ -61,22 +61,22 @@
 				class="text-primaryGreen w-full flex mdlg:hidden items-center justify-start gap-3"
 				@click="emits('saveQuestion')">
 				<SofaIcon name="save" class="h-[16px] fill-current" />
-				<SofaNormalText color="text-inherit" content="Save question" />
+				<SofaText content="Save question" />
 			</a>
 			<a class="w-full flex mdlg:hidden items-center justify-start gap-3" @click="emits('duplicateQuestion', question)">
 				<SofaIcon name="copy" class="h-[16px]" />
-				<SofaNormalText color="text-inherit" content="Duplicate question" />
+				<SofaText content="Duplicate question" />
 			</a>
 			<a
 				v-if="!quiz.isPublished"
 				class="w-full flex mdlg:hidden items-center justify-start gap-3"
 				@click="emits('deleteQuestion', question.id)">
 				<SofaIcon name="trash" class="h-[16px]" />
-				<SofaNormalText color="text-primaryRed" content="Delete question" />
+				<SofaText class="text-primaryRed" content="Delete question" />
 			</a>
 			<a v-if="!quiz.isPublished" class="w-full flex items-center justify-start gap-3" @click="emits('deleteQuiz')">
 				<SofaIcon name="trash" class="h-[16px]" />
-				<SofaNormalText color="text-primaryRed" content="Delete quiz" />
+				<SofaText class="text-primaryRed" content="Delete quiz" />
 			</a>
 		</div>
 	</div>

@@ -27,14 +27,12 @@
 			</div>
 			<slot name="outer-suffix" />
 		</div>
-		<SofaNormalText v-if="error" class="text-left !font-normal pt-1 justify-start" :content="error" color="text-primaryRed" />
+		<SofaText v-if="error" class="text-primaryRed pt-1 justify-start" :content="error" />
 	</div>
 </template>
 
 <script lang="ts" setup generic="T">
 import { ref } from 'vue'
-import SofaIcon from '../SofaIcon'
-import SofaNormalText from '../SofaTypography/normalText.vue'
 
 withDefaults(
 	defineProps<{

@@ -17,33 +17,17 @@
 	</VideoPlayer>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { VideoPlayer } from '@videojs-player/vue'
 import 'video.js/dist/video-js.min.css'
-import { defineComponent, ref } from 'vue'
-import SofaIcon from '../SofaIcon'
-export default defineComponent({
-	name: 'SofaVideoPlayer',
-	components: {
-		SofaIcon,
-		VideoPlayer,
-	},
-	props: {
-		videoUrl: {
-			type: String,
-			required: true,
-		},
-		type: {
-			type: String,
-			required: false,
-			default: undefined,
-		},
-	},
-	setup() {
-		const videoIsPlaying = ref(false)
-		return { videoIsPlaying }
-	},
-})
+import { ref } from 'vue'
+
+defineProps<{
+	videoUrl: string
+	type?: string
+}>()
+
+const videoIsPlaying = ref(false)
 </script>
 
 <style>

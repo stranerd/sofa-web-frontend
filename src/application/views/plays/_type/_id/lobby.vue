@@ -65,20 +65,17 @@
 												<SofaIcon class="h-[16px]" name="share" @click="extras.share()" />
 											</div>
 											<div class="flex gap-2 items-center">
-												<SofaNormalText
-													color="text-primaryPurple"
-													class="capitalize"
-													:content="play.singularizedType" />
+												<SofaText class="text-primaryPurple capitalize" :content="play.singularizedType" />
 												<span class="size-[5px] rounded-full bg-primaryPurple" />
-												<SofaNormalText
-													color="text-primaryPurple"
+												<SofaText
+													class="text-primaryPurple"
 													:content="`${play.questions.length} question${play.questions.length > 1 ? 's' : ''}`" />
 											</div>
 											<div class="w-full flex items-start gap-2 flex-nowrap">
 												<SofaAvatar :size="20" :photoUrl="play.user.bio.photo?.link" />
-												<SofaNormalText
-													color="text-bodyBlack"
-													class="!font-semibold"
+												<SofaHeading
+													bold
+													class="text-bodyBlack"
 													:content="`Hosted by ${play.user.bio.publicName}`" />
 											</div>
 										</div>

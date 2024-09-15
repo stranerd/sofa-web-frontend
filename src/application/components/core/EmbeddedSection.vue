@@ -18,7 +18,7 @@
 						item.quizMode === PlayTypes.practice ? 'Comfortable learning for topic mastery' : 'Evaluate your level of knowledge'
 					}}
 				</SofaText>
-				<SofaNormalText color="text-white">{{ item.quiz.questions.length }} Questions </SofaNormalText>
+				<SofaText>{{ item.quiz.questions.length }} Questions </SofaText>
 				<SofaButton
 					bgColor="bg-white"
 					textColor="text-primaryPurple"

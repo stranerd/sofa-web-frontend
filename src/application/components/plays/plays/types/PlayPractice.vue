@@ -53,17 +53,17 @@
 		<template v-if="isDone" #default>
 			<div class="flex flex-col gap-1">
 				<SofaHeading size="title2" content="Congratulations!" />
-				<SofaNormalText color="text-inherit" content="You have mastered this quiz" />
+				<SofaText content="You have mastered this quiz" />
 			</div>
 		</template>
 		<template v-if="showSolution" #postBody="{ extras }">
 			<div class="w-full flex flex-col gap-2 items-start">
 				<SofaHeading size="title2" content="Answer" />
-				<SofaNormalText :content="extras.question?.answer" />
+				<SofaText :content="extras.question?.answer" />
 			</div>
 			<div v-if="extras.question?.explanation" class="w-full flex flex-col gap-2 items-start">
 				<SofaHeading size="title2" content="Explanation" />
-				<SofaNormalText :content="extras.question.explanation" />
+				<SofaText :content="extras.question.explanation" />
 			</div>
 		</template>
 	</Quiz>

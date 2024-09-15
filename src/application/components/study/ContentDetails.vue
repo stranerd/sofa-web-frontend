@@ -19,18 +19,18 @@
 							<SofaIcon name="save" class="h-[16px]" @click="saveToFolder(material)" />
 						</div>
 					</div>
-					<SofaNormalText :content="material.description" />
+					<SofaText :content="material.description" />
 					<div class="flex gap-2 items-center" :class="[color]">
-						<SofaNormalText color="text-current" :content="label" />
+						<SofaText :content="label" />
 						<span class="size-[5px] rounded-full bg-current" />
-						<SofaNormalText color="text-current" :content="sub" />
+						<SofaText :content="sub" />
 					</div>
 
 					<div class="flex gap-2 items-center">
 						<SofaRatings v-model="material.ratings.avg" size="h-[15px]" />
-						<SofaNormalText color="text-grayColor">
+						<SofaText class="text-grayColor">
 							({{ material.ratings.count }} {{ $utils.pluralize(material.ratings.count, 'rating', 'ratings') }})
-						</SofaNormalText>
+						</SofaText>
 					</div>
 
 					<div class="w-full flex items-center gap-2 justify-between">
@@ -42,7 +42,7 @@
 
 							<span class="size-[5px] rounded-full bg-bodyBlack" />
 
-							<SofaNormalText :content="$utils.formatTime(material.updatedAt)" />
+							<SofaText :content="$utils.formatTime(material.updatedAt)" />
 						</div>
 
 						<div class="mdlg:flex hidden flex-col">
@@ -64,22 +64,24 @@
 			</div>
 
 			<div class="w-full flex gap-3 items-center flex-nowrap overflow-x-auto scrollbar-hide">
-				<SofaNormalText
+				<SofaText
 					v-for="tag in tags"
 					:key="tag.hash"
-					color="text-grayColor"
-					class="!whitespace-nowrap px-4 py-1 border rounded-custom border-grayColor"
+					class="!whitespace-nowrap text-grayColor px-4 py-1 border rounded-custom border-grayColor"
 					:content="tag.title" />
 			</div>
 		</div>
 
 		<div class="w-full flex gap-4 items-center border-b border-lightGray px-4 pt-2">
-			<SofaNormalText
+			<SofaText
 				v-for="(tab, index) in tabs.filter((tab) => !tab.hide)"
 				:key="index"
-				:color="selectedTab == tab.key ? 'text-bodyBlack' : 'text-grayColor'"
-				class="!font-semibold pb-2 border-b-2 border-transparent"
-				:class="{ '!border-bodyBlack': selectedTab === tab.key }"
+				bold
+				:class="[
+					selectedTab == tab.key ? 'text-bodyBlack' : 'text-grayColor',
+					selectedTab == tab.key ? 'border-bodyBlack' : 'border-transparent',
+				]"
+				class="!font-semibold pb-2 border-b-2"
 				as="a"
 				:content="tab.name"
 				@click="selectedTab = tab.key" />
@@ -88,22 +90,20 @@
 		<div class="w-full flex flex-col gap-2 p-4 grow overflow-y-auto">
 			<template v-if="selectedTab == 'content' && material.isCourse()">
 				<div class="flex items-center gap-3">
-					<SofaNormalText>
+					<SofaText>
 						{{ material.sections.length }} {{ $utils.pluralize(material.sections.length, 'section', 'sections') }}
-					</SofaNormalText>
+					</SofaText>
 					<span class="size-[5px] rounded-full bg-bodyBlack" />
-					<SofaNormalText>
-						{{ material.totalItems }} {{ $utils.pluralize(material.totalItems, 'material', 'materials') }}
-					</SofaNormalText>
+					<SofaText> {{ material.totalItems }} {{ $utils.pluralize(material.totalItems, 'material', 'materials') }} </SofaText>
 				</div>
 
 				<div v-for="(section, index) in sections" :key="index" class="w-full flex flex-col gap-3">
 					<a class="bg-lightGray rounded-custom p-4 gap-4 flex items-center" @click="toggleSection(index)">
 						<SofaHeading clamp :content="section.label" />
 						<span class="grow" />
-						<SofaNormalText>
+						<SofaText>
 							{{ section.items.length }} {{ $utils.pluralize(section.items.length, 'material', 'materials') }}
-						</SofaNormalText>
+						</SofaText>
 						<SofaIcon class="h-[8px]" name="chevron-down" :class="{ 'rotate-180': expandedSections.has(index) }" />
 					</a>
 
@@ -145,11 +145,11 @@
 								:key="question.hash"
 								class="w-full bg-lightGray p-4 flex flex-col gap-2 rounded-custom">
 								<div class="flex items-center gap-2">
-									<SofaNormalText color="text-grayColor" :content="question.label" />
+									<SofaText class="text-grayColor" :content="question.label" />
 									<span class="size-[5px] rounded-full bg-grayColor" />
-									<SofaNormalText color="text-grayColor" :content="$utils.getDigitalTime(question.timeLimit)" />
+									<SofaText class="text-grayColor" :content="$utils.getDigitalTime(question.timeLimit)" />
 								</div>
-								<SofaNormalText class="!font-bold" :content="question.content" />
+								<SofaHeading :content="question.content" />
 							</div>
 							<SofaButton padding="py-3 px-4" class="sticky bottom-0 mdlg:hidden mt-auto" @click="openQuiz()">
 								{{ hasAccess ? 'Start' : 'Go to course' }}
@@ -171,12 +171,12 @@
 				<div class="bg-lightGray rounded-custom p-4 flex gap-3 items-center">
 					<div class="p-4 min-w-[150px] shrink-0 flex flex-col gap-2 items-center justify-center border-r-2 border-darkLightGray">
 						<div class="flex items-center">
-							<SofaNormalText class="mdlg:!text-xl !text-lg" :content="`${material.ratings.avg}`" />
-							<SofaNormalText class="mdlg:!text-xl !text-lg" color="text-grayColor"> /5 </SofaNormalText>
+							<SofaText size="title" :content="`${material.ratings.avg}`" />
+							<SofaText size="title" class="text-grayColor"> /5 </SofaText>
 						</div>
 						<SofaRatings v-model="material.ratings.avg" size="h-[15px] mdlg:h-[17px]" />
-						<SofaNormalText
-							color="text-grayColor"
+						<SofaText
+							class="text-grayColor"
 							:content="`${material.ratings.total} ${$utils.pluralize(material.ratings.total, 'rating', 'ratings')}`" />
 					</div>
 
@@ -186,14 +186,12 @@
 							:key="key"
 							class="w-full flex items-center justify-between gap-3"
 							:class="rating.count === 0 ? 'text-grayColor' : 'text-bodyBlack'">
-							<SofaNormalText class="!text-xs mdlg:!text-xs" color="text-current">
-								{{ key }} {{ $utils.pluralize(Number(key), 'star', 'stars') }}
-							</SofaNormalText>
+							<SofaText size="sub"> {{ key }} {{ $utils.pluralize(Number(key), 'star', 'stars') }} </SofaText>
 							<div class="grow h-2 rounded-full bg-darkLightGray">
 								<div class="h-full bg-primaryYellow rounded-full" :style="`width: ${rating.percentage * 100}%;`" />
 							</div>
 
-							<SofaNormalText class="!text-xs" color="text-current"> ({{ rating.count }}) </SofaNormalText>
+							<SofaText size="sub"> ({{ rating.count }}) </SofaText>
 						</div>
 					</div>
 				</div>
@@ -202,9 +200,9 @@
 					<SofaAvatar :photoUrl="review.user.bio.photo?.link" :size="44" :userId="review.user.id" />
 
 					<div class="flex flex-col gap-1">
-						<SofaNormalText class="!font-semibold" :content="review.user.bio.publicName" />
+						<SofaHeading :content="review.user.bio.publicName" />
 						<SofaRatings v-model="review.rating" size="h-[14px] mdlg:h-[16px]" />
-						<SofaNormalText :content="review.message" />
+						<SofaText :content="review.message" />
 					</div>
 				</div>
 			</template>

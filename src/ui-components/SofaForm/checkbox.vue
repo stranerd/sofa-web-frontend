@@ -14,7 +14,6 @@
 </template>
 <script lang="ts" setup generic="T = boolean">
 import { computed } from 'vue'
-import SofaIcon from '../SofaIcon/index.vue'
 
 const props = withDefaults(
 	defineProps<{

@@ -43,7 +43,7 @@
 							<SofaHeading size="title" content="Flashcards" />
 							<SofaIcon class="h-[19px] md:hidden" name="circle-close" @click="close" />
 						</div>
-						<SofaNormalText content="Learning quiz questions and answers" />
+						<SofaText content="Learning quiz questions and answers" />
 					</div>
 					<div class="w-full h-full flex flex-col items-center gap-4">
 						<div class="bg-primaryPurple text-white rounded-custom p-4 w-full flex flex-col gap-2">
@@ -57,11 +57,11 @@
 								:key="index"
 								class="flex items-center justify-start gap-2">
 								<span class="w-1 aspect-square rounded-full bg-white" />
-								<SofaNormalText color="text-inherit" :content="item" />
+								<SofaText :content="item" />
 							</div>
 						</div>
 						<SofaCheckbox v-model="dontShowAgain" class="!w-auto">
-							<SofaNormalText color="text-inherit" content="Don't show again" />
+							<SofaText content="Don't show again" />
 						</SofaCheckbox>
 						<div class="w-full flex mdlg:flex-row flex-col mdlg:items-center justify-between mt-auto gap-4">
 							<SofaButton

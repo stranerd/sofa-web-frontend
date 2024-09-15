@@ -11,7 +11,7 @@
 					class="w-full flex items-center justify-start pt-7 top-0 left-0 sticky bg-white z-30 gap-3 p-3"
 					to="/chats/new">
 					<SofaIcon name="add" class="h-[17px] fill-primaryPink" />
-					<SofaNormalText color="text-primaryPink"> New chat </SofaNormalText>
+					<SofaText class="text-primaryPink"> New chat </SofaText>
 				</router-link>
 
 				<div v-if="conversations.length && userType.isTeacher" class="w-full flex justify-start pt-4 pb-2">

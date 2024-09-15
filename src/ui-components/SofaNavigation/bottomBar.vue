@@ -21,7 +21,6 @@
 </template>
 
 <script lang="ts" setup>
-import SofaIcon from '../SofaIcon/index.vue'
 import { useAuth } from '@app/composables/auth/auth'
 
 const { userType } = useAuth()

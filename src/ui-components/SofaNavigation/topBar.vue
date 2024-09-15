@@ -92,7 +92,7 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import SofaBadge from '../SofaBadge/index.vue'
+import SofaBadge from '../SofaBadge'
 import { handleShowAddMaterial } from '@app/composables/study'
 import { useModals } from '@app/composables/core/modals'
 import { useAuth } from '@app/composables/auth/auth'

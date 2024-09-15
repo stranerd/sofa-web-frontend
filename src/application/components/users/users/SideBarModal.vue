@@ -5,27 +5,25 @@
 
 			<div class="flex flex-col">
 				<UserName :user="user" :avatar="false" bold />
-				<SofaNormalText class="capitalize" color="text-grayColor" :content="userType.type" />
-				<SofaNormalText color="text-primaryBlue" as="router-link" to="/profile" content="View Profile" />
+				<SofaText class="capitalize text-grayColor" :content="userType.type" />
+				<SofaText class="text-primaryBlue" as="router-link" to="/profile" content="View Profile" />
 			</div>
 		</div>
 		<div v-if="user && userType.isStudent" class="w-full grid grid-cols-2 gap-3 px-5">
 			<div class="p-4 rounded-custom bg-lightGray col-span-1 flex gap-3 justify-start items-center">
 				<SofaIcon class="h-[40px]" name="xp-points" />
 				<div class="flex flex-col items-start justify-center">
-					<SofaNormalText class="font-bold">
-						{{ $utils.formatNumber(user.account.rankings.overall.value, 2) }} xp
-					</SofaNormalText>
-					<SofaNormalText color="text-bodyBlack" content="Point" />
+					<SofaHeading> {{ $utils.formatNumber(user.account.rankings.overall.value, 2) }} xp </SofaHeading>
+					<SofaText content="Point" />
 				</div>
 			</div>
 			<div class="p-4 rounded-custom bg-lightGray col-span-1 flex gap-3 justify-start items-center">
 				<SofaIcon class="h-[40px]" name="streak-new" />
 				<div class="flex flex-col items-start justify-center">
-					<SofaNormalText class="font-bold">
+					<SofaHeading>
 						{{ user.account.streak.count }} {{ $utils.pluralize(user.account.streak.count, 'day', 'days') }}
-					</SofaNormalText>
-					<SofaNormalText color="text-bodyBlack">Streak</SofaNormalText>
+					</SofaHeading>
+					<SofaText class="text-bodyBlack">Streak</SofaText>
 				</div>
 			</div>
 		</div>
@@ -38,34 +36,29 @@
 				:to="item.route"
 				exactActiveClass="bg-lightBlue font-semibold">
 				<SofaIcon :name="item.icon" class="h-[17px] fill-current" />
-				<SofaNormalText color="text-inherit" :content="item.title" />
+				<SofaText :content="item.title" />
 			</router-link>
 		</div>
 		<div class="h-[1px] bg-lightGray" />
 		<template v-if="userType.isStudent">
 			<router-link class="flex items-center gap-2 px-5" to="/chats/new">
 				<SofaAvatar :photoUrl="userAi.image" :size="24" />
-				<SofaNormalText color="text-inherit" content="Ask me anything" />
+				<SofaText content="Ask me anything" />
 			</router-link>
 			<a class="flex items-center gap-2 px-5" @click="customizeAi">
 				<SofaIcon name="robot" class="h-6" />
-				<SofaNormalText color="text-inherit" content="Customize AI" />
+				<SofaText content="Customize AI" />
 			</a>
 			<div class="h-[1px] bg-lightGray" />
 		</template>
 		<template v-if="user">
-			<SofaNormalText as="a" color="text-primaryRed" content="Log out" class="px-6" @click="signout" />
+			<SofaText as="a" class="text-primaryRed px-6" content="Log out" @click="signout" />
 			<div class="h-[1px] bg-lightGray" />
 		</template>
 		<div class="flex flex-col gap-6 px-6 text-grayColor">
-			<SofaNormalText color="text-inherit" as="router-link" to="/legal/privacy-policy" content="Privacy Policy" />
-			<SofaNormalText color="text-inherit" as="router-link" to="/legal/terms-of-service" content="Terms of Service" />
-			<SofaNormalText
-				v-if="user && !user.roles.isVerified"
-				color="text-inherit"
-				content="Get Verified"
-				as="router-link"
-				to="/verification" />
+			<SofaText as="router-link" to="/legal/privacy-policy" content="Privacy Policy" />
+			<SofaText as="router-link" to="/legal/terms-of-service" content="Terms of Service" />
+			<SofaText v-if="user && !user.roles.isVerified" content="Get Verified" as="router-link" to="/verification" />
 		</div>
 	</div>
 </template>

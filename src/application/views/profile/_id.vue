@@ -14,7 +14,7 @@
 
 						<div class="flex flex-col">
 							<UserName :user="user" :avatar="false" name size="title" bold />
-							<SofaNormalText class="capitalize" :content="user.userType.type" />
+							<SofaText class="capitalize" :content="user.userType.type" />
 						</div>
 					</div>
 
@@ -57,13 +57,13 @@
 				</div>
 
 				<div class="w-full flex gap-6 items-center">
-					<SofaNormalText
+					<SofaHeading
 						v-for="item in ['content', 'about']"
 						:key="item"
 						as="router-link"
 						:to="`/profile/${user.id}?tab=${item}`"
-						class="!font-semibold capitalize pb-2 border-b-2 border-transparent text-deepGray"
-						:class="{ '!text-primaryPurple !border-primaryPurple': currentTab === item }"
+						class="capitalize pb-2 border-b-2 border-transparent text-deepGray"
+						:class="{ '!text-primaryPurple !border-current': currentTab === item }"
 						:content="item" />
 				</div>
 			</div>
@@ -81,9 +81,9 @@
 
 				<div class="w-full flex flex-col mdlg:gap-4 gap-3 pl-4 mdlg:pl-0">
 					<div class="w-full flex gap-2 pr-4 mdlg:pr-0 items-center justify-between">
-						<SofaNormalText class="!font-bold" content="Resources" />
-						<SofaNormalText
-							color="text-primaryPink"
+						<SofaHeading content="Resources" />
+						<SofaText
+							class="text-primaryPink"
 							as="router-link"
 							content="View all"
 							:to="`/marketplace/search?userId=${user.id}&userName=${user.publicName}`" />
@@ -113,14 +113,14 @@
 		<template v-if="currentTab == 'about'">
 			<div class="w-full flex flex-col gap-4 mdlg:p-0 p-4">
 				<div class="w-full flex shadow-custom p-6 rounded-2xl bg-white flex-col gap-2">
-					<SofaNormalText class="!font-bold" content="Bio" />
-					<SofaNormalText :content="user.bio.description" />
+					<SofaHeading content="Bio" />
+					<SofaText :content="user.bio.description" />
 				</div>
 
 				<div class="w-full flex shadow-custom p-6 rounded-2xl bg-white flex-col gap-2">
-					<SofaNormalText class="!font-bold" content="Links" />
+					<SofaHeading content="Links" />
 					<div class="w-full flex gap-5 items-center">
-						<SofaNormalText v-if="user.socials.length === 0" color="text-grayColor" content="No socials" />
+						<SofaText v-if="user.socials.length === 0" class="text-grayColor" content="No socials" />
 						<a v-for="(item, index) in user.socials" :key="index" :href="item.link" target="_blank">
 							<SofaIcon :name="socials[item.ref] ?? 'website'" class="h-5 fill-deepGray" />
 						</a>
