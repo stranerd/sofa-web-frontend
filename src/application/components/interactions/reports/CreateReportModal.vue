@@ -5,7 +5,7 @@
 		</div>
 
 		<div class="w-full flex justify-between items-center md:hidden">
-			<SofaNormalText class="!font-bold" :content="modTitle" />
+			<SofaHeading :content="modTitle" />
 			<SofaIcon class="h-[19px]" name="circle-close" @click="close" />
 		</div>
 

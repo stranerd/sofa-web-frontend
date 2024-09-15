@@ -6,7 +6,7 @@
 		</div>
 
 		<div class="w-full flex justify-between items-center mdlg:hidden pt-2 pb-4 border-lightGray border-b">
-			<SofaNormalText class="!font-bold !text-base">Choose payment method</SofaNormalText>
+			<SofaHeading>Choose payment method</SofaHeading>
 			<SofaIcon class="h-[20px]" name="circle-close" @click="close" />
 		</div>
 

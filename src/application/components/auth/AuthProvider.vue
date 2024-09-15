@@ -9,7 +9,7 @@
 			@click="googleSignin">
 			<div class="flex gap-2 items-center normal-case">
 				<SofaIcon name="google" class="text-[16px]" />
-				<SofaNormalText :content="`${message} with Google`" />
+				<SofaText :content="`${message} with Google`" />
 			</div>
 		</SofaButton>
 		<SofaButton
@@ -22,13 +22,13 @@
 			@click="appleSignin">
 			<span class="flex gap-2 items-center normal-case">
 				<SofaIcon name="apple" class="text-[16px]" />
-				<SofaNormalText :content="`${message} with Apple`" />
+				<SofaText :content="`${message} with Apple`" />
 			</span>
 		</SofaButton>
 	</div>
 	<div class="w-full flex gap-3 items-center">
 		<div class="border border-darkLightGray w-full"></div>
-		<SofaNormalText color="text-grayColor" class="!whitespace-nowrap">Or use email</SofaNormalText>
+		<SofaText class="!whitespace-nowrap">Or use email</SofaText>
 		<div class="border border-darkLightGray w-full"></div>
 	</div>
 </template>

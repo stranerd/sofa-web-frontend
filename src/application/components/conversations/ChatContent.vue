@@ -11,12 +11,8 @@
 						class="!px-0"
 						:autoFocus="true"
 						@onBlur="submitTitle" />
-					<SofaNormalText
-						v-else
-						class="!font-bold w-full !text-sm mdlg:!text-base !line-clamp-1"
-						:content="model"
-						@click="editTitle = canEditTitle ?? false" />
-					<SofaNormalText class="!text-[12px] line-clamp-1" :content="data.userNames.join(', ')" />
+					<SofaHeading v-else size="sub" class="w-full" :content="model" @click="editTitle = canEditTitle ?? false" />
+					<SofaText size="sub" clamp :content="data.userNames.join(', ')" />
 				</div>
 			</div>
 			<slot v-if="!editTitle" name="top-extras" />

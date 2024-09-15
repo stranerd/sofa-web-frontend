@@ -19,7 +19,8 @@
 						<SofaIcon v-if="option.done" class="h-[14px]" name="done" />
 						<span v-else>{{ index + 1 }}</span>
 					</div>
-					<SofaNormalText
+					<SofaText
+						:content="option.name"
 						:class="[
 							'hidden mdlg:block',
 							{
@@ -27,9 +28,7 @@
 								'text-primaryPurple': tab === option.id && !option.done,
 								'text-grayColor': !option.done && tab !== option.id,
 							},
-						]">
-						{{ option.name }}
-					</SofaNormalText>
+						]" />
 					<div
 						v-if="index < accountSetupOptions.length - 1 && !accountSetupOptions[index + 1].hide"
 						class="w-8 mdlg:w-12 h-0.5 bg-grayColor mx-1 mdlg:mx-2"></div>
@@ -192,7 +191,7 @@
 							'flex items-center justify-between whitespace-nowrap gap-2 px-2 py-3 border-2 rounded-lg cursor-pointer',
 							typeFactory.schoolType === studentType.value ? 'border-primaryPurple bg-lightPurple' : 'border-lightGray',
 						]">
-						<SofaNormalText :content="studentType.value" class="capitalize text-grayColor" />
+						<SofaText :content="studentType.value" class="capitalize" />
 						<SofaRadio
 							:id="studentType.value"
 							v-model="typeFactory.schoolType"
@@ -231,12 +230,9 @@
 		<div v-if="tab === 'exams'" class="w-full flex flex-col py-5">
 			<template v-if="(typeFactory.isStudent && typeFactory.isAspirantType) || typeFactory.isTeacher || typeFactory.isOrganization">
 				<div class="w-full flex flex-col gap-4 justify-center items-center">
-					<SofaNormalText v-if="typeFactory.isStudent" class="!font-semibold" content="Choose exams your studying for" />
-					<SofaNormalText v-if="typeFactory.isTeacher" class="!font-semibold" content="What exams do you teach for?" />
-					<SofaNormalText
-						v-if="typeFactory.isOrganization"
-						class="!font-semibold"
-						content="What exams does your organization cover?" />
+					<SofaHeading v-if="typeFactory.isStudent" content="Choose exams your studying for" />
+					<SofaHeading v-if="typeFactory.isTeacher" content="What exams do you teach for?" />
+					<SofaHeading v-if="typeFactory.isOrganization" content="What exams does your organization cover?" />
 
 					<div class="w-full flex justify-center items-center flex-wrap gap-3">
 						<SofaBadge customClass="flex items-center gap-2" color="gray">Enter exam</SofaBadge>
@@ -260,12 +256,9 @@
 
 		<div v-if="tab === 'subjects'" class="w-full flex flex-col py-5 justify-center items-center">
 			<template v-if="typeFactory.isStudent || typeFactory.isTeacher || typeFactory.isOrganization">
-				<SofaNormalText v-if="typeFactory.isStudent" class="!font-semibold" content="Choose subjects you are studying for" />
-				<SofaNormalText v-if="typeFactory.isTeacher" class="!font-semibold" content="What subjects do you teach?" />
-				<SofaNormalText
-					v-if="typeFactory.isOrganization"
-					class="!font-semibold"
-					content="What subjects does your organization cover?" />
+				<SofaHeading v-if="typeFactory.isStudent" content="Choose subjects you are studying for" />
+				<SofaHeading v-if="typeFactory.isTeacher" content="What subjects do you teach?" />
+				<SofaHeading v-if="typeFactory.isOrganization" content="What subjects does your organization cover?" />
 				<div class="w-full flex justify-center items-center flex-wrap gap-3 py-2">
 					<SofaBadge customClass="flex items-center gap-2" color="gray">Enter exam</SofaBadge>
 					<SofaBadge
@@ -288,19 +281,17 @@
 		</div>
 
 		<div v-if="tab === 'phone-verify'" class="w-full flex flex-col items-center justify-center gap-4 py-5">
-			<SofaNormalText color="text-grayColor" class="pb-3">
-				Enter the 6-digit code sent to {{ phoneFactory.phoneStr }}
-			</SofaNormalText>
+			<SofaText class="pb-3">Enter the 6-digit code sent to {{ phoneFactory.phoneStr }}</SofaText>
 			<div class="w-full md:!w-[60%] flex flex-col gap-4">
 				<SofaOtpInput v-model="token" />
 			</div>
 
 			<div class="w-full flex items-center justify-center gap-1 pt-3">
-				<SofaNormalText color="text-grayColor" content="Didn't receive code?" />
-				<SofaNormalText color="text-primaryBlue" as="a" content="Resend code" @click="sendVerificationText" />
+				<SofaText content="Didn't receive code?" />
+				<SofaText class="text-primaryBlue" as="a" content="Resend code" @click="sendVerificationText" />
 			</div>
 
-			<SofaNormalText color="text-primaryBlue" class="mx-auto" as="a" content="Change number" @click="tab = 'phone'" />
+			<SofaText class="text-primaryBlue mx-auto" as="a" content="Change number" @click="tab = 'phone'" />
 		</div>
 
 		<div class="w-full flex flex-col items-center md:py-0 py-4">

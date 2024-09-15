@@ -5,7 +5,7 @@
 			to="/chats/new"
 			class="w-full flex items-center justify-start top-0 left-0 sticky pt-4 bg-white z-30 gap-3 py-3 px-4 cursor-pointer">
 			<SofaIcon name="add" class="h-[17px] fill-primaryPink" />
-			<SofaNormalText color="text-primaryPink" content="New chat" />
+			<SofaText class="text-primaryPink" content="New chat" />
 		</router-link>
 
 		<ChatList customClass="!rounded-none" extraStyle="px-3" />
@@ -18,15 +18,15 @@
 				class="w-full flex items-center justify-start gap-2 text-primaryRed"
 				@click="endSession">
 				<SofaIcon class="h-[16px] fill-current" name="tutor" />
-				<SofaNormalText color="text-inherit" content="End conversation" />
+				<SofaText content="End conversation" />
 			</a>
 			<a v-else-if="!conversation.tutor" class="w-full flex items-center justify-start gap-2 text-primaryGreen" @click="addTutor">
 				<SofaIcon class="h-[16px] fill-current" name="tutor" />
-				<SofaNormalText color="text-inherit" content="Message a tutor" />
+				<SofaText content="Message a tutor" />
 			</a>
-			<a class="w-full flex items-center justify-start gap-2" @click="deleteConversation">
-				<SofaIcon class="h-[16px]" name="trash" />
-				<SofaNormalText color="text-primaryRed" content="Delete conversation" />
+			<a class="w-full flex items-center justify-start gap-2 text-primaryRed" @click="deleteConversation">
+				<SofaIcon class="h-[16px] fill-current" name="trash" />
+				<SofaText content="Delete conversation" />
 			</a>
 		</div>
 	</div>

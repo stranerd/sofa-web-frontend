@@ -7,7 +7,7 @@
 			</div>
 			<SofaIcon class="h-[16px]" name="circle-close" @click="close" />
 		</div>
-		<SofaNormalText color="" content="Need extra help with your work?" class="!text-deppGray" />
+		<SofaText content="Need extra help with your work?" class="!text-deppGray" />
 		<SofaButton bgColor="bg-primaryPurple" textColor="!text-white" padding="px-6 py-4" @click="addTutor"> Add a tutor </SofaButton>
 	</div>
 </template>

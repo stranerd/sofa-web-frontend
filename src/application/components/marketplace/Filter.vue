@@ -2,8 +2,8 @@
 	<div class="flex flex-col gap-6">
 		<div v-if="selectedOptions.length" class="flex flex-col gap-3">
 			<div class="flex items-center gap-2 justify-between">
-				<SofaNormalText class="!font-bold">Applied filters</SofaNormalText>
-				<SofaNormalText content="Clear all" color="text-primaryPink" as="a" @click="selectedOptions.length = 0" />
+				<SofaHeading class="!font-bold">Applied filters</SofaHeading>
+				<SofaText content="Clear all" class="text-primaryPink" as="a" @click="selectedOptions.length = 0" />
 			</div>
 
 			<div class="flex gap-3 flex-wrap items-center">
@@ -11,7 +11,7 @@
 					v-for="option in selectedOptions"
 					:key="option.id"
 					class="px-4 py-2 bg-primaryPurple rounded-custom flex items-center justify-center gap-1">
-					<SofaNormalText color="text-white" :content="option.name" />
+					<SofaText class="text-white" :content="option.name" />
 					<SofaIcon class="h-[18px] fill-white" name="circle-close" c @click="toggleOption(option)" />
 				</span>
 			</div>
@@ -21,13 +21,13 @@
 			<a class="flex items-center justify-between" @click="openOption = option.name === openOption ? '' : option.name">
 				<div class="flex items-center gap-2">
 					<SofaIcon class="h-[16px]" :name="option.icon" />
-					<SofaNormalText class="!font-bold" :content="option.name" />
+					<SofaText bold :content="option.name" />
 				</div>
 				<SofaIcon class="h-[7px]" name="chevron-down" :class="{ 'rotate-180': option.name === openOption }" />
 			</a>
 
 			<div v-if="option.name === openOption" class="w-full flex flex-wrap gap-3">
-				<SofaNormalText
+				<SofaText
 					v-for="item in option.options"
 					:key="item.id"
 					:content="item.name"

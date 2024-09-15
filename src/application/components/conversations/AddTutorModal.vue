@@ -25,14 +25,14 @@
 
 			<template v-if="currentStep == 0">
 				<div class="w-full flex flex-col gap-3 px-4 md:px-0">
-					<SofaNormalText class="text-center mx-auto" content="What type of help do you need?" />
+					<SofaText class="text-center mx-auto" content="What type of help do you need?" />
 					<a
 						v-for="option in helpOptions"
 						:key="option.key"
 						class="w-full flex items-center justify-between p-4 rounded-custom bg-lightGray"
 						@click="selectedhelpOption = option.key">
-						<SofaNormalText
-							:color="selectedhelpOption == option.key ? 'text-primaryPurple' : 'text-grayColor'"
+						<SofaText
+							:class="selectedhelpOption == option.key ? 'text-primaryPurple' : 'text-grayColor'"
 							:content="option.title" />
 						<SofaIcon :name="selectedhelpOption == option.key ? 'selected' : 'not-selected'" class="h-[20px]" />
 					</a>
@@ -58,15 +58,13 @@
 							<SofaAvatar :size="60" :photoUrl="tutor.photoUrl" :online="tutor.online" />
 							<div class="w-full flex flex-col grow gap-1">
 								<UserName :user="tutor.user" :avatar="false" class="font-bold" />
-								<SofaNormalText class="!line-clamp-1 !text-left" :content="tutor.subjects" />
+								<SofaText clamp :content="tutor.subjects" />
 
 								<div class="w-full flex gap-2 items-center">
 									<SofaIcon name="star" class="h-[16px] fill-primaryYellow" />
 									<div class="flex gap-1 items-center">
-										<SofaNormalText :content="tutor.ratings.value" />
-										<SofaNormalText
-											color="text-grayColor"
-											:content="`(${tutor.ratings.count}) rating${tutor.ratings.count > 1 ? 's' : ''}`" />
+										<SofaText :content="tutor.ratings.value" />
+										<SofaText :content="`(${tutor.ratings.count}) rating${tutor.ratings.count > 1 ? 's' : ''}`" />
 									</div>
 								</div>
 							</div>
@@ -74,7 +72,7 @@
 					</template>
 					<template v-else>
 						<div class="flex flex-col items-center justify-center pt-3">
-							<SofaNormalText color="text-grayColor" content="No tutor found for selected subject" />
+							<SofaText content="No tutor found for selected subject" />
 						</div>
 					</template>
 				</div>

@@ -7,19 +7,13 @@
 		<div class="flex gap-2 w-full">
 			<SofaAvatar :photoUrl="chat.photoUrl" :size="40" />
 			<div class="flex flex-col">
-				<SofaNormalText customClass="!font-semibold text-left !line-clamp-1">
-					{{ chat.title }}
-				</SofaNormalText>
-				<SofaNormalText customClass="text-left !line-clamp-1" color="text-grayColor">
-					{{ chat.lastMessage }}
-				</SofaNormalText>
+				<SofaHeading>{{ chat.title }}</SofaHeading>
+				<SofaText clamp>{{ chat.lastMessage }}</SofaText>
 			</div>
 		</div>
 
 		<div class="flex flex-col justify-between items-end">
-			<SofaNormalText customClass="text-right !text-[11px] whitespace-nowrap" color="text-grayColor">
-				{{ chat.lastMessageTime }}
-			</SofaNormalText>
+			<SofaText size="sub" class="text-right whitespace-nowrap">{{ chat.lastMessageTime }}</SofaText>
 		</div>
 	</router-link>
 </template>
