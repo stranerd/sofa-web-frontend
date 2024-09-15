@@ -15,46 +15,52 @@ export enum UserType {
 export enum UserSchoolType {
 	'aspirant' = 'aspirant',
 	'college' = 'college',
-	'university' = 'university',
+	'graduate' = 'graduate',
 }
 
-export type UserTypeData =
+export type UserSchool =
 	| {
-			type: UserType.student
-			school:
-				| {
-						type: UserSchoolType.aspirant
-						exams: {
-							institutionId: string
-							courseIds: string[]
-						}[]
-				  }
-				| {
-						type: UserSchoolType.college
-						institutionId: string
-						facultyId: string
-						departmentId: string
-				  }
-				| {
-						type: UserSchoolType.university
-				  }
-	  }
-	| {
-			type: UserType.teacher
-			school: string
+			type: UserSchoolType.aspirant
 			exams: {
 				institutionId: string
 				courseIds: string[]
 			}[]
+	  }
+	| {
+			type: UserSchoolType.college
+			institutionId: string
+			facultyId: string
+			departmentId: string
+	  }
+	| {
+			type: UserSchoolType.graduate
+	  }
+
+export type UserTypeData =
+	| {
+			type: UserType.student
+			school: UserSchool
+	  }
+	| {
+			type: UserType.teacher
+			degree: string
+			workplace: string
+			opLength: string
+			sellsMaterials: boolean
+			school: UserSchool
 	  }
 	| {
 			type: UserType.organization
 			name: string
 			code: string
-			exams: {
-				institutionId: string
-				courseIds: string[]
-			}[]
+			opLength: string
+			teachersSize: string
+			studentsSize: string
+			sellsMaterials: boolean
+			school: UserSchool
+	  }
+	| {
+			type: UserType.agent
 	  }
 
 export enum RankingTimes {

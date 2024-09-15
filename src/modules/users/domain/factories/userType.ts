@@ -1,7 +1,7 @@
 import { v } from 'valleyed'
 import { reactive } from 'vue'
 import { UserEntity } from '../entities/users'
-import { UserSchoolType, UserType, UserTypeData } from '../types'
+import { UserSchool, UserSchoolType, UserType, UserTypeData } from '../types'
 import { BaseFactory } from '@modules/core'
 
 type Exam = {
@@ -16,35 +16,37 @@ type Keys = {
 	facultyId: string
 	departmentId: string
 	exams: Exam[]
-	school: string
+
+	opLength: string
+	sellsMaterials: boolean
+
+	degree: string
+	workplace: string
+
 	name: string
 	code: string
-	degree: string
-	teachingYears: string
-	sellMaterials: boolean
-	orgLength: string
-	orgTeachersLength: string
-	orgStudentsLength: string
+	teachersSize: string
+	studentsSize: string
 }
 
 export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys> {
 	readonly rules = {
 		type: v.in(Object.values(UserType)),
 
-		schoolType: v.in(Object.values(UserSchoolType)).requiredIf(() => this.isStudent),
+		schoolType: v.in(Object.values(UserSchoolType)).requiredIf(() => this.canSetSchool),
 
 		institutionId: v
 			.string()
 			.min(1)
-			.requiredIf(() => this.isStudent && this.isCollegeType),
+			.requiredIf(() => this.canSetSchool && this.isCollegeType),
 		facultyId: v
 			.string()
 			.min(1)
-			.requiredIf(() => this.isStudent && this.isCollegeType),
+			.requiredIf(() => this.canSetSchool && this.isCollegeType),
 		departmentId: v
 			.string()
 			.min(1)
-			.requiredIf(() => this.isStudent && this.isCollegeType),
+			.requiredIf(() => this.canSetSchool && this.isCollegeType),
 
 		exams: v
 			.array(
@@ -57,9 +59,19 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 						.parse(val),
 				),
 			)
-			.requiredIf(() => (this.isStudent && this.isAspirantType) || this.isTeacher || this.isOrganization),
+			.requiredIf(() => this.canSetSchool && this.isAspirantType),
 
-		school: v
+		opLength: v
+			.string()
+			.min(1)
+			.requiredIf(() => this.isTeacher || this.isOrganization),
+		sellsMaterials: v.boolean().requiredIf(() => this.isTeacher || this.isOrganization),
+
+		degree: v
+			.string()
+			.min(1)
+			.requiredIf(() => this.isTeacher),
+		workplace: v
 			.string()
 			.min(1)
 			.requiredIf(() => this.isTeacher),
@@ -72,33 +84,16 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 			.string()
 			.min(6)
 			.requiredIf(() => this.isOrganization),
-
-		degree: v
-			.string()
-			.min(1)
-			.requiredIf(() => this.isTeacher),
-
-		teachingYears: v
-			.string()
-			.min(1)
-			.requiredIf(() => this.isTeacher),
-
-		sellMaterials: v.boolean().requiredIf(() => this.isTeacher || this.isOrganization),
-
-		orgLength: v
+		teachersSize: v
 			.string()
 			.min(1)
 			.requiredIf(() => this.isOrganization),
-		orgTeachersLength: v
-			.string()
-			.min(1)
-			.requiredIf(() => this.isOrganization),
-		orgStudentsLength: v
+		studentsSize: v
 			.string()
 			.min(1)
 			.requiredIf(() => this.isOrganization),
 	}
-	reserved = ['type']
+	reserved = ['type', 'schoolType']
 	extras = reactive({
 		insts: [] as string[],
 		activeInst: null as string | null,
@@ -116,20 +111,20 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 	constructor() {
 		super({
 			type: UserType.student,
-			schoolType: UserSchoolType.university,
+			schoolType: UserSchoolType.graduate,
 			institutionId: '',
 			facultyId: '',
 			departmentId: '',
 			exams: [],
-			school: '',
+			sellMaterials: false,
+			degree: '',
+			workplace: '',
+			teachingYears: '',
 			name: '',
 			code: '',
-			degree: '',
-			teachingYears: '',
-			sellMaterials: false,
-			orgLength: '',
-			orgTeachersLength: '',
-			orgStudentsLength: '',
+			opLength: '',
+			teachersSize: '',
+			studentsSize: '',
 		})
 	}
 
@@ -170,6 +165,14 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 		return this.type === UserType.organization
 	}
 
+	get isAgent() {
+		return this.type === UserType.agent
+	}
+
+	get canSetSchool() {
+		return this.isStudent || this.isTeacher || this.isOrganization
+	}
+
 	get isCollegeType() {
 		return this.schoolType === UserSchoolType.college
 	}
@@ -178,15 +181,8 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 		return this.schoolType === UserSchoolType.aspirant
 	}
 
-	get isUniversityType() {
-		return this.schoolType === UserSchoolType.university
-	}
-
-	get isValidExceptExams() {
-		return this.keys
-			.filter((key) => key !== 'exams')
-			.map((key) => this.isValid(key))
-			.every(Boolean)
+	get isGraduateType() {
+		return this.schoolType === UserSchoolType.graduate
 	}
 
 	getInstitution(institutionId: string) {
@@ -210,46 +206,71 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 		this.entityId = entity.id
 		if (!entity.type) return
 		this.type = entity.type.type
-		if (entity.type.type === UserType.student) {
-			if (entity.type.school.type === UserSchoolType.college) {
-				this.institutionId = entity.type.school.institutionId
-				this.facultyId = entity.type.school.facultyId
-				this.departmentId = entity.type.school.departmentId
-			} else if (entity.type.school.type === UserSchoolType.aspirant) {
-				this.exams = entity.type.school.exams
-				this.institutions = entity.type.school.exams.map((e) => e.institutionId)
+		if ('school' in entity.type) {
+			const school = entity.type.school
+			this.schoolType = school.type
+			if (school.type === UserSchoolType.college) {
+				this.institutionId = school.institutionId
+				this.facultyId = school.facultyId
+				this.departmentId = school.departmentId
+			} else if (school.type === UserSchoolType.aspirant) {
+				this.exams = school.exams
+				this.institutions = school.exams.map((e) => e.institutionId)
 			}
+		}
+		if ('opLength' in entity.type) this.opLength = entity.type.opLength
+		if ('sellsMaterials' in entity.type) this.sellsMaterials = entity.type.sellsMaterials
+
+		if (entity.type.type === UserType.student) {
 		} else if (entity.type.type === UserType.teacher) {
-			this.exams = entity.type.exams
-			this.school = entity.type.school
+			this.degree = entity.type.degree
+			this.workplace = entity.type.workplace
 		} else if (entity.type.type === UserType.organization) {
-			this.exams = entity.type.exams
 			this.name = entity.type.name
 			this.code = entity.type.code
+			this.teachersSize = entity.type.teachersSize
+			this.studentsSize = entity.type.studentsSize
 		}
 	}
 
 	model = (): UserTypeData => {
-		const { institutionId, facultyId, departmentId, exams, school, name, code } = this.validValues
-		if (this.isTeacher) return { type: UserType.teacher, school, exams }
-		if (this.isOrganization) return { type: UserType.organization, name, code, exams }
-		return {
-			type: UserType.student,
-			school: this.isCollegeType
+		const {
+			type,
+			schoolType,
+			institutionId,
+			facultyId,
+			departmentId,
+			exams,
+			opLength,
+			sellsMaterials,
+			degree,
+			workplace,
+			name,
+			code,
+			teachersSize,
+			studentsSize,
+		} = this.validValues
+		const school: UserSchool =
+			schoolType === UserSchoolType.college
 				? {
 						type: UserSchoolType.college,
 						institutionId,
 						facultyId,
 						departmentId,
 					}
-				: this.isAspirantType
+				: schoolType === UserSchoolType.aspirant
 					? {
 							type: UserSchoolType.aspirant,
 							exams,
 						}
 					: {
-							type: UserSchoolType.university,
-						},
-		}
+							type: UserSchoolType.graduate,
+						}
+		if (type === UserType.agent) return { type: UserType.agent }
+		else if (type === UserType.student) return { type: UserType.student, school }
+		else if (type === UserType.teacher) return { type: UserType.teacher, school, opLength, sellsMaterials, degree, workplace }
+		else if (type === UserType.organization)
+			return { type: UserType.organization, school, opLength, sellsMaterials, name, code, teachersSize, studentsSize }
+		throw new Error(`Invalid user type: ${type}`)
 	}
 }

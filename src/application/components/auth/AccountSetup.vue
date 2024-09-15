@@ -276,9 +276,9 @@
 						:color="typeFactory.getInstitution(typeFactory.activeInst).courseIds.includes(course.key) ? 'purple' : 'gray'"
 						customClass="flex items-center gap-2"
 						as="a"
-						@click="toggleCourse(course.key)"
-					>{{ course.value }}</SofaBadge
-					>
+						@click="toggleCourse(course.key)">
+						{{ course.value }}
+					</SofaBadge>
 				</div>
 			</template>
 		</div>
@@ -346,7 +346,7 @@ const isDisabled = computed(() => {
 	if (tab.value === 'profile') return !profileFactory.valid || !locationFactory.valid
 	else if (tab.value === 'phone') return !phoneFactory.valid
 	else if (tab.value === 'phone-verify') return !token.value
-	else if (tab.value === 'type') return !typeFactory.isValidExceptExams
+	else if (tab.value === 'type') return !typeFactory.isValidExcept('exams')
 	else if (tab.value === 'exams') return !typeFactory.isValidExceptExams
 	else if (tab.value === 'subjects') return !typeFactory.valid
 	return false
