@@ -30,9 +30,15 @@ type Keys = {
 
 export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys> {
 	readonly rules = {
-		type: v.in(Object.values(UserType)),
+		type: v.in(Object.values(UserType)).custom((val) => val !== UserType.agent, 'agent type is not allowed for now'),
 
-		schoolType: v.in(Object.values(UserSchoolType)).requiredIf(() => this.canSetSchool),
+		schoolType: v
+			.in(Object.values(UserSchoolType))
+			.requiredIf(() => this.canSetSchool)
+			.custom(
+				(val) => (this.isTeacher || this.isOrganization ? val === UserSchoolType.aspirant : true),
+				'only aspirants level is supported for orgs and teachers',
+			),
 
 		institutionId: v
 			.string()
