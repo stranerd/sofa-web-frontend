@@ -104,7 +104,6 @@
 				<SofaInput
 					v-if="typeFactory.isTeacher"
 					v-model="typeFactory.workplace"
-					customClass="rounded-custom !bg-lightGray"
 					placeholder="Where do you teach now?"
 					:error="typeFactory.errors.workplace" />
 
