@@ -206,16 +206,16 @@
 					<div class="w-full flex justify-center items-center flex-wrap gap-3">
 						<SofaBadge class="flex items-center gap-2" color="gray">Enter exam</SofaBadge>
 						<SofaBadge
-							v-for="exam in gatewayExams.map((s) => ({ key: s.id, value: s.title }))"
-							:key="exam.key"
-							:color="typeFactory.institutions.includes(exam.key) ? 'purple' : 'gray'"
+							v-for="exam in gatewayExams"
+							:key="exam.id"
+							:color="typeFactory.hasInstitution(exam.id) ? 'purple' : 'gray'"
 							class="flex items-center gap-2"
 							as="a"
-							@click.prevent="toggleInstitution(exam.key)">
-							{{ exam.value }}
+							@click.prevent="typeFactory.toggleInstitution(exam.id)">
+							{{ exam.title }}
 							<SofaIcon
-								:name="typeFactory.institutions.includes(exam.key) ? 'done' : 'circle-close'"
-								:class="typeFactory.institutions.includes(exam.key) ? 'fill-white' : 'fill-deepGray'"
+								:name="typeFactory.hasInstitution(exam.id) ? 'done' : 'circle-close'"
+								:class="typeFactory.hasInstitution(exam.id) ? 'fill-white' : 'fill-deepGray'"
 								class="h-[17px]" />
 						</SofaBadge>
 					</div>
@@ -228,18 +228,20 @@
 				<SofaHeading v-if="typeFactory.isStudent" content="Choose subjects you are studying for" />
 				<SofaHeading v-if="typeFactory.isTeacher" content="What subjects do you teach?" />
 				<SofaHeading v-if="typeFactory.isOrganization" content="What subjects does your organization cover?" />
-				<div class="w-full flex justify-center items-center flex-wrap gap-3 py-2">
+				<!-- For now, any course you select is for the first institution... Once design is updated, the slice can be removed -->
+				<div
+					v-for="exam in typeFactory.institutions.slice(0, 1)"
+					:key="exam.institutionId"
+					class="w-full flex justify-center items-center flex-wrap gap-3 py-2">
 					<SofaBadge class="flex items-center gap-2" color="gray">Enter exam</SofaBadge>
 					<SofaBadge
-						v-for="course in courses
-							.filter((c) => c.institutionId === typeFactory.activeInst)
-							.map((s) => ({ key: s.id, value: s.title }))"
-						:key="course.key"
-						:color="typeFactory.getInstitution(typeFactory.activeInst).courseIds.includes(course.key) ? 'purple' : 'gray'"
+						v-for="course in courses.filter((c) => c.institutionId === exam.institutionId)"
+						:key="course.id"
+						:color="exam.courseIds.includes(course.id) ? 'purple' : 'gray'"
 						class="flex items-center gap-2"
 						as="a"
-						@click="toggleCourse(course.key)">
-						{{ course.value }}
+						@click="exam.toggleCourse(course.id)">
+						{{ course.title }}
 					</SofaBadge>
 				</div>
 			</template>
@@ -373,24 +375,6 @@ const handleAccountSetup = async () => {
 
 const complete = async () => {
 	await router.push(await $utils.getRedirectToRoute())
-}
-
-const toggleCourse = (key: string) => {
-	const activeInst = typeFactory.activeInst
-	if (!activeInst) return
-	const institution = typeFactory.getInstitution(activeInst)
-	const index = institution.courseIds.indexOf(key)
-	index === -1 ? institution.courseIds.push(key) : institution.courseIds.splice(index, 1)
-}
-
-const toggleInstitution = (key: string) => {
-	if (typeFactory.institutions.includes(key)) {
-		typeFactory.institutions = []
-		typeFactory.activeInst = null
-	} else {
-		typeFactory.institutions = [key]
-		typeFactory.activeInst = key
-	}
 }
 
 const { courses, fetchInstitutionCourses } = useCourseList()

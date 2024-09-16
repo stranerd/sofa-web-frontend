@@ -1,5 +1,4 @@
 import { v } from 'valleyed'
-import { reactive } from 'vue'
 import { UserEntity } from '../entities/users'
 import { UserSchool, UserSchoolType, UserType, UserTypeData } from '../types'
 import { BaseFactory } from '@modules/core'
@@ -94,10 +93,6 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 			.requiredIf(() => this.isOrganization),
 	}
 	reserved = ['type']
-	extras = reactive({
-		insts: [] as string[],
-		activeInst: null as string | null,
-	})
 	protected onSet = {
 		type: () => {
 			this.resetProp('schoolType')
@@ -131,28 +126,24 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 	}
 
 	get institutions() {
-		return this.extras.insts
-	}
-
-	set institutions(institutionIds: string[]) {
-		const now = Date.now()
-		this.exams = institutionIds.map((institutionId) => ({
-			institutionId,
-			courseIds: [],
-			startDate: now,
-			endDate: now,
-			...(this.exams.find((e) => e.institutionId === institutionId) ?? {}),
+		return this.exams.map((e, i) => ({
+			...e,
+			toggleCourse: (courseId: string) => {
+				const index = e.courseIds.indexOf(courseId)
+				const courseIds = index === -1 ? [...e.courseIds, courseId] : e.courseIds.filter((c) => c !== courseId)
+				this.exams = this.exams.map((e, j) => (i === j ? { ...e, courseIds } : e))
+			},
 		}))
-		this.institutions.splice(0, this.institutions.length, ...this.exams.map((e) => e.institutionId))
-		if (this.activeInst && !this.institutions.includes(this.activeInst)) this.activeInst = null
 	}
 
-	get activeInst() {
-		return this.extras.activeInst
+	hasInstitution(institutionId: string) {
+		return this.exams.some((e) => e.institutionId === institutionId)
 	}
 
-	set activeInst(institutionId: string | null) {
-		this.extras.activeInst = institutionId
+	toggleInstitution(institutionId: string) {
+		const index = this.exams.findIndex((e) => e.institutionId === institutionId)
+		this.exams =
+			index === -1 ? [...this.exams, { institutionId, courseIds: [] }] : this.exams.filter((e) => e.institutionId !== institutionId)
 	}
 
 	get isStudent() {
@@ -187,23 +178,6 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 		return this.schoolType === UserSchoolType.graduate
 	}
 
-	getInstitution(institutionId: string) {
-		// eslint-disable-next-line @typescript-eslint/no-this-alias
-		const classThis = this
-		const obj = this.exams.find((e) => e.institutionId === institutionId)!
-		return {
-			...obj,
-			get courseIds() {
-				return obj.courseIds
-			},
-			set courseIds(value: string[]) {
-				obj.courseIds = value
-				// eslint-disable-next-line no-self-assign
-				classThis.exams = classThis.exams
-			},
-		}
-	}
-
 	load = (entity: UserEntity) => {
 		this.entityId = entity.id
 		if (!entity.type) return
@@ -217,7 +191,6 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 				this.departmentId = school.departmentId
 			} else if (school.type === UserSchoolType.aspirant) {
 				this.exams = school.exams
-				this.institutions = school.exams.map((e) => e.institutionId)
 			}
 		}
 		if ('opLength' in entity.type) this.opLength = entity.type.opLength
