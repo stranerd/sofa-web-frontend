@@ -17,7 +17,7 @@
 		}">
 		<div
 			:class="[
-				'bg-white rounded-xl overflow-y-auto flex flex-col justify-center items-center shrink-0 md:p-8 p-4',
+				'bg-white min-w-fit rounded-xl overflow-y-auto flex flex-col justify-center items-center shrink-0 md:p-8 p-4',
 				showBodyBgImage ? 'w-[80%] mdlg:w-[60%]' : 'h-full w-full lg:w-[45%] mdlg:w-[50%]',
 			]">
 			<div v-if="!showBodyBgImage" class="w-full py-4">

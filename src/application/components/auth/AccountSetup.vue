@@ -1,11 +1,11 @@
 <template>
 	<form class="w-full flex flex-col gap-4" @submit.prevent="handleAccountSetup">
 		<div v-if="!isProfileEducation && !isProfilePhone" class="w-full flex gap-3">
-			<div class="flex items-center">
+			<div class="flex items-center justify-center w-full">
 				<a
 					v-for="(option, index) in accountSetupOptions.filter((o) => !o.hide)"
 					:key="option.id"
-					class="flex items-center gap-2 w-full"
+					class="flex items-center gap-2"
 					@click="tab = option.id">
 					<div
 						:class="[
@@ -22,7 +22,7 @@
 					<SofaText
 						:content="option.name"
 						:class="[
-							'hidden mdlg:block',
+							'hidden mdlg:block whitespace-nowrap',
 							{
 								'text-primaryGreen': option.done,
 								'text-primaryPurple': tab === option.id && !option.done,
@@ -94,7 +94,7 @@
 				</div>
 			</div>
 
-			<div v-if="tab === 'type'" class="w-full flex flex-col gap-4 py-3">
+			<div v-if="tab === 'type'" class="w-full flex flex-col gap-6 py-3">
 				<SofaInput
 					v-if="typeFactory.isTeacher"
 					v-model="typeFactory.degree"
@@ -113,7 +113,7 @@
 					placeholder="How long have you been teaching?"
 					:options="[]"
 					:error="typeFactory.errors.opLength"
-					class="text-grayColor capitalize" />
+					class="text-grayColor" />
 				<!-- Organization -->
 				<SofaSelect
 					v-if="typeFactory.isOrganization"
@@ -121,21 +121,21 @@
 					placeholder="How long has your organization been operating?"
 					:error="typeFactory.errors.opLength"
 					:options="[]"
-					class="text-grayColor capitalize" />
+					class="text-grayColor" />
 				<SofaSelect
 					v-if="typeFactory.isOrganization"
 					v-model="typeFactory.teachersSize"
 					placeholder="How many teachers do you have?"
 					:error="typeFactory.errors.teachersSize"
 					:options="[]"
-					class="text-grayColor capitalize" />
+					class="text-grayColor" />
 				<SofaSelect
 					v-if="typeFactory.isOrganization"
 					v-model="typeFactory.studentsSize"
 					placeholder="How many students do you have?"
 					:error="typeFactory.errors.studentsSize"
 					:options="[]"
-					class="text-grayColor capitalize" />
+					class="text-grayColor" />
 				<!-- Organization & Teachers -->
 				<SofaSelect
 					v-if="typeFactory.isTeacher || typeFactory.isOrganization"
@@ -143,7 +143,7 @@
 					placeholder="Do you sell study materials?"
 					:options="[]"
 					:error="typeFactory.errors.sellsMaterials"
-					class="text-grayColor capitalize" />
+					class="text-grayColor" />
 
 				<div
 					v-if="typeFactory.isStudent"
