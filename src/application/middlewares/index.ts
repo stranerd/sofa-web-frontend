@@ -20,13 +20,14 @@ export const isNotAuthenticated = defineMiddleware(async () => {
 	if (useAuth().isLoggedIn.value) return '/dashboard'
 })
 const checkAuthUser = async (to: string) => {
-	if (!useAuth().isLoggedIn.value) {
+	const { isLoggedIn, isEmailVerified, user } = useAuth()
+	if (!isLoggedIn.value) {
 		if (!to.startsWith('/auth/')) await $utils.setRedirectToRoute(to)
 		return '/auth/signin'
 	}
-	if (!useAuth().isEmailVerified.value) {
+	if (!isEmailVerified.value) {
 		if (!to.startsWith('/auth/')) await $utils.setRedirectToRoute(to)
-		return '/auth/verify'
+		return `/auth/verify?email=${user.value?.email ?? ''}`
 	}
 }
 export const isAuthenticated = defineMiddleware(async ({ to }) => {

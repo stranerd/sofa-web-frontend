@@ -1,34 +1,38 @@
 import { computed, ref } from 'vue'
+import { createStore } from '../core/store'
 import { useListener } from '@app/composables/core/listener'
 import { AuthDetails, AuthTypes, AuthUseCases } from '@modules/auth'
 import { WalletsUseCases } from '@modules/payment'
 import { WalletEntity } from '@modules/payment/domain/entities/wallets'
 import { UserEntity, UsersUseCases } from '@modules/users'
 
-const store = {
-	auth: ref(null as AuthDetails | null),
-	user: ref(null as UserEntity | null),
-	wallet: ref(null as WalletEntity | null),
-	listener: useListener(async () => {
-		const id = store.auth.value?.id as string | undefined
-		if (!id) return () => {}
-		const setUser = async (user: UserEntity) => {
-			store.user.value = user
-		}
-		const setWallet = async (wallet: WalletEntity) => {
-			store.wallet.value = wallet
-		}
-		const listeners = [
-			await UsersUseCases.listenToOne(id, { created: setUser, updated: setUser, deleted: setUser }),
-			await WalletsUseCases.listen({
-				created: setWallet,
-				updated: setWallet,
-				deleted: setWallet,
-			}),
-		]
-		return () => Promise.all(listeners.map((l) => l()))
-	}),
-}
+const store = createStore(
+	{
+		auth: ref<AuthDetails | null>(null),
+		user: ref<UserEntity | null>(null),
+		wallet: ref<WalletEntity | null>(null),
+		listener: useListener(async () => {
+			const id = store.auth.value?.id as string | undefined
+			if (!id) return () => {}
+			const setUser = async (user: UserEntity) => {
+				store.user.value = user
+			}
+			const setWallet = async (wallet: WalletEntity) => {
+				store.wallet.value = wallet
+			}
+			const listeners = [
+				await UsersUseCases.listenToOne(id, { created: setUser, updated: setUser, deleted: setUser }),
+				await WalletsUseCases.listen({
+					created: setWallet,
+					updated: setWallet,
+					deleted: setWallet,
+				}),
+			]
+			return () => Promise.all(listeners.map((l) => l()))
+		}),
+	},
+	'auth/auth',
+)
 
 export const useAuth = () => {
 	const id = computed(() => store.auth.value?.id ?? '')
