@@ -2,9 +2,7 @@ import { setupDevtoolsPlugin } from '@vue/devtools-api'
 import { getRandomValue } from 'valleyed'
 import { App } from 'vue'
 
-type AnyRecord = Record<string, any>
-
-const stores: AnyRecord = {}
+const stores: Record<string, { value: any; stack: string[] }> = {}
 
 const config = {
 	componentStateTypes: ['Global Stores'],
@@ -13,7 +11,7 @@ const config = {
 	label: 'Global Stores',
 }
 
-function isValid(payload: AnyRecord, data: AnyRecord) {
+function isValid(payload: Record<string, any>, data: Record<string, any>) {
 	for (const [key, value] of Object.entries(data)) {
 		if (payload[key] !== value) return false
 	}
@@ -47,7 +45,7 @@ export function devtools(app: App) {
 				payload.instanceData.state.push({
 					key,
 					type: config.componentStateTypes[0],
-					value: store,
+					value: store.value,
 					editable: false,
 				})
 			})
@@ -62,9 +60,10 @@ export function devtools(app: App) {
 		api.on.getInspectorTree((payload) => {
 			if (!isValid(payload, { app, inspectorId: config.id })) return
 
-			payload.rootNodes = Object.entries(stores)
-				.filter(([key]) => key.toLowerCase().includes(payload.filter.toLowerCase()))
-				.map(([key]) => ({
+			payload.rootNodes = Object.keys(stores)
+				.filter((key) => key.toLowerCase().includes(payload.filter.toLowerCase()))
+				.sort()
+				.map((key) => ({
 					id: key,
 					label: key,
 					children: [],
@@ -81,10 +80,11 @@ export function devtools(app: App) {
 				State: [
 					{
 						key: 'value',
-						value: store,
+						value: store.value,
 						editable: false,
 					},
 				],
+				Stack: store.stack.map((value, index) => ({ key: index.toString(), value })),
 			}
 		})
 
@@ -93,15 +93,21 @@ export function devtools(app: App) {
 			const store = stores[payload.nodeId]
 			if (!store) return
 
-			payload.set(store)
+			payload.set(store.value)
 		})
 	})
+}
+
+function getStack() {
+	const stack = <string[]>new Error().stack!.split('\n')
+	const index = stack.findIndex((line) => line.includes('getStack'))
+	return stack.slice(index + 2).map((line) => line.trim())
 }
 
 export function createStore<T>(initial: T, name?: string): T {
 	name ??= getRandomValue()
 	if (stores[name]) name += `-${getRandomValue()}`
 
-	stores[name] = initial
+	stores[name] = { value: initial, stack: getStack() }
 	return initial
 }
