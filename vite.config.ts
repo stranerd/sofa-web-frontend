@@ -5,6 +5,7 @@ import { defineConfig } from 'vite'
 import Checker from 'vite-plugin-checker'
 import Compression from 'vite-plugin-compression'
 import Pages from 'vite-plugin-pages'
+import vueDevTools from 'vite-plugin-vue-devtools'
 import { watch } from 'vite-plugin-watch'
 
 const skipCompression = !!process.env.SKIP_COMPRESSION
@@ -57,6 +58,7 @@ export default defineConfig({
 						// eslint: { lintCommand: 'eslint ./src' }
 						// stylelint: { lintCommand: 'stylelint ./src/**/*.{css,scss,vue}' }
 					}),
+					vueDevTools(),
 				]
 			: []),
 	],
@@ -81,12 +83,4 @@ export default defineConfig({
 	server: {
 		port: 8080,
 	},
-	/* css: {
-		preprocessorOptions: {
-			scss: {
-				additionalData: `@import '@app/assets/styles/global.scss';
-`
-			}
-		}
-	} */
 })

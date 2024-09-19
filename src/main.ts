@@ -6,6 +6,7 @@ import { $screen, $utils } from '@utils/modules'
 import App from '@app/App.vue'
 import '@app/assets/styles/index.scss'
 
+import { devtools } from '@app/composables/core/store'
 import { globalPlugins } from '@app/plugins'
 import { router } from '@app/router'
 
@@ -18,7 +19,7 @@ const init = async () => {
 
 	const head = createHead()
 
-	app.use(router).use(head).mount('#app')
+	app.use(router).use(head).use(devtools).mount('#app')
 
 	await router.isReady().catch()
 }
