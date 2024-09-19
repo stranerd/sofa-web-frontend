@@ -45,20 +45,17 @@ const props = defineProps<
 			item: ExtendedCourseSectionItem
 			classInst: ClassEntity
 			lesson: ClassLesson
-			course?: undefined
 	  }
 	| {
 			item: ExtendedCourseSectionItem
 			course: CourseEntity
-			classInst?: undefined
-			lesson?: undefined
 	  }
 >()
 
 const access = computed(() => {
-	if (props.classInst && props.lesson)
+	if ('classInst' in props && props.classInst && props.lesson)
 		return { organizationId: props.classInst.organizationId, classId: props.classInst.id, lessonId: props.lesson.id }
-	if (props.course) return { courseId: props.course.id }
+	if ('course' in props && props.course) return { courseId: props.course.id }
 	return {}
 })
 

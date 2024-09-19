@@ -8,11 +8,12 @@
 		</div>
 
 		<CourseForm
+			v-if="course"
 			:course="course"
 			:factory="factory"
 			:cancel="close"
 			:submit="updateCourse"
-			:publish="!course?.isPublished ? publishCourse : undefined" />
+			:publish="!course.isPublished ? publishCourse : undefined" />
 	</div>
 </template>
 

@@ -50,6 +50,8 @@ import EmbeddedSection from '@app/components/core/EmbeddedSection.vue'
 import CourseSections from '@app/components/study/courses/CourseSections.vue'
 import { ExtendedCourseSections, ExtendedCourseSectionItem } from '@modules/study'
 
+type DistributiveOmit<T, K extends PropertyKey> = T extends any ? Omit<T, K> : never
+
 defineProps<{
 	title: string
 	hasAccess: boolean
@@ -57,7 +59,7 @@ defineProps<{
 	description?: string
 	rate?: () => void
 	defaultSelected?: { sectionIndex: number; itemIndex: number }
-	embeddedProps: Omit<InstanceType<typeof EmbeddedSection>['$props'], 'item'>
+	embeddedProps: DistributiveOmit<InstanceType<typeof EmbeddedSection>['$props'], 'item'>
 }>()
 
 const selectedItem = ref<ExtendedCourseSectionItem | null>(null)
