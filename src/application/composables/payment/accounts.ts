@@ -1,11 +1,15 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
+import { createStore } from '../core/store'
 import { AccountUpdateFactory, WalletsUseCases } from '@modules/payment'
 
-const accountsStore = {
-	banks: ref<Awaited<ReturnType<(typeof WalletsUseCases)['getBanks']>>>([]),
-}
+const accountsStore = createStore(
+	{
+		banks: ref<Awaited<ReturnType<(typeof WalletsUseCases)['getBanks']>>>([]),
+	},
+	'payment/accounts',
+)
 
 export const useAccountsUpdate = () => {
 	const factory = new AccountUpdateFactory()

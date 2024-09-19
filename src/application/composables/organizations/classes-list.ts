@@ -3,38 +3,42 @@ import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useAuth } from '../auth/auth'
 import { Refable, useAsyncFn, useItemsInList, usePaginatedTable } from '../core/hooks'
 import { useListener } from '../core/listener'
+import { createStore } from '../core/store'
 import { similarStore } from './classes'
 import { UsersUseCases } from '@modules/users'
 import { ClassEntity, ClassesUseCases } from '@modules/organizations'
 
-const store = {
-	classesIn: ref<ClassEntity[]>([]),
-	listener: useListener(async () => {
-		const { user } = useAuth()
-		return ClassesUseCases.listenToMyClassesIn(user.value!, {
-			created: async (entity) => {
-				addToArray(
-					store.classesIn.value,
-					entity,
-					(e) => e.id,
-					(e) => e.createdAt,
-				)
-			},
-			updated: async (entity) => {
-				addToArray(
-					store.classesIn.value,
-					entity,
-					(e) => e.id,
-					(e) => e.createdAt,
-				)
-			},
-			deleted: async (entity) => {
-				store.classesIn.value = store.classesIn.value.filter((m) => m.id !== entity.id)
-			},
-		})
-	}),
-	classesExplore: ref<ClassEntity[]>([]),
-}
+const store = createStore(
+	{
+		classesIn: ref<ClassEntity[]>([]),
+		listener: useListener(async () => {
+			const { user } = useAuth()
+			return ClassesUseCases.listenToMyClassesIn(user.value!, {
+				created: async (entity) => {
+					addToArray(
+						store.classesIn.value,
+						entity,
+						(e) => e.id,
+						(e) => e.createdAt,
+					)
+				},
+				updated: async (entity) => {
+					addToArray(
+						store.classesIn.value,
+						entity,
+						(e) => e.id,
+						(e) => e.createdAt,
+					)
+				},
+				deleted: async (entity) => {
+					store.classesIn.value = store.classesIn.value.filter((m) => m.id !== entity.id)
+				},
+			})
+		}),
+		classesExplore: ref<ClassEntity[]>([]),
+	},
+	'organizations/classes/list',
+)
 
 export const useMyClasses = () => {
 	const { user } = useAuth()

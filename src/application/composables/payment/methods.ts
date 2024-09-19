@@ -3,36 +3,40 @@ import { onMounted, onUnmounted, ref } from 'vue'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useSuccessHandler } from '../core/states'
+import { createStore } from '../core/store'
 import { createTransaction } from './transactions'
 import { MethodEntity } from '@modules/payment/domain/entities/methods'
 import { MethodsUseCases, TransactionType } from '@modules/payment'
 
-const store = {
-	methods: ref<MethodEntity[]>([]),
-	listener: useListener(async () =>
-		MethodsUseCases.listenToAll({
-			created: async (entity) => {
-				addToArray(
-					store.methods.value,
-					entity,
-					(e) => e.id,
-					(e) => e.createdAt,
-				)
-			},
-			updated: async (entity) => {
-				addToArray(
-					store.methods.value,
-					entity,
-					(e) => e.id,
-					(e) => e.createdAt,
-				)
-			},
-			deleted: async (entity) => {
-				store.methods.value = store.methods.value.filter((m) => m.id !== entity.id)
-			},
-		}),
-	),
-}
+const store = createStore(
+	{
+		methods: ref<MethodEntity[]>([]),
+		listener: useListener(async () =>
+			MethodsUseCases.listenToAll({
+				created: async (entity) => {
+					addToArray(
+						store.methods.value,
+						entity,
+						(e) => e.id,
+						(e) => e.createdAt,
+					)
+				},
+				updated: async (entity) => {
+					addToArray(
+						store.methods.value,
+						entity,
+						(e) => e.id,
+						(e) => e.createdAt,
+					)
+				},
+				deleted: async (entity) => {
+					store.methods.value = store.methods.value.filter((m) => m.id !== entity.id)
+				},
+			}),
+		),
+	},
+	'payment/methods',
+)
 
 export const useMyMethods = () => {
 	const { called, asyncFn: fetchMethods } = useAsyncFn(

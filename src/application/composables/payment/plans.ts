@@ -5,35 +5,39 @@ import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useSuccessHandler } from '../core/states'
+import { createStore } from '../core/store'
 import { UserType } from '@modules/users'
 import { PlanEntity, PlansUseCases, SelectedPaymentMethod, WalletsUseCases } from '@modules/payment'
 
-const store = {
-	plans: ref<PlanEntity[]>([]),
-	listener: useListener(async () =>
-		PlansUseCases.listenToAll({
-			created: async (entity) => {
-				addToArray(
-					store.plans.value,
-					entity,
-					(e) => e.id,
-					(e) => e.createdAt,
-				)
-			},
-			updated: async (entity) => {
-				addToArray(
-					store.plans.value,
-					entity,
-					(e) => e.id,
-					(e) => e.createdAt,
-				)
-			},
-			deleted: async (entity) => {
-				store.plans.value = store.plans.value.filter((m) => m.id !== entity.id)
-			},
-		}),
-	),
-}
+const store = createStore(
+	{
+		plans: ref<PlanEntity[]>([]),
+		listener: useListener(async () =>
+			PlansUseCases.listenToAll({
+				created: async (entity) => {
+					addToArray(
+						store.plans.value,
+						entity,
+						(e) => e.id,
+						(e) => e.createdAt,
+					)
+				},
+				updated: async (entity) => {
+					addToArray(
+						store.plans.value,
+						entity,
+						(e) => e.id,
+						(e) => e.createdAt,
+					)
+				},
+				deleted: async (entity) => {
+					store.plans.value = store.plans.value.filter((m) => m.id !== entity.id)
+				},
+			}),
+		),
+	},
+	'payment/plans',
+)
 
 export const usePlansList = () => {
 	const { userType, wallet } = useAuth()

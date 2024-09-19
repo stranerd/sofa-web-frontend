@@ -2,63 +2,70 @@ import { addToArray } from 'valleyed'
 import { computed, onMounted, onUnmounted, reactive } from 'vue'
 import { Refable, useAsyncFn, useItemsInList } from '../core/hooks'
 import { useListener } from '../core/listener'
+import { createStore } from '../core/store'
 import { TagEntity, TagsUseCases } from '@modules/interactions'
 
-const topicStore = {
-	topics: reactive<TagEntity[]>([]),
-	listener: useListener(async () =>
-		TagsUseCases.listenToAllTopics({
-			created: async (entity) => {
-				addToArray(
-					topicStore.topics,
-					entity,
-					(e) => e.id,
-					(e) => e.title,
-					true,
-				)
-			},
-			updated: async (entity) => {
-				addToArray(
-					topicStore.topics,
-					entity,
-					(e) => e.id,
-					(e) => e.title,
-					true,
-				)
-			},
-			deleted: async (entity) => {
-				topicStore.topics = topicStore.topics.filter((m) => m.id !== entity.id)
-			},
-		}),
-	),
-}
+const topicStore = createStore(
+	{
+		topics: reactive<TagEntity[]>([]),
+		listener: useListener(async () =>
+			TagsUseCases.listenToAllTopics({
+				created: async (entity) => {
+					addToArray(
+						topicStore.topics,
+						entity,
+						(e) => e.id,
+						(e) => e.title,
+						true,
+					)
+				},
+				updated: async (entity) => {
+					addToArray(
+						topicStore.topics,
+						entity,
+						(e) => e.id,
+						(e) => e.title,
+						true,
+					)
+				},
+				deleted: async (entity) => {
+					topicStore.topics = topicStore.topics.filter((m) => m.id !== entity.id)
+				},
+			}),
+		),
+	},
+	'interactions/tags/topics',
+)
 
-const genericStore = {
-	tags: reactive<TagEntity[]>([]),
-	listener: useListener(async () =>
-		TagsUseCases.listenToAllGeneric({
-			created: async (entity) => {
-				addToArray(
-					genericStore.tags,
-					entity,
-					(e) => e.id,
-					(e) => e.meta.total,
-				)
-			},
-			updated: async (entity) => {
-				addToArray(
-					genericStore.tags,
-					entity,
-					(e) => e.id,
-					(e) => e.meta.total,
-				)
-			},
-			deleted: async (entity) => {
-				genericStore.tags = genericStore.tags.filter((m) => m.id !== entity.id)
-			},
-		}),
-	),
-}
+const genericStore = createStore(
+	{
+		tags: reactive<TagEntity[]>([]),
+		listener: useListener(async () =>
+			TagsUseCases.listenToAllGeneric({
+				created: async (entity) => {
+					addToArray(
+						genericStore.tags,
+						entity,
+						(e) => e.id,
+						(e) => e.meta.total,
+					)
+				},
+				updated: async (entity) => {
+					addToArray(
+						genericStore.tags,
+						entity,
+						(e) => e.id,
+						(e) => e.meta.total,
+					)
+				},
+				deleted: async (entity) => {
+					genericStore.tags = genericStore.tags.filter((m) => m.id !== entity.id)
+				},
+			}),
+		),
+	},
+	'interactions/tags/generic',
+)
 
 export const useTopicsList = () => {
 	const {

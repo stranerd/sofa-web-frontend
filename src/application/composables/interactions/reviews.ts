@@ -2,16 +2,22 @@ import { addToArray } from 'valleyed'
 import { Ref, computed, onMounted, onUnmounted, ref } from 'vue'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
+import { createStore } from '../core/store'
 import { Interaction, ReviewEntity, ReviewFactory, ReviewsUseCases } from '@modules/interactions'
 import { useSuccessHandler } from '@app/composables/core/states'
 
-const store: Record<
-	string,
-	{
-		reviews: Ref<ReviewEntity[]>
-		listener: ReturnType<typeof useListener>
-	}
-> = {}
+const store = createStore(
+	<
+		Record<
+			string,
+			{
+				reviews: Ref<ReviewEntity[]>
+				listener: ReturnType<typeof useListener>
+			}
+		>
+	>{},
+	'interactions/reviews',
+)
 
 export const useReviews = (interaction: Interaction) => {
 	const key = `${interaction.type}-${interaction.id}`

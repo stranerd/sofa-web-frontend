@@ -2,9 +2,13 @@ import { addToArray, getRandomValue } from 'valleyed'
 import { ComputedRef, Ref, computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 import { useListener } from './listener'
 import { useErrorHandler, useLoadingHandler } from './states'
+import { createStore } from './store'
 import { Listeners, QueryResults } from '@modules/core'
 
-const asyncStore: Record<string, { called: Ref<boolean> } & ReturnType<typeof useErrorHandler> & ReturnType<typeof useLoadingHandler>> = {}
+const asyncStore = createStore(
+	<Record<string, { called: Ref<boolean> } & ReturnType<typeof useErrorHandler> & ReturnType<typeof useLoadingHandler>>>{},
+	'core/hooks/async',
+)
 
 type UseAsyncFnOptions<T extends (...args: any[]) => any> = {
 	hideLoading?: boolean
@@ -35,12 +39,17 @@ export const useAsyncFn = <T extends (...args: any[]) => any>(fn: T, opts: Parti
 	return { asyncFn, error, loading, called }
 }
 
-const listItemsStore: Record<
-	string,
-	{
-		items: { id: string }[]
-	}
-> = {}
+const listItemsStore = createStore(
+	<
+		Record<
+			string,
+			{
+				items: { id: string }[]
+			}
+		>
+	>{},
+	'core/hooks/list-items',
+)
 
 export type Refable<T> = Ref<T> | ComputedRef<T>
 
@@ -106,16 +115,21 @@ export const useItemsInList = <T extends { id: string }>(
 	return { items: filteredItems, searchForItem, addToList }
 }
 
-const paginatedTableStore: Record<
-	string,
-	{
-		items: Ref<{ id: string }[]>
-		hasMore: Ref<boolean>
-		total: Ref<number>
-		currentViewingIndex: Ref<number>
-		listener: ReturnType<typeof useListener>
-	}
-> = {}
+const paginatedTableStore = createStore(
+	<
+		Record<
+			string,
+			{
+				items: Ref<{ id: string }[]>
+				hasMore: Ref<boolean>
+				total: Ref<number>
+				currentViewingIndex: Ref<number>
+				listener: ReturnType<typeof useListener>
+			}
+		>
+	>{},
+	'core/hooks/paginated-table',
+)
 
 export const usePaginatedTable = <T extends { id: string }, C = T>({
 	key,

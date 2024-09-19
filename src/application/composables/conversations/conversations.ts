@@ -5,35 +5,39 @@ import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useSuccessHandler } from '../core/states'
+import { createStore } from '../core/store'
 import { ConversationEntity, ConversationFactory, ConversationsUseCases } from '@modules/conversations'
 
-const store = {
-	conversations: ref<ConversationEntity[]>([]),
-	listener: useListener(
-		async () =>
-			await ConversationsUseCases.listenToAll({
-				created: async (entity) => {
-					addToArray(
-						store.conversations.value,
-						entity,
-						(e) => e.id,
-						(e) => e.last?.createdAt ?? 0,
-					)
-				},
-				updated: async (entity) => {
-					addToArray(
-						store.conversations.value,
-						entity,
-						(e) => e.id,
-						(e) => e.last?.createdAt ?? 0,
-					)
-				},
-				deleted: async (entity) => {
-					store.conversations.value = store.conversations.value.filter((m) => m.id !== entity.id)
-				},
-			}),
-	),
-}
+const store = createStore(
+	{
+		conversations: ref<ConversationEntity[]>([]),
+		listener: useListener(
+			async () =>
+				await ConversationsUseCases.listenToAll({
+					created: async (entity) => {
+						addToArray(
+							store.conversations.value,
+							entity,
+							(e) => e.id,
+							(e) => e.last?.createdAt ?? 0,
+						)
+					},
+					updated: async (entity) => {
+						addToArray(
+							store.conversations.value,
+							entity,
+							(e) => e.id,
+							(e) => e.last?.createdAt ?? 0,
+						)
+					},
+					deleted: async (entity) => {
+						store.conversations.value = store.conversations.value.filter((m) => m.id !== entity.id)
+					},
+				}),
+		),
+	},
+	'conversations/conversations',
+)
 
 export const useConversationsList = () => {
 	const { id: authId } = useAuth()

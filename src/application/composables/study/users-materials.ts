@@ -2,17 +2,23 @@ import { addToArray } from 'valleyed'
 import { Ref, onMounted, onUnmounted, reactive, ref } from 'vue'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
+import { createStore } from '../core/store'
 import { UserEntity, UsersUseCases } from '@modules/users'
 import { CourseEntity, CoursesUseCases, QuizEntity, QuizzesUseCases } from '@modules/study'
 
-const store = {} as Record<
-	string,
-	{
-		user: Ref<UserEntity | null>
-		quizzes: QuizEntity[]
-		courses: CourseEntity[]
-	}
->
+const store = createStore(
+	<
+		Record<
+			string,
+			{
+				user: Ref<UserEntity | null>
+				quizzes: QuizEntity[]
+				courses: CourseEntity[]
+			}
+		>
+	>{},
+	'study/users-materials',
+)
 
 export const useUsersMaterials = (id: string) => {
 	store[id] ??= {

@@ -6,37 +6,41 @@ import { useAsyncFn, usePaginatedTable } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useModals } from '../core/modals'
 import { useSuccessHandler } from '../core/states'
+import { createStore } from '../core/store'
 import { useUsersInList } from './users'
 import { AcceptTutorRequestInput } from '@modules/users/domain/types'
 import { TutorRequestEntity, TutorRequestFactory, TutorRequestsUseCases, UserEntity } from '@modules/users'
 
-const myStore = {
-	tutorRequests: ref<TutorRequestEntity[]>([]),
-	listener: useListener(async () => {
-		const { id } = useAuth()
-		return TutorRequestsUseCases.listenToMine(id.value, {
-			created: async (entity) => {
-				addToArray(
-					myStore.tutorRequests.value,
-					entity,
-					(e) => e.id,
-					(e) => e.createdAt,
-				)
-			},
-			updated: async (entity) => {
-				addToArray(
-					myStore.tutorRequests.value,
-					entity,
-					(e) => e.id,
-					(e) => e.createdAt,
-				)
-			},
-			deleted: async (entity) => {
-				myStore.tutorRequests.value = myStore.tutorRequests.value.filter((m) => m.id !== entity.id)
-			},
-		})
-	}),
-}
+const myStore = createStore(
+	{
+		tutorRequests: ref<TutorRequestEntity[]>([]),
+		listener: useListener(async () => {
+			const { id } = useAuth()
+			return TutorRequestsUseCases.listenToMine(id.value, {
+				created: async (entity) => {
+					addToArray(
+						myStore.tutorRequests.value,
+						entity,
+						(e) => e.id,
+						(e) => e.createdAt,
+					)
+				},
+				updated: async (entity) => {
+					addToArray(
+						myStore.tutorRequests.value,
+						entity,
+						(e) => e.id,
+						(e) => e.createdAt,
+					)
+				},
+				deleted: async (entity) => {
+					myStore.tutorRequests.value = myStore.tutorRequests.value.filter((m) => m.id !== entity.id)
+				},
+			})
+		}),
+	},
+	'users/tutorRequests/mine',
+)
 
 export const useMyTutorRequests = () => {
 	const { id } = useAuth()

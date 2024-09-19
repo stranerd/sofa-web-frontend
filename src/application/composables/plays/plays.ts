@@ -4,38 +4,42 @@ import { useRoute, useRouter } from 'vue-router'
 import { useAuth } from '../auth/auth'
 import { Refable, useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
-import { useUsersInList } from '../users/users'
 import { useSuccessHandler } from '../core/states'
+import { createStore } from '../core/store'
+import { useUsersInList } from '../users/users'
 import { CoursableAccess, QuestionEntity } from '@modules/study'
 import { AnswerEntity, AnswersUseCases, PlayEntity, PlayFactory, PlayTypes, PlaysUseCases } from '@modules/plays'
 
-const myStore = {
-	plays: ref<PlayEntity[]>([]) as Ref<PlayEntity[]>,
-	listener: useListener(async () => {
-		const { id } = useAuth()
-		return PlaysUseCases.listenToMine(id.value, {
-			created: async (entity) => {
-				addToArray(
-					myStore.plays.value,
-					entity,
-					(e) => e.id,
-					(e) => e.createdAt,
-				)
-			},
-			updated: async (entity) => {
-				addToArray(
-					myStore.plays.value,
-					entity,
-					(e) => e.id,
-					(e) => e.createdAt,
-				)
-			},
-			deleted: async (entity) => {
-				myStore.plays.value = myStore.plays.value.filter((m) => m.id !== entity.id)
-			},
-		})
-	}),
-}
+const myStore = createStore(
+	{
+		plays: ref<PlayEntity[]>([]) as Ref<PlayEntity[]>,
+		listener: useListener(async () => {
+			const { id } = useAuth()
+			return PlaysUseCases.listenToMine(id.value, {
+				created: async (entity) => {
+					addToArray(
+						myStore.plays.value,
+						entity,
+						(e) => e.id,
+						(e) => e.createdAt,
+					)
+				},
+				updated: async (entity) => {
+					addToArray(
+						myStore.plays.value,
+						entity,
+						(e) => e.id,
+						(e) => e.createdAt,
+					)
+				},
+				deleted: async (entity) => {
+					myStore.plays.value = myStore.plays.value.filter((m) => m.id !== entity.id)
+				},
+			})
+		}),
+	},
+	'plays/plays/mine',
+)
 
 export const useMyPlays = () => {
 	const { id } = useAuth()
@@ -74,15 +78,20 @@ export const useMyPlays = () => {
 	return { ...myStore, loading, error, ongoing, closed }
 }
 
-const singleStore = {} as Record<
-	string,
-	{
-		play: Ref<PlayEntity | null>
-		questions: QuestionEntity[]
-		answers: Ref<AnswerEntity[]>
-		listener: ReturnType<typeof useListener>
-	}
->
+const singleStore = createStore(
+	<
+		Record<
+			string,
+			{
+				play: Ref<PlayEntity | null>
+				questions: QuestionEntity[]
+				answers: Ref<AnswerEntity[]>
+				listener: ReturnType<typeof useListener>
+			}
+		>
+	>{},
+	'plays/plays/single',
+)
 
 export const usePlay = (type: PlayTypes, id: string, skip: { questions: boolean; statusNav: boolean; participants: boolean }) => {
 	const { id: authId } = useAuth()

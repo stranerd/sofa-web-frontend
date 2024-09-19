@@ -4,15 +4,21 @@ import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useModals } from '../core/modals'
 import { useSuccessHandler } from '../core/states'
+import { createStore } from '../core/store'
 import { MemberEntity, MembersUseCases, MemberTypes } from '@modules/organizations'
 
-const store = {} as Record<
-	string,
-	{
-		members: MemberEntity[]
-		listener: ReturnType<typeof useListener>
-	}
->
+const store = createStore(
+	<
+		Record<
+			string,
+			{
+				members: MemberEntity[]
+				listener: ReturnType<typeof useListener>
+			}
+		>
+	>{},
+	'organizations/members',
+)
 
 export const useOrganizationMembers = (id: string) => {
 	store[id] ??= {
