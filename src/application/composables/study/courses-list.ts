@@ -3,36 +3,40 @@ import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useAuth } from '../auth/auth'
 import { Refable, useAsyncFn, useItemsInList, usePaginatedTable } from '../core/hooks'
 import { useListener } from '../core/listener'
+import { createStore } from '../core/store'
 import { useMyPurchases } from '../payment/purchases'
 import { CourseEntity, CoursesUseCases } from '@modules/study'
 
-const store = {
-	courses: ref<CourseEntity[]>([]),
-	listener: useListener(async () => {
-		const { id } = useAuth()
-		return CoursesUseCases.listenToUserCourses(id.value, {
-			created: async (entity) => {
-				addToArray(
-					store.courses.value,
-					entity,
-					(e) => e.id,
-					(e) => e.createdAt,
-				)
-			},
-			updated: async (entity) => {
-				addToArray(
-					store.courses.value,
-					entity,
-					(e) => e.id,
-					(e) => e.createdAt,
-				)
-			},
-			deleted: async (entity) => {
-				store.courses.value = store.courses.value.filter((m) => m.id !== entity.id)
-			},
-		})
-	}),
-}
+const store = createStore(
+	{
+		courses: ref<CourseEntity[]>([]),
+		listener: useListener(async () => {
+			const { id } = useAuth()
+			return CoursesUseCases.listenToUserCourses(id.value, {
+				created: async (entity) => {
+					addToArray(
+						store.courses.value,
+						entity,
+						(e) => e.id,
+						(e) => e.createdAt,
+					)
+				},
+				updated: async (entity) => {
+					addToArray(
+						store.courses.value,
+						entity,
+						(e) => e.id,
+						(e) => e.createdAt,
+					)
+				},
+				deleted: async (entity) => {
+					store.courses.value = store.courses.value.filter((m) => m.id !== entity.id)
+				},
+			})
+		}),
+	},
+	'study/courses/list/mine',
+)
 
 export const useMyCourses = () => {
 	const { id } = useAuth()

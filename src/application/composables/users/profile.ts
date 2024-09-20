@@ -3,6 +3,7 @@ import { useRoute } from 'vue-router'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useSuccessHandler } from '../core/states'
+import { createStore } from '../core/store'
 import {
 	UserAiFactory,
 	UserLocationFactory,
@@ -35,8 +36,6 @@ export const useUserTypeUpdate = () => {
 	return { error, loading, factory, updateType }
 }
 
-export const showCustomizeAi = ref(false)
-
 export const useUserAiUpdate = () => {
 	const factory = new UserAiFactory()
 	const { setMessage } = useSuccessHandler()
@@ -52,15 +51,17 @@ export const useUserAiUpdate = () => {
 	} = useAsyncFn(async () => {
 		user.value = await UsersUseCases.updateAi(factory)
 		await setMessage('Updated successfully!')
-		showCustomizeAi.value = false
 	})
 
 	return { error, loading, factory, updateAi }
 }
 
-const locationStore = {
-	countries: ref<Awaited<ReturnType<(typeof UsersUseCases)['getCountries']>>>([]),
-}
+const locationStore = createStore(
+	{
+		countries: ref<Awaited<ReturnType<(typeof UsersUseCases)['getCountries']>>>([]),
+	},
+	'users/users/locations',
+)
 
 export const useUserLocationUpdate = () => {
 	const factory = new UserLocationFactory()

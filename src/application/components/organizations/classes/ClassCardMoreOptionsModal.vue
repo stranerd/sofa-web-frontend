@@ -1,8 +1,8 @@
 <template>
 	<div class="w-full flex flex-col mdlg:min-w-[200px]">
 		<div class="w-full flex justify-between items-center sticky top-0 left-0 md:hidden py-2 px-4 border-lightGray border-b">
-			<SofaNormalText customClass="!font-bold !text-base">Options</SofaNormalText>
-			<SofaIcon customClass="h-[19px]" name="circle-close" @click="close" />
+			<SofaHeading>Options</SofaHeading>
+			<SofaIcon class="h-[19px]" name="circle-close" @click="close" />
 		</div>
 
 		<a

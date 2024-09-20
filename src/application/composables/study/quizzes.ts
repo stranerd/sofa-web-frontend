@@ -5,6 +5,7 @@ import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useModals } from '../core/modals'
 import { useSuccessHandler } from '../core/states'
+import { createStore } from '../core/store'
 import { useUsersInList } from '../users/users'
 import { useQuestionsInList } from './questions'
 import { useHasAccess } from '.'
@@ -20,13 +21,18 @@ import {
 	QuizzesUseCases,
 } from '@modules/study'
 
-const store = {} as Record<
-	string,
-	{
-		quiz: Ref<QuizEntity | null>
-		listener: ReturnType<typeof useListener>
-	}
->
+const store = createStore(
+	<
+		Record<
+			string,
+			{
+				quiz: Ref<QuizEntity | null>
+				listener: ReturnType<typeof useListener>
+			}
+		>
+	>{},
+	'study/quizzes',
+)
 
 export const useQuiz = (id: string, skip?: { questions?: boolean; members?: boolean }, access?: CoursableAccess['access']) => {
 	store[id] ??= {

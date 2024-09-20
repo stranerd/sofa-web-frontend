@@ -1,6 +1,6 @@
 <template>
-	<main class="w-full flex flex-col gap-[50px] mdlg:gap-[150px] bg-white mx-auto">
-		<header class="flex flex-col items-center justify-center relative gap-[44px]">
+	<main class="w-full flex flex-col gap-12 mdlg:gap-36 bg-white mx-auto">
+		<header class="flex flex-col items-center justify-center relative gap-11">
 			<HomeNavbar />
 			<!-- Link -->
 			<div

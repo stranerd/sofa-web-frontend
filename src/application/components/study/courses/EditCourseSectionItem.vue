@@ -3,42 +3,37 @@
 		<template v-if="quiz">
 			<SofaImageLoader class="w-full rounded-custom h-[200px]" :photoUrl="quiz.picture" />
 
-			<SofaNormalText class="font-bold" :content="quiz.title" />
+			<SofaHeading :content="quiz.title" />
 
 			<div class="w-full text-primaryPurple flex items-center gap-2">
-				<SofaNormalText color="text-current" content="Quiz" />
+				<SofaText content="Quiz" />
 				<span class="size-[4px] rounded-full bg-current" />
-				<SofaNormalText color="text-current" :content="`${quiz.questions.length} questions`" />
+				<SofaText :content="`${quiz.questions.length} questions`" />
 			</div>
 
-			<SofaNormalText :content="quiz.description" />
+			<SofaText :content="quiz.description" />
 
 			<div class="flex items-center gap-2">
 				<SofaRatings v-model="quiz.ratings.avg" size="h-[15px]" />
-				<SofaNormalText> {{ quiz.ratings.avg }} </SofaNormalText>
-				<SofaNormalText> ({{ quiz.ratings.count }} ratings) </SofaNormalText>
+				<SofaText> {{ quiz.ratings.avg }} </SofaText>
+				<SofaText> ({{ quiz.ratings.count }} ratings) </SofaText>
 			</div>
 
 			<div class="flex items-center gap-2">
 				<SofaAvatar :size="20" :photoUrl="quiz.user.bio.photo?.link" />
-				<SofaNormalText :content="quiz.user.bio.publicName" />
+				<SofaText :content="quiz.user.bio.publicName" />
 			</div>
 
 			<div class="flex items-center gap-2">
 				<SofaIcon class="h-[16px]" name="calendar" />
-				<SofaNormalText :content="`Last updated ${$utils.formatTime(quiz.updatedAt)}`" />
+				<SofaText :content="`Last updated ${$utils.formatTime(quiz.updatedAt)}`" />
 			</div>
 		</template>
 
 		<form v-if="file" class="flex flex-col gap-4" @submit.prevent="updateFile">
 			<SofaFormGroup>
 				<SofaLabel>Title</SofaLabel>
-				<SofaTextField
-					v-model="factory.title"
-					customClass="rounded-custom !bg-lightGray"
-					type="text"
-					placeholder="File title"
-					borderColor="border-transparent" />
+				<SofaInput v-model="factory.title" placeholder="File title" />
 			</SofaFormGroup>
 
 			<SofaFormGroup>

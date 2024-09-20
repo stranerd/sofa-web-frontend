@@ -2,7 +2,7 @@
 	<SettingsLayout title="Contact Us">
 		<div class="w-full flex flex-col gap-5 mdlg:!px-0 px-4">
 			<div class="w-full flex flex-col gap-4 bg-white rounded-2xl mdlg:p-5 p-4 shadow-custom">
-				<SofaHeaderText size="xl" content="Contact details" />
+				<SofaHeading size="title" content="Contact details" />
 
 				<div class="w-full flex flex-row items-center gap-5 flex-wrap">
 					<a v-for="social in socials" :key="social.link" :href="social.link" target="_blank">
@@ -12,7 +12,7 @@
 			</div>
 
 			<form class="w-full flex flex-col gap-4 bg-white rounded-2xl mdlg:p-5 p-4 shadow-custom" @submit.prevent="sendMessage">
-				<SofaHeaderText size="xl" content="Give feedback" />
+				<SofaHeading size="title" content="Give feedback" />
 
 				<SofaTextarea v-model="factory.message" placeholder="Let us know how we can help" />
 

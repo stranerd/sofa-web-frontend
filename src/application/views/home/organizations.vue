@@ -1,6 +1,6 @@
 <template>
 	<main class="w-full bg-white">
-		<header class="flex gap-[44px] flex-col items-center justify-center bg-[#29001a] relative">
+		<header class="flex gap-11 flex-col items-center justify-center bg-[#29001a] relative">
 			<HomeNavbar class="!z-50" />
 			<!-- Link -->
 			<div
@@ -39,7 +39,7 @@
 						</RouterLink>
 						<RouterLink
 							to="/"
-							class="flex items-center justify-center gap-[10px] border border-white text-white py-[10px] px-[30px] h-[44px] rounded-[22px]">
+							class="flex items-center justify-center gap-2.5 border border-white text-white py-[10px] px-[30px] h-[44px] rounded-[22px]">
 							<SofaIcon name="solar_play-circle-bold" class="!fill-white" />
 							<span class="text-white">Watch video</span>
 						</RouterLink>

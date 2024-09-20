@@ -2,16 +2,22 @@ import { addToArray } from 'valleyed'
 import { Ref, onMounted, onUnmounted, ref } from 'vue'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
+import { createStore } from '../core/store'
 import { AnnouncementEntity, AnnouncementFactory, AnnouncementsUseCases } from '@modules/organizations'
 
-const store = {} as Record<
-	string,
-	{
-		announcements: Ref<AnnouncementEntity[]>
-		hasMore: Ref<boolean>
-		listener: ReturnType<typeof useListener>
-	}
->
+const store = createStore(
+	<
+		Record<
+			string,
+			{
+				announcements: Ref<AnnouncementEntity[]>
+				hasMore: Ref<boolean>
+				listener: ReturnType<typeof useListener>
+			}
+		>
+	>{},
+	'organizations/announcements',
+)
 
 export const useClassAnnouncements = (organizationId: string, classId: string) => {
 	const key = `${organizationId}-${classId}`

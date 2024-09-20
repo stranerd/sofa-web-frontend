@@ -6,39 +6,43 @@ import { useAsyncFn, usePaginatedTable } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useModals } from '../core/modals'
 import { useSuccessHandler } from '../core/states'
+import { createStore } from '../core/store'
 import { useCoursesInList } from '../study/courses-list'
 import { useQuizzesInList } from '../study/quizzes-list'
 import { useUsersInList } from './users'
 import { AcceptVerificationInput } from '@modules/users/domain/types'
 import { UserEntity, VerificationEntity, VerificationFactory, VerificationsUseCases } from '@modules/users'
 
-const myStore = {
-	verifications: ref<VerificationEntity[]>([]),
-	listener: useListener(async () => {
-		const { id } = useAuth()
-		return VerificationsUseCases.listenToMine(id.value, {
-			created: async (entity) => {
-				addToArray(
-					myStore.verifications.value,
-					entity,
-					(e) => e.id,
-					(e) => e.createdAt,
-				)
-			},
-			updated: async (entity) => {
-				addToArray(
-					myStore.verifications.value,
-					entity,
-					(e) => e.id,
-					(e) => e.createdAt,
-				)
-			},
-			deleted: async (entity) => {
-				myStore.verifications.value = myStore.verifications.value.filter((m) => m.id !== entity.id)
-			},
-		})
-	}),
-}
+const myStore = createStore(
+	{
+		verifications: ref<VerificationEntity[]>([]),
+		listener: useListener(async () => {
+			const { id } = useAuth()
+			return VerificationsUseCases.listenToMine(id.value, {
+				created: async (entity) => {
+					addToArray(
+						myStore.verifications.value,
+						entity,
+						(e) => e.id,
+						(e) => e.createdAt,
+					)
+				},
+				updated: async (entity) => {
+					addToArray(
+						myStore.verifications.value,
+						entity,
+						(e) => e.id,
+						(e) => e.createdAt,
+					)
+				},
+				deleted: async (entity) => {
+					myStore.verifications.value = myStore.verifications.value.filter((m) => m.id !== entity.id)
+				},
+			})
+		}),
+	},
+	'users/verifications/mine',
+)
 
 export const useMyVerifications = (afterFetch?: () => void) => {
 	const { id } = useAuth()

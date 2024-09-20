@@ -58,12 +58,12 @@
 				<template v-for="(content, index) in question.splitQuestions" :key="index">
 					<div
 						v-if="index !== 0"
-						class="min-w-[160px] rounded-xl p-3 flex items-center justify-center border-2"
+						class="min-w-[160px] rounded-xl p-3 flex items-center justify-center border-2 font-size-mid"
 						:class="buildClass(answer.value[index - 1], index - 1)">
 						<input
 							v-model="answer.value[index - 1]"
 							placeholder="answer here"
-							class="w-full focus:outline-none placeholder:md:text-2xl text-inherit bg-transparent placeholder:text-base placeholder:text-inherit md:text-2xl text-base" />
+							class="w-full focus:outline-none text-inherit bg-transparent placeholder:text-inherit" />
 					</div>
 					<SofaText :content="content" />
 				</template>

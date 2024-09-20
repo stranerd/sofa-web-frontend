@@ -3,35 +3,39 @@ import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useAuth } from '../auth/auth'
 import { Refable, useAsyncFn, useItemsInList, usePaginatedTable } from '../core/hooks'
 import { useListener } from '../core/listener'
+import { createStore } from '../core/store'
 import { UserEntity, UserType, UsersUseCases } from '@modules/users'
 
-const store = {
-	tutors: ref<UserEntity[]>([]),
-	listener: useListener(
-		async () =>
-			await UsersUseCases.listenToAllTeachers({
-				created: async (entity) => {
-					addToArray(
-						store.tutors.value,
-						entity,
-						(e) => e.id,
-						(e) => e.account.ratings.avg,
-					)
-				},
-				updated: async (entity) => {
-					addToArray(
-						store.tutors.value,
-						entity,
-						(e) => e.id,
-						(e) => e.account.ratings.avg,
-					)
-				},
-				deleted: async (entity) => {
-					store.tutors.value = store.tutors.value.filter((m) => m.id !== entity.id)
-				},
-			}),
-	),
-}
+const store = createStore(
+	{
+		tutors: ref<UserEntity[]>([]),
+		listener: useListener(
+			async () =>
+				await UsersUseCases.listenToAllTeachers({
+					created: async (entity) => {
+						addToArray(
+							store.tutors.value,
+							entity,
+							(e) => e.id,
+							(e) => e.account.ratings.avg,
+						)
+					},
+					updated: async (entity) => {
+						addToArray(
+							store.tutors.value,
+							entity,
+							(e) => e.id,
+							(e) => e.account.ratings.avg,
+						)
+					},
+					deleted: async (entity) => {
+						store.tutors.value = store.tutors.value.filter((m) => m.id !== entity.id)
+					},
+				}),
+		),
+	},
+	'users/users/tutors',
+)
 
 export const useTutorsList = () => {
 	const {
@@ -114,6 +118,7 @@ export const useAdminsList = () =>
 		comparer: (users) => users.dates.createdAt,
 		listenerFn: (handlers) => UsersUseCases.listenToAdmins(handlers),
 	})
+
 export const useUserTypeList = (type: UserType) =>
 	usePaginatedTable<UserEntity>({
 		key: `users/users/${type}`,

@@ -1,5 +1,5 @@
 <template>
-	<component :is="as" class="shrink-0 relative" :class="[customClass]" :style="styles">
+	<component :is="as" class="shrink-0 relative" :style="styles">
 		<img v-if="photoUrl" :src="photoUrl" class="w-full invisible" :style="aspect ? `aspect-ratio: ${aspect}` : undefined" />
 		<span class="w-full h-full flex flex-col items-center justify-center" :class="{ 'absolute top-0 left-0': photoUrl }">
 			<slot />
@@ -13,13 +13,11 @@ import { computed } from 'vue'
 const props = withDefaults(
 	defineProps<{
 		photoUrl?: string | null
-		customClass?: string
 		aspect?: string
 		as?: string
 	}>(),
 	{
 		photoUrl: null,
-		customClass: '',
 		aspect: undefined,
 		as: 'div',
 	},

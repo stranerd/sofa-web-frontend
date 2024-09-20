@@ -3,35 +3,39 @@ import { computed, onMounted, onUnmounted, reactive } from 'vue'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
+import { createStore } from '../core/store'
 import { Purchasables, PurchaseEntity, PurchasesUseCases, SelectedPaymentMethod } from '@modules/payment'
 
-const store = {
-	purchases: reactive<PurchaseEntity[]>([]),
-	listener: useListener(async () => {
-		const { id } = useAuth()
-		return PurchasesUseCases.listenToUsers(id.value, {
-			created: async (entity) => {
-				addToArray(
-					store.purchases,
-					entity,
-					(e) => e.id,
-					(e) => e.createdAt,
-				)
-			},
-			updated: async (entity) => {
-				addToArray(
-					store.purchases,
-					entity,
-					(e) => e.id,
-					(e) => e.createdAt,
-				)
-			},
-			deleted: async (entity) => {
-				store.purchases = store.purchases.filter((m) => m.id !== entity.id)
-			},
-		})
-	}),
-}
+const store = createStore(
+	{
+		purchases: reactive<PurchaseEntity[]>([]),
+		listener: useListener(async () => {
+			const { id } = useAuth()
+			return PurchasesUseCases.listenToUsers(id.value, {
+				created: async (entity) => {
+					addToArray(
+						store.purchases,
+						entity,
+						(e) => e.id,
+						(e) => e.createdAt,
+					)
+				},
+				updated: async (entity) => {
+					addToArray(
+						store.purchases,
+						entity,
+						(e) => e.id,
+						(e) => e.createdAt,
+					)
+				},
+				deleted: async (entity) => {
+					store.purchases = store.purchases.filter((m) => m.id !== entity.id)
+				},
+			})
+		}),
+	},
+	'payments/purchases',
+)
 
 export const useMyPurchases = () => {
 	const { id } = useAuth()

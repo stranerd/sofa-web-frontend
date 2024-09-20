@@ -2,7 +2,7 @@
 	<SettingsLayout title="Profile">
 		<div v-if="auth" class="w-full flex flex-col gap-5 mdlg:px-0 px-4">
 			<div id="profile" class="w-full flex flex-col gap-4 bg-white rounded-2xl md:p-5 p-4 shadow-custom">
-				<SofaHeaderText size="xl"> Personal info </SofaHeaderText>
+				<SofaHeading size="title"> Personal info </SofaHeading>
 				<div class="w-full flex items-center justify-start py-2 gap-4">
 					<SofaImageLoader class="size-[90px] bg-grayColor rounded-full" :photoUrl="factory.photo?.link">
 						<SofaIcon v-if="!factory.photo" class="h-[50px]" name="user" />
@@ -17,21 +17,9 @@
 					<SofaButton padding="px-5 py-2" @click="$router.push('/profile')">View profile</SofaButton>
 				</div>
 
-				<SofaTextField
-					v-model="factory.first"
-					customClass="rounded-custom !bg-lightGray"
-					type="text"
-					placeholder="First Name"
-					:error="factory.errors.first"
-					borderColor="border-transparent" />
+				<SofaInput v-model="factory.first" placeholder="First Name" :error="factory.errors.first" />
 
-				<SofaTextField
-					v-model="factory.last"
-					customClass="rounded-custom !bg-lightGray"
-					type="text"
-					placeholder="Last Name"
-					:error="factory.errors.last"
-					borderColor="border-transparent" />
+				<SofaInput v-model="factory.last" placeholder="Last Name" :error="factory.errors.last" />
 
 				<SofaTextarea
 					v-model="factory.description"
@@ -41,30 +29,23 @@
 			</div>
 
 			<div id="contact" class="w-full flex flex-col gap-4 bg-white rounded-2xl md:p-5 p-4 shadow-custom">
-				<SofaHeaderText size="xl"> Contact info </SofaHeaderText>
+				<SofaHeading size="title"> Contact info </SofaHeading>
 
-				<SofaTextField
-					ref="name.first"
-					v-model="auth.email"
-					customClass="rounded-custom !bg-lightGray"
-					type="text"
-					placeholder="Email"
-					:disabled="true"
-					borderColor="border-transparent" />
+				<SofaInput v-model="auth.email" placeholder="Email" :disabled="true" />
 
 				<AccountSetup v-if="false" :isProfilePhone="true" />
 			</div>
 
 			<div v-if="!userType.isOrg" id="type" class="w-full flex flex-col gap-4 bg-white rounded-2xl md:p-5 p-4 shadow-custom">
-				<SofaHeaderText size="xl">
+				<SofaHeading size="title">
 					{{ userType.isTeacher ? 'Experience' : 'Education' }}
-				</SofaHeaderText>
+				</SofaHeading>
 
 				<AccountSetup :isProfileEducation="true" />
 			</div>
 
 			<div id="socials" class="w-full flex flex-col gap-4 bg-white rounded-2xl md:p-5 p-4 shadow-custom">
-				<SofaHeaderText size="xl"> Social links </SofaHeaderText>
+				<SofaHeading size="title"> Social links </SofaHeading>
 
 				<SocialMediaUpdate :factory="socialsFactory" />
 			</div>

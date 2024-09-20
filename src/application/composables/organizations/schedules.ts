@@ -3,15 +3,21 @@ import { Ref, computed, onMounted, onUnmounted, ref } from 'vue'
 import { Refable, useAsyncFn, useItemsInList } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useModals } from '../core/modals'
+import { createStore } from '../core/store'
 import { ClassEntity, ScheduleEntity, ScheduleFactory, SchedulesUseCases } from '@modules/organizations'
 
-const store = {} as Record<
-	string,
-	{
-		schedules: Ref<ScheduleEntity[]>
-		listener: ReturnType<typeof useListener>
-	}
->
+const store = createStore(
+	<
+		Record<
+			string,
+			{
+				schedules: Ref<ScheduleEntity[]>
+				listener: ReturnType<typeof useListener>
+			}
+		>
+	>{},
+	'organizations/schedules',
+)
 
 export const useClassSchedules = (organizationId: string, classId: string) => {
 	const key = `${organizationId}-${classId}`

@@ -1,26 +1,21 @@
 <template>
 	<form class="flex flex-col gap-4 mdlg:p-6 p-4" @submit.prevent="fundWallet">
 		<div class="w-full hidden justify-between items-center mdlg:flex">
-			<SofaHeaderText class="text-xl">Fund wallet</SofaHeaderText>
+			<SofaHeading size="title">Fund wallet</SofaHeading>
 			<SofaIcon class="h-[20px]" name="circle-close" @click="close" />
 		</div>
 
 		<div class="w-full flex justify-between items-center sticky top-0 left-0 mdlg:hidden pt-2 pb-4 border-lightGray border-b">
-			<SofaNormalText class="!font-bold !text-base">Fund wallet</SofaNormalText>
+			<SofaHeading>Fund wallet</SofaHeading>
 			<SofaIcon class="h-[20px]" name="circle-close" @click="close" />
 		</div>
 
 		<div class="w-full flex flex-col gap-5">
-			<SofaTextField
-				v-model="factory.amount"
-				customClass="rounded-custom !bg-lightGray"
-				type="number"
-				placeholder="Amount"
-				borderColor="border-transparent">
-				<template #inner-prefix>
-					<SofaNormalText>₦</SofaNormalText>
+			<SofaInput v-model="factory.amount" type="number" placeholder="Amount">
+				<template #prefix>
+					<SofaText>₦</SofaText>
 				</template>
-			</SofaTextField>
+			</SofaInput>
 
 			<SelectPaymentMethod
 				v-model="factory.methodId"

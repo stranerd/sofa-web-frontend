@@ -8,11 +8,12 @@
 		</div>
 
 		<QuizForm
+			v-if="quiz"
 			:quiz="quiz"
 			:factory="factory"
 			:cancel="close"
 			:submit="updateQuiz"
-			:publish="!quiz?.isPublished ? publishQuiz : undefined" />
+			:publish="!quiz.isPublished ? publishQuiz : undefined" />
 	</div>
 </template>
 

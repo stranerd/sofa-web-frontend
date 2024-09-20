@@ -86,7 +86,6 @@
 
 <script lang="ts" setup>
 import { modal } from '@app/composables/core/modal'
-import { SofaPrompt } from 'sofa-ui-components'
 
 const { modals, popovers, modalsDef, close } = modal
 

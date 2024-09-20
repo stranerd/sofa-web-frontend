@@ -1,13 +1,12 @@
 <template>
 	<button
 		:disabled="loading || disabled"
-		class="focus:outline-none disabled:opacity-75 rounded-lg flex gap-2 font-bold items-center text-sub justify-center whitespace-nowrap"
+		class="focus:outline-none disabled:opacity-75 rounded-lg flex gap-2 font-bold items-center font-size-sub justify-center whitespace-nowrap"
 		:class="{
 			'shadow-button': shadow,
 			[padding]: true,
 			[bgColor]: true,
 			[textColor]: true,
-			[customClass]: true,
 		}">
 		<slot />
 	</button>
@@ -26,10 +25,6 @@ export default defineComponent({
 		textColor: {
 			type: String,
 			default: 'text-white',
-		},
-		customClass: {
-			type: String,
-			default: '',
 		},
 		padding: {
 			type: String,

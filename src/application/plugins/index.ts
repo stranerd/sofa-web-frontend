@@ -1,7 +1,6 @@
 import { App } from 'vue'
 import { Router } from 'vue-router'
 import { useAuth } from '@app/composables/auth/auth'
-import { setEmailVerificationEmail } from '@app/composables/auth/signin'
 import { AuthUseCases } from '@modules/auth'
 import { getTokens } from '@utils/tokens'
 
@@ -36,8 +35,7 @@ const parseLoggedInUser = definePlugin(async ({ router }) => {
 		const user = await AuthUseCases.getAuthUser()
 		if (!user) return
 		if (!user.isEmailVerified) {
-			setEmailVerificationEmail(user.email)
-			await router.push('/auth/verify')
+			await router.push(`/auth/verify?email=${user.email}`)
 		} else {
 			const { isLoggedIn, signin, setAuthUser } = useAuth()
 			await setAuthUser(user)

@@ -3,67 +3,74 @@ import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useAuth } from '../auth/auth'
 import { Refable, useAsyncFn, useItemsInList, usePaginatedTable } from '../core/hooks'
 import { useListener } from '../core/listener'
+import { createStore } from '../core/store'
 import { QuizEntity, QuizzesUseCases } from '@modules/study'
 
-const store = {
-	quizzes: ref<QuizEntity[]>([]),
-	listener: useListener(async () => {
-		const { id } = useAuth()
-		return QuizzesUseCases.listenToUserQuizzes(id.value, {
-			created: async (entity) => {
-				addToArray(
-					store.quizzes.value,
-					entity,
-					(e) => e.id,
-					(e) => e.createdAt,
-				)
-			},
-			updated: async (entity) => {
-				addToArray(
-					store.quizzes.value,
-					entity,
-					(e) => e.id,
-					(e) => e.createdAt,
-				)
-			},
-			deleted: async (entity) => {
-				store.quizzes.value = store.quizzes.value.filter((m) => m.id !== entity.id)
-			},
-		})
-	}),
-}
+const store = createStore(
+	{
+		quizzes: ref<QuizEntity[]>([]),
+		listener: useListener(async () => {
+			const { id } = useAuth()
+			return QuizzesUseCases.listenToUserQuizzes(id.value, {
+				created: async (entity) => {
+					addToArray(
+						store.quizzes.value,
+						entity,
+						(e) => e.id,
+						(e) => e.createdAt,
+					)
+				},
+				updated: async (entity) => {
+					addToArray(
+						store.quizzes.value,
+						entity,
+						(e) => e.id,
+						(e) => e.createdAt,
+					)
+				},
+				deleted: async (entity) => {
+					store.quizzes.value = store.quizzes.value.filter((m) => m.id !== entity.id)
+				},
+			})
+		}),
+	},
+	'study/quizzes/list/mine',
+)
 
-const tutorStore = {
-	quizzes: ref<QuizEntity[]>([]),
-	listener: useListener(async () => {
-		const { id, isAdmin } = useAuth()
-		if (!isAdmin.value)
-			return () => {
-				/**/
-			}
-		return QuizzesUseCases.listenToTutorQuizzes(id.value, {
-			created: async (entity) => {
-				addToArray(
-					tutorStore.quizzes.value,
-					entity,
-					(e) => e.id,
-					(e) => e.createdAt,
-				)
-			},
-			updated: async (entity) => {
-				addToArray(
-					tutorStore.quizzes.value,
-					entity,
-					(e) => e.id,
-					(e) => e.createdAt,
-				)
-			},
-			deleted: async (entity) => {
-				tutorStore.quizzes.value = tutorStore.quizzes.value.filter((m) => m.id !== entity.id)
-			},
-		})
-	}),
-}
+const tutorStore = createStore(
+	{
+		quizzes: ref<QuizEntity[]>([]),
+		listener: useListener(async () => {
+			const { id, isAdmin } = useAuth()
+			if (!isAdmin.value)
+				return () => {
+					/**/
+				}
+			return QuizzesUseCases.listenToTutorQuizzes(id.value, {
+				created: async (entity) => {
+					addToArray(
+						tutorStore.quizzes.value,
+						entity,
+						(e) => e.id,
+						(e) => e.createdAt,
+					)
+				},
+				updated: async (entity) => {
+					addToArray(
+						tutorStore.quizzes.value,
+						entity,
+						(e) => e.id,
+						(e) => e.createdAt,
+					)
+				},
+				deleted: async (entity) => {
+					tutorStore.quizzes.value = tutorStore.quizzes.value.filter((m) => m.id !== entity.id)
+				},
+			})
+		}),
+	},
+	'study/quizzes/list/tutors',
+)
 
 export const useMyQuizzes = () => {
 	const { id } = useAuth()

@@ -1,13 +1,13 @@
 <template>
 	<div class="flex flex-col">
 		<div class="w-full flex justify-between items-center sticky top-0 left-0 md:!hidden py-2 px-4 border-lightGray border-b">
-			<SofaNormalText customClass="!font-bold !text-base">Options</SofaNormalText>
+			<SofaHeading>Options</SofaHeading>
 			<SofaIcon class="h-[19px]" name="circle-close" @click="close" />
 		</div>
 
 		<a v-for="item in moreOptions" :key="item.title" class="w-full flex items-center gap-2 p-4" @click.stop.prevent="item.action()">
 			<SofaIcon :name="item.icon" class="h-[15px] fill-current" />
-			<SofaNormalText>{{ item.title }}</SofaNormalText>
+			<SofaText>{{ item.title }}</SofaText>
 		</a>
 	</div>
 </template>

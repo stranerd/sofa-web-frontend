@@ -1,11 +1,11 @@
 <template>
 	<div class="w-full flex flex-col mdlg:p-6 md:gap-4 gap-1 md:p-4">
 		<div class="w-full hidden flex-col gap-2 justify-center items-center md:flex">
-			<SofaHeaderText class="text-xl" content="Save to" />
+			<SofaHeading size="title" content="Save to" />
 		</div>
 
 		<div class="w-full flex justify-between items-center sticky top-0 left-0 md:!hidden py-2 pt-3 border-lightGray border-b px-4">
-			<SofaNormalText class="!font-bold !text-base" content="Save to" />
+			<SofaHeading content="Save to" />
 			<SofaIcon class="h-[19px]" name="circle-close" @click="close" />
 		</div>
 
@@ -15,7 +15,7 @@
 				:key="folder.hash"
 				class="w-full flex items-center gap-3 justify-between p-4 rounded-custom bg-lightGray">
 				<div class="flex items-center w-full gap-3">
-					<SofaIcon name="folder" customClass="h-[18px]" />
+					<SofaIcon name="folder" class="h-[18px]" />
 
 					<SofaCustomInput
 						v-if="folder.id === factory.entityId"
@@ -25,18 +25,15 @@
 						@onBlur="saveFolder"
 						@onEnter="saveFolder" />
 
-					<SofaNormalText v-else class="truncate grow" :content="folder.title" />
+					<SofaText v-else clamp class="grow" :content="folder.title" />
 				</div>
 
-				<div class="flex items-center shrink-0">
-					<SofaNormalText
-						v-if="folder.hasItem(entity)"
-						color="text-primaryRed"
-						as="a"
-						content="- Remove"
-						@click="handleFolderSelected(folder.id, false)" />
-					<SofaNormalText v-else color="text-primaryBlue" as="a" content="+ Add" @click="handleFolderSelected(folder.id, true)" />
-				</div>
+				<SofaText
+					class="text-primaryRed shrink-0"
+					as="a"
+					:content="folder.hasItem(entity) ? '- Remove' : '+ Add'"
+					:class="folder.hasItem(entity) ? 'text-primaryRed' : 'text-primaryBlue'"
+					@click="handleFolderSelected(folder.id, !folder.hasItem(entity))" />
 			</a>
 			<a class="w-full flex items-center gap-3 p-4 rounded-custom bg-lightGray text-grayColor" @click="generateNewFolder">
 				<SofaIcon class="h-[18px] fill-current" name="add" />

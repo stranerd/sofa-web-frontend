@@ -9,21 +9,21 @@
 		<template v-if="item.type === Coursable.quiz">
 			<div
 				v-if="!quizPlayStarted"
-				class="w-full bg-primaryPurple p-12 grow flex flex-col items-center justify-center gap-3 rounded-custom">
-				<SofaHeaderText color="text-white">
+				class="w-full bg-primaryPurple text-white p-12 grow flex flex-col items-center justify-center gap-3 rounded-custom">
+				<SofaHeading size="title">
 					{{ item.quizMode === PlayTypes.practice ? 'Practice questions' : 'Test yourself' }}
-				</SofaHeaderText>
-				<SofaNormalText color="text-white">
+				</SofaHeading>
+				<SofaText>
 					{{
 						item.quizMode === PlayTypes.practice ? 'Comfortable learning for topic mastery' : 'Evaluate your level of knowledge'
 					}}
-				</SofaNormalText>
-				<SofaNormalText color="text-white">{{ item.quiz.questions.length }} Questions </SofaNormalText>
+				</SofaText>
+				<SofaText>{{ item.quiz.questions.length }} Questions </SofaText>
 				<SofaButton
 					bgColor="bg-white"
 					textColor="text-primaryPurple"
 					padding="py-3 px-9"
-					customClass="font-bold"
+					class="font-bold"
 					@click="startQuizPlay(item.quiz, item.quizMode)">
 					Start
 				</SofaButton>
@@ -45,20 +45,17 @@ const props = defineProps<
 			item: ExtendedCourseSectionItem
 			classInst: ClassEntity
 			lesson: ClassLesson
-			course?: undefined
 	  }
 	| {
 			item: ExtendedCourseSectionItem
 			course: CourseEntity
-			classInst?: undefined
-			lesson?: undefined
 	  }
 >()
 
 const access = computed(() => {
-	if (props.classInst && props.lesson)
+	if ('classInst' in props && props.classInst && props.lesson)
 		return { organizationId: props.classInst.organizationId, classId: props.classInst.id, lessonId: props.lesson.id }
-	if (props.course) return { courseId: props.course.id }
+	if ('course' in props && props.course) return { courseId: props.course.id }
 	return {}
 })
 

@@ -1,11 +1,11 @@
 <template>
 	<form class="flex flex-col gap-4 mdlg:p-6 p-4" @submit.prevent="updateAi">
 		<div class="w-full hidden flex-col gap-2 justify-center items-center md:flex">
-			<SofaHeaderText class="!text-xl" content="Customize AI" />
+			<SofaHeading size="title" content="Customize AI" />
 		</div>
 
 		<div class="w-full flex justify-between items-center md:hidden">
-			<SofaNormalText class="!font-bold" content="Customize AI" />
+			<SofaHeading content="Customize AI" />
 			<SofaIcon class="h-[19px]" name="circle-close" @click="close" />
 		</div>
 
@@ -23,21 +23,9 @@
 					</SofaFileInput>
 				</SofaImageLoader>
 
-				<SofaTextField
-					v-model="factory.name"
-					customClass="rounded-custom !bg-lightGray"
-					type="text"
-					borderColor="border-transparent"
-					placeholder="Name"
-					:error="factory.errors.name" />
+				<SofaInput v-model="factory.name" placeholder="Name" :error="factory.errors.name" />
 
-				<SofaTextField
-					v-model="factory.tagline"
-					customClass="rounded-custom !bg-lightGray"
-					type="text"
-					borderColor="border-transparent"
-					placeholder="Tagline"
-					:error="factory.errors.tagline" />
+				<SofaInput v-model="factory.tagline" placeholder="Tagline" :error="factory.errors.tagline" />
 			</div>
 
 			<div class="w-full flex items-center justify-between">

@@ -2,13 +2,7 @@
 	<form class="flex flex-col gap-4" @submit.prevent="submit">
 		<div class="w-full md:grid md:grid-cols-2 flex flex-col-reverse gap-4">
 			<div class="col-span-1 w-full flex flex-col gap-3">
-				<SofaTextField
-					v-model="factory.title"
-					customClass="rounded-custom !bg-lightGray"
-					type="text"
-					placeholder="Title"
-					borderColor="border-transparent"
-					:error="factory.errors.title" />
+				<SofaInput v-model="factory.title" placeholder="Title" :error="factory.errors.title" />
 
 				<SofaTextarea v-model="factory.description" :rows="4" placeholder="Description" :error="factory.errors.description" />
 
@@ -38,33 +32,26 @@
 			<SofaCheckbox
 				:modelValue="factory.timeLimit === null"
 				type="switch"
-				@update:modelValue="(selected: boolean) => (factory.timeLimit = selected ? null : (quiz?.questions.length ?? 0) * 30)">
+				@update:modelValue="(selected) => (factory.timeLimit = selected ? null : (quiz?.questions.length ?? 0) * 30)">
 				<SofaText content="Use individual question times" class="capitalize" />
 			</SofaCheckbox>
-			<SofaTextField
+			<SofaInput
 				v-if="factory.timeLimit !== null"
 				v-model="factory.timeLimit"
 				type="number"
 				:min="1"
-				customClass="rounded-custom !bg-lightGray"
 				placeholder="Enter time limit"
-				:error="factory.errors.timeLimit"
-				borderColor="border-transparent">
-				<template #inner-suffix>
+				:error="factory.errors.timeLimit">
+				<template #suffix>
 					<div class="flex items-center gap-1 border-l-2 border-darkLightGray pl-3">
 						<SofaText content="s" />
 					</div>
 				</template>
-			</SofaTextField>
+			</SofaInput>
 		</div>
 
 		<div class="w-full flex flex-col gap-2">
-			<SofaTextField
-				v-model="factory.tagString"
-				customClass="rounded-custom !bg-lightGray"
-				name="Tags"
-				placeholder="Tags (Comma separated for multiple)"
-				borderColor="border-transparent" />
+			<SofaInput v-model="factory.tagString" name="Tags" placeholder="Tags (Comma separated for multiple)" />
 			<div class="w-full flex flex-wrap gap-2 items-center">
 				<template v-for="(item, index) in factory.tags" :key="index">
 					<div class="p-2 border-2 flex items-center gap-2 rounded-custom border-darkLightGray">
@@ -133,13 +120,13 @@ const { isAdmin } = useAuth()
 const { topics } = useTopicsList()
 const { tags } = useGenericTagsList()
 
-const modes: { value: QuizModes; key: keyof typeof props.factory }[] = [
+const modes = [
 	{ value: QuizModes.games, key: 'modeGames' },
 	{ value: QuizModes.tests, key: 'modeTests' },
 	{ value: QuizModes.assessments, key: 'modeAssessments' },
 	{ value: QuizModes.practice, key: 'modePractice' },
 	{ value: QuizModes.flashcards, key: 'modeFlashcards' },
-]
+] as const
 
 watch(
 	topics,

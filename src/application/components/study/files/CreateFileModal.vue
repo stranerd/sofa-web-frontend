@@ -1,20 +1,15 @@
 <template>
 	<form class="flex flex-col gap-4 mdlg:p-6 p-4" @submit.prevent="submit">
 		<div class="w-full hidden flex-col gap-2 justify-center items-center md:flex">
-			<SofaHeaderText class="!text-xl" content="Upload file" />
+			<SofaHeading class="title" content="Upload file" />
 		</div>
 
 		<div class="w-full flex justify-between items-center md:hidden">
-			<SofaNormalText class="!font-bold" content="Upload file" />
+			<SofaHeading content="Upload file" />
 			<SofaIcon class="h-[19px]" name="circle-close" @click="close" />
 		</div>
 
-		<SofaTextField
-			v-model="factory.title"
-			customClass="rounded-custom !bg-lightGray"
-			:error="factory.errors.title"
-			placeholder="File title"
-			borderColor="border-transparent" />
+		<SofaInput v-model="factory.title" :error="factory.errors.title" placeholder="File title" />
 
 		<SofaTextarea v-model="factory.description" padding="p-4" placeholder="Description..." :error="factory.errors.description" />
 

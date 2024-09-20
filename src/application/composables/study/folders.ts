@@ -5,39 +5,43 @@ import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useModals } from '../core/modals'
+import { createStore } from '../core/store'
 import { FolderEntity, FolderFactory, FolderSaved, FoldersUseCases, StudyMaterial } from '@modules/study'
 
 export const saveToFolder = (entity: StudyMaterial) => {
 	useModals().study.saveToFolder.open({ entity })
 }
 
-const store = {
-	folders: ref<FolderEntity[]>([]),
-	listener: useListener(async () => {
-		const { id } = useAuth()
-		return await FoldersUseCases.listenToUserFolders(id.value, {
-			created: async (entity) => {
-				addToArray(
-					store.folders.value,
-					entity,
-					(e) => e.id,
-					(e) => e.createdAt,
-				)
-			},
-			updated: async (entity) => {
-				addToArray(
-					store.folders.value,
-					entity,
-					(e) => e.id,
-					(e) => e.createdAt,
-				)
-			},
-			deleted: async (entity) => {
-				store.folders.value = store.folders.value.filter((m) => m.id !== entity.id)
-			},
-		})
-	}),
-}
+const store = createStore(
+	{
+		folders: ref<FolderEntity[]>([]),
+		listener: useListener(async () => {
+			const { id } = useAuth()
+			return await FoldersUseCases.listenToUserFolders(id.value, {
+				created: async (entity) => {
+					addToArray(
+						store.folders.value,
+						entity,
+						(e) => e.id,
+						(e) => e.createdAt,
+					)
+				},
+				updated: async (entity) => {
+					addToArray(
+						store.folders.value,
+						entity,
+						(e) => e.id,
+						(e) => e.createdAt,
+					)
+				},
+				deleted: async (entity) => {
+					store.folders.value = store.folders.value.filter((m) => m.id !== entity.id)
+				},
+			})
+		}),
+	},
+	'study/folders/mine',
+)
 
 export const useMyFolders = () => {
 	const { id } = useAuth()

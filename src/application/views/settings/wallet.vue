@@ -2,34 +2,34 @@
 	<SettingsLayout title="Wallet">
 		<div class="w-full flex flex-col gap-5 mdlg:px-0 px-4">
 			<div class="flex flex-col gap-4 bg-white rounded-2xl md:p-5 p-4 shadow-custom">
-				<SofaHeaderText size="xl">Wallet</SofaHeaderText>
+				<SofaHeading size="title">Wallet</SofaHeading>
 
 				<div class="w-full flex flex-col gap-1">
 					<div class="flex items-center gap-2">
-						<SofaNormalText>Balance</SofaNormalText>
+						<SofaText>Balance</SofaText>
 						<SofaIcon
 							:class="showMoney ? 'h-[10px]' : 'h-[15px]'"
 							:name="showMoney ? 'hide' : 'show'"
 							@click="showMoney = !showMoney" />
 					</div>
 
-					<SofaHeaderText class="mdlg:!text-3xl !text-2xl">
+					<SofaHeading size="title3">
 						{{ showMoney ? balance : '****' }}
-					</SofaHeaderText>
+					</SofaHeading>
 
 					<div class="mt-3 grid grid-cols-2 gap-3 pt-4">
 						<a
-							class="col-span-1 flex items-center p-3 gap-2 rounded-custom justify-center border-2 border-darkLightGray"
+							class="col-span-1 flex items-center p-3 gap-2 rounded-custom justify-center border-2 border-darkLightGray text-grayColor"
 							@click="showFundWallet">
 							<SofaIcon class="h-[16px]" name="fund-wallet" />
-							<SofaNormalText class="text-grayColor">Fund wallet</SofaNormalText>
+							<SofaText>Fund wallet</SofaText>
 						</a>
 
 						<a
-							class="col-span-1 flex items-center p-3 gap-2 rounded-custom justify-center border-2 border-darkLightGray"
+							class="col-span-1 flex items-center p-3 gap-2 rounded-custom justify-center border-2 border-darkLightGray text-grayColor"
 							@click="showWalletWithdraw">
 							<SofaIcon class="h-[16px]" name="withdraw-wallet" />
-							<SofaNormalText class="text-grayColor">Withdraw</SofaNormalText>
+							<SofaText>Withdraw</SofaText>
 						</a>
 					</div>
 				</div>

@@ -1,5 +1,5 @@
 <template>
-	<div class="grid grid-cols-7 gap-2 text-sub text-center select-none">
+	<div class="grid grid-cols-7 gap-2 font-size-sub text-center select-none">
 		<div class="col-span-full flex items-center gap-2">
 			<span
 				class="mr-auto"

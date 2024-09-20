@@ -3,10 +3,10 @@
 		<div class="w-full flex flex-col h-full gap-3 md:gap-4 mdlg:px-6 md:px-4 overflow-y-auto">
 			<div
 				class="w-full flex flex-col justify-between items-center sticky top-0 left-0 bg-white z-[1] border-lightGray border-b md:border-0 p-4 md:gap-2">
-				<SofaHeaderText class="text-xl hidden md:inline-block" content="Message a tutor" />
+				<SofaHeading size="title" class="hidden md:inline-block" content="Message a tutor" />
 
 				<div class="flex w-full md:hidden items-center gap-2 justify-between">
-					<SofaHeaderText class="!font-bold" content="Message a tutor" />
+					<SofaHeading content="Message a tutor" />
 					<SofaIcon class="h-[16px]" name="circle-close" @click="close" />
 				</div>
 
@@ -25,18 +25,18 @@
 
 			<template v-if="currentStep == 0">
 				<div class="w-full flex flex-col gap-3 px-4 md:px-0">
-					<SofaNormalText class="text-center mx-auto" content="What type of help do you need?" />
+					<SofaText class="text-center mx-auto" content="What type of help do you need?" />
 					<a
 						v-for="option in helpOptions"
 						:key="option.key"
 						class="w-full flex items-center justify-between p-4 rounded-custom bg-lightGray"
 						@click="selectedhelpOption = option.key">
-						<SofaNormalText
-							:color="selectedhelpOption == option.key ? 'text-primaryPurple' : 'text-grayColor'"
+						<SofaText
+							:class="selectedhelpOption == option.key ? 'text-primaryPurple' : 'text-grayColor'"
 							:content="option.title" />
 						<SofaIcon :name="selectedhelpOption == option.key ? 'selected' : 'not-selected'" class="h-[20px]" />
 					</a>
-					<SofaTextField v-model="selectedhelpOptionOthers" customClass="border rounded-custom" placeholder="Others" />
+					<SofaInput v-model="selectedhelpOptionOthers" placeholder="Others" class="flex-1" />
 				</div>
 			</template>
 
@@ -57,16 +57,14 @@
 							@click="factory.tutorId = tutor.id">
 							<SofaAvatar :size="60" :photoUrl="tutor.photoUrl" :online="tutor.online" />
 							<div class="w-full flex flex-col grow gap-1">
-								<UserName :user="tutor.user" :avatar="false" class="font-bold" />
-								<SofaNormalText class="!line-clamp-1 !text-left" :content="tutor.subjects" />
+								<UserName :user="tutor.user" :avatar="false" bold />
+								<SofaText clamp :content="tutor.subjects" />
 
 								<div class="w-full flex gap-2 items-center">
 									<SofaIcon name="star" class="h-[16px] fill-primaryYellow" />
 									<div class="flex gap-1 items-center">
-										<SofaNormalText :content="tutor.ratings.value" />
-										<SofaNormalText
-											color="text-grayColor"
-											:content="`(${tutor.ratings.count}) rating${tutor.ratings.count > 1 ? 's' : ''}`" />
+										<SofaText :content="tutor.ratings.value" />
+										<SofaText :content="`(${tutor.ratings.count}) rating${tutor.ratings.count > 1 ? 's' : ''}`" />
 									</div>
 								</div>
 							</div>
@@ -74,7 +72,7 @@
 					</template>
 					<template v-else>
 						<div class="flex flex-col items-center justify-center pt-3">
-							<SofaNormalText color="text-grayColor" content="No tutor found for selected subject" />
+							<SofaText content="No tutor found for selected subject" />
 						</div>
 					</template>
 				</div>
@@ -86,8 +84,7 @@
 				padding="px-5 py-2"
 				bgColor="bg-white"
 				textColor="text-grayColor"
-				class="hidden md:!inline-block"
-				customClass="border border-gray-100"
+				class="hidden md:!inline-block border border-gray-100"
 				@click="close">
 				Exit
 			</SofaButton>

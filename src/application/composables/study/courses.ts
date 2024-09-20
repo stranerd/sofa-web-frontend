@@ -5,6 +5,7 @@ import { Refable, useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useModals } from '../core/modals'
 import { useSuccessHandler } from '../core/states'
+import { createStore } from '../core/store'
 import { useFilesInList } from './files-list'
 import { useQuizzesInList } from './quizzes-list'
 import {
@@ -18,13 +19,18 @@ import {
 	QuizModes,
 } from '@modules/study'
 
-const store = {} as Record<
-	string,
-	{
-		course: Ref<CourseEntity | null>
-		listener: ReturnType<typeof useListener>
-	}
->
+const store = createStore(
+	<
+		Record<
+			string,
+			{
+				course: Ref<CourseEntity | null>
+				listener: ReturnType<typeof useListener>
+			}
+		>
+	>{},
+	'study/courses',
+)
 
 export const useCourse = (id: string) => {
 	store[id] ??= {

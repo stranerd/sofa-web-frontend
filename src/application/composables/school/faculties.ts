@@ -2,13 +2,17 @@ import { addToArray } from 'valleyed'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAsyncFn } from '../core/hooks'
+import { createStore } from '../core/store'
 import { FacultiesUseCases, FacultyEntity, FacultyFactory } from '@modules/school'
 import { useSuccessHandler } from '@app/composables/core/states'
 
-const store = {
-	faculties: ref([] as FacultyEntity[]),
-	institutions: {} as Record<string, boolean>,
-}
+const store = createStore(
+	{
+		faculties: ref([] as FacultyEntity[]),
+		institutions: {} as Record<string, boolean>,
+	},
+	'school/faculties',
+)
 
 const {
 	asyncFn: fetchFaculties,

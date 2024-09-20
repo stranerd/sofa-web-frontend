@@ -6,6 +6,7 @@ export * from './verifications'
 export { AuthRoleType, UserBio }
 
 export enum UserType {
+	agent = 'agent',
 	student = 'student',
 	teacher = 'teacher',
 	organization = 'organization',
@@ -14,40 +15,53 @@ export enum UserType {
 export enum UserSchoolType {
 	'aspirant' = 'aspirant',
 	'college' = 'college',
-	'university' = 'university',
+	'graduate' = 'graduate',
 }
+
+export type UserSchool =
+	| {
+			type: UserSchoolType.aspirant
+			exams: {
+				institutionId: string
+				courseIds: string[]
+			}[]
+	  }
+	| {
+			type: UserSchoolType.college
+			institutionId: string
+			facultyId: string
+			departmentId: string
+	  }
+	| {
+			type: UserSchoolType.graduate
+	  }
+	| null
 
 export type UserTypeData =
 	| {
 			type: UserType.student
-			school:
-				| {
-						type: UserSchoolType.aspirant
-						exams: {
-							institutionId: string
-							courseIds: string[]
-							startDate: number
-							endDate: number
-						}[]
-				  }
-				| {
-						type: UserSchoolType.college
-						institutionId: string
-						facultyId: string
-						departmentId: string
-				  }
-				| {
-						type: UserSchoolType.university
-				  }
+			school: UserSchool
 	  }
 	| {
 			type: UserType.teacher
-			school: string
+			degree: string
+			workplace: string
+			opLength: string
+			sellsMaterials: boolean
+			school: UserSchool
 	  }
 	| {
 			type: UserType.organization
 			name: string
 			code: string
+			opLength: string
+			teachersSize: string
+			studentsSize: string
+			sellsMaterials: boolean
+			school: UserSchool
+	  }
+	| {
+			type: UserType.agent
 	  }
 
 export enum RankingTimes {
@@ -59,11 +73,14 @@ export enum RankingTimes {
 
 export type EmbeddedUser = {
 	id: string
-	bio: Pick<UserBio, 'name' | 'photo'> & {
-		publicName: string
-	}
+	bio: Pick<UserBio, 'name' | 'photo'> & { publicName: string }
 	roles: AuthRoleType
-	type: UserTypeData | null
+	type:
+		| Pick<Extract<UserTypeData, { type: UserType.agent }>, 'type'>
+		| Pick<Extract<UserTypeData, { type: UserType.student }>, 'type'>
+		| Pick<Extract<UserTypeData, { type: UserType.teacher }>, 'type'>
+		| Pick<Extract<UserTypeData, { type: UserType.organization }>, 'type' | 'name'>
+		| null
 }
 
 enum UserMeta {

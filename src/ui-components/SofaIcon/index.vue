@@ -1,19 +1,13 @@
 <template>
-	<InlineSvg :src="`/images/icons/${name}.svg`" class="cursor-pointer shrink-0" :class="customClass" />
+	<InlineSvg :src="`/images/icons/${name}.svg`" class="cursor-pointer shrink-0" />
 </template>
 
 <script lang="ts" setup>
 import InlineSvg from 'vue-inline-svg'
 
-withDefaults(
-	defineProps<{
-		name: IconName
-		customClass?: string
-	}>(),
-	{
-		customClass: '',
-	},
-)
+defineProps<{
+	name: IconName
+}>()
 </script>
 
 <style>

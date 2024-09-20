@@ -6,7 +6,7 @@
 				<div
 					class="w-[90%] max-w-[1800px] mx-auto flex justify-between relative mt-[230px] sm:mt-[200px] mdlg:mt-0 mdlg:flex-row flex-col gap-10 mdlg:gap-0">
 					<div class="w-full mdlg:w-1/2 flex flex-col gap-4 mdlg:pr-16 text-center md:text-left">
-						<div class="flex flex-col gap-[10px]">
+						<div class="flex flex-col gap-2.5">
 							<h1 class="text-[20px] mdlg:text-[40px] text-white leading-[30px] mdlg:leading-[60px] font-normal">
 								<span class="bg-white text-purple font-bold rounded-[16px] p-[10px]">Get in touch</span> with us to
 							</h1>
@@ -42,7 +42,6 @@
 									</label>
 									<input
 										v-model="factory.name"
-										type="text"
 										class="border border-[#5A5A5A] h-[50px] rounded-lg bg-transparent p-4 placeholder:text-[#D9D9D9] text-[14px] md:text-[16px]"
 										placeholder="Enter your full name here"
 										required />

@@ -1,27 +1,35 @@
 import { Ref, computed, onMounted, ref } from 'vue'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
-import { useMyPurchases } from '../payment/purchases'
 import { useModals } from '../core/modals'
-import { CourseEntity, CoursesUseCases, StudyMaterial, QuizEntity, StudyKeys, StudyUseCases, QuizzesUseCases } from '@modules/study'
+import { createStore } from '../core/store'
+import { useMyPurchases } from '../payment/purchases'
+import { CourseEntity, CoursesUseCases, QuizEntity, QuizzesUseCases, StudyKeys, StudyMaterial, StudyUseCases } from '@modules/study'
 
 export const handleShowAddMaterial = () => {
 	useModals().study.addMaterial.open({})
 }
 
-const store: Record<
-	string,
-	{
-		materials: Ref<StudyMaterial[]>
-	}
-> = {}
+const store = createStore(
+	<
+		Record<
+			string,
+			{
+				materials: Ref<StudyMaterial[]>
+			}
+		>
+	>{},
+	'study/index',
+)
 
-const similarStore: Record<
-	string,
-	{
-		materials: Ref<StudyMaterial[]>
-	}
-> = {}
+const similarStore = createStore<
+	Record<
+		string,
+		{
+			materials: Ref<StudyMaterial[]>
+		}
+	>
+>({}, 'study/index/similar')
 
 export const useMyStudy = (key: StudyKeys, alwaysRefetch = false) => {
 	store[key] ??= {

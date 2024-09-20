@@ -1,4 +1,5 @@
 import { Component, Ref, computed, ref } from 'vue'
+import { createStore } from './store'
 
 type Comp = Component & (abstract new (...args: any) => any)
 type Args = Record<string, any>
@@ -59,8 +60,8 @@ const registerModals = (stack: Ref<string[]>, modals: ModalsDef) => {
 }
 
 const useModal = () => {
-	const stack = ref<string[]>([])
-	const modalsDef: ModalsDef = {}
+	const stack = createStore(ref<string[]>([]), 'core/modal/stack')
+	const modalsDef = createStore(<ModalsDef>{}, 'core/modal/defs')
 	const modals = computed(() => stack.value.filter((key) => modalsDef[key] && !modalsDef[key].modalArgs?.popover))
 	const popovers = computed(() => stack.value.filter((key) => modalsDef[key] && modalsDef[key].modalArgs?.popover))
 	return { stack, modals, popovers, modalsDef, ...registerModals(stack, modalsDef) }

@@ -7,11 +7,11 @@
 					class="rounded-custom p-3 flex flex-col gap-1 border border-grayColor bg-white text-bodyBlack shrink-0"
 					:class="{ '!bg-primaryPurple !border-primaryPurple !text-white': isItemSelected(listItem) }"
 					@click="onClickItem(listItem)">
-					<SofaNormalText color="text-current">{{ section.label }} - {{ listItem.title }}</SofaNormalText>
+					<SofaText>{{ section.label }} - {{ listItem.title }}</SofaText>
 
 					<span class="w-full flex items-center gap-2">
 						<SofaIcon :name="listItem.icon" class="h-[15px] fill-current" />
-						<SofaNormalText color="text-current" :content="listItem.info" class="capitalize" />
+						<SofaText :content="listItem.info" class="capitalize" />
 					</span>
 				</a>
 			</template>
@@ -28,7 +28,7 @@
 					placeholder="Section label"
 					@onBlur="closeLabelSection(sectionIndex)"
 					@onEnter="closeLabelSection(sectionIndex)" />
-				<SofaHeaderText v-else size="base" class="grow truncate">{{ section.label }}</SofaHeaderText>
+				<SofaHeading v-else class="grow">{{ section.label }}</SofaHeading>
 				<SofaIcon v-if="edit" class="h-[16px] fill-grayColor" name="edit" @click.stop.prevent="toggleLabelSection(sectionIndex)" />
 				<SofaIcon v-if="edit" class="h-[16px] fill-grayColor" name="trash" @click.stop.prevent="factory.delete(sectionIndex)" />
 				<SofaIcon v-if="edit" class="h-[20px] sectionHandle fill-grayColor" name="reorder" />
@@ -50,23 +50,23 @@
 					:id="getItemId(listItem)"
 					:key="itemIndex"
 					class="flex items-center gap-2 p-2"
-					:class="{ 'bg-lightBlue rounded-lg py-2': isItemSelected(listItem) }"
+					:class="{ 'bg-lightBlue text-deepGray rounded-lg py-2': isItemSelected(listItem) }"
 					@click="onClickItem(listItem)">
-					<SofaIcon :name="listItem.icon" class="h-[16px] fill-deepGray" />
-					<SofaNormalText color="text-deepGray" :content="listItem.title" class="truncate flex-1" />
+					<SofaIcon :name="listItem.icon" class="h-[16px] fill-current" />
+					<SofaText :content="listItem.title" clamp class="flex-1" />
 					<SofaIcon v-if="edit" class="h-[16px] fill-grayColor" name="trash" @click.stop.prevent="removeItem(listItem)" />
 					<SofaIcon v-if="edit" class="h-[20px] itemHandle fill-grayColor" name="reorder" />
 				</a>
 				<a v-if="edit" class="flex items-center gap-2 p-2 text-primaryPurple" @click.stop.prevent="addStudyMaterial(sectionIndex)">
 					<SofaIcon name="add" class="h-[16px] fill-current" />
-					<SofaNormalText color="text-current" content="Add study material" />
+					<SofaText content="Add study material" />
 				</a>
 				<div v-if="edit && sectionIndex < factory.factories.length - 1" class="h-0.5 w-full bg-lightGray" />
 			</VueDraggable>
 		</div>
 		<a v-if="edit" class="flex items-center gap-2 px-2 text-primaryPink" @click.stop.prevent="factory.add()">
 			<SofaIcon name="add" class="h-[16px] fill-current" />
-			<SofaNormalText color="text-current" content="Add section" />
+			<SofaText content="Add section" />
 		</a>
 	</VueDraggable>
 </template>

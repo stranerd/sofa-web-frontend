@@ -5,16 +5,12 @@
 				<SofaOtpInput v-model="token" />
 			</div>
 
-			<div class="w-full flex flex-col">
-				<SofaButton customClass="w-full" padding="md:py-4 py-3" type="submit"> Verify </SofaButton>
-			</div>
+			<SofaButton class="w-full" padding="md:py-4 py-3" type="submit"> Verify </SofaButton>
 		</form>
 
 		<div class="flex items-center gap-2 pt-3">
-			<SofaNormalText color="text-grayColor">Have an account?</SofaNormalText>
-			<router-link to="/auth/signin">
-				<SofaNormalText color="!text-primaryBlue">Sign in</SofaNormalText>
-			</router-link>
+			<SofaText class="text-grayColor">Have an account?</SofaText>
+			<SofaText as="router-link" to="/auth/signin" class="text-primaryBlue"> Sign in </SofaText>
 		</div>
 	</AuthLayout>
 </template>
@@ -22,15 +18,19 @@
 <script lang="ts">
 import { useHead } from '@unhead/vue'
 import { defineComponent } from 'vue'
-import { getEmailVerificationEmail, useEmailVerification } from '@app/composables/auth/signin'
+import { useRoute } from 'vue-router'
+import { useEmailVerification } from '@app/composables/auth/signin'
 
 export default defineComponent({
 	name: 'AuthVerifyPage',
-	routeConfig: { middlewares: [() => (getEmailVerificationEmail() ? undefined : '/auth/signin')] },
+	routeConfig: { middlewares: [({ to }) => (to.query.email ? undefined : '/auth/signin')] },
 	setup() {
 		useHead({ title: 'Verify your email' })
 
-		const { email, token, message, completeVerification, sendVerificationEmail } = useEmailVerification()
+		const route = useRoute()
+		const email = route.query.email as string
+
+		const { token, message, completeVerification, sendVerificationEmail } = useEmailVerification()
 		return {
 			email,
 			message,

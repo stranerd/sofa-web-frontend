@@ -3,13 +3,17 @@ import { onMounted, onUnmounted, ref } from 'vue'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { loadScript } from '../core/scripts'
+import { createStore } from '../core/store'
 import { FlutterwaveSecrets, TransactionEntity, TransactionType, TransactionsUseCases } from '@modules/payment'
 
-const store = {
-	flutterwave: null as FlutterwaveSecrets | null,
-	transactions: ref<TransactionEntity[]>([]),
-	hasMore: ref(false),
-}
+const store = createStore(
+	{
+		flutterwave: null as FlutterwaveSecrets | null,
+		transactions: ref<TransactionEntity[]>([]),
+		hasMore: ref(false),
+	},
+	'payment/transactions',
+)
 
 const listener = useListener(() =>
 	TransactionsUseCases.listen(

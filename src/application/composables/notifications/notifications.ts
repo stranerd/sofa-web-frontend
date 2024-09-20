@@ -1,24 +1,30 @@
-import { onMounted, onUnmounted, ref, Ref, watch } from 'vue'
 import { addToArray } from 'valleyed'
+import { onMounted, onUnmounted, ref, Ref, watch } from 'vue'
 import { useAuth } from '../auth/auth'
-import { useErrorHandler, useLoadingHandler } from '../core/states'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
+import { useErrorHandler, useLoadingHandler } from '../core/states'
+import { createStore } from '../core/store'
 import { NotificationEntity, NotificationsUseCases } from '@modules/notifications'
 
-const store = {} as Record<
-	string,
-	{
-		notifications: Ref<NotificationEntity[]>
-		hasMore: Ref<boolean>
-		fetched: Ref<boolean>
-		listener: ReturnType<typeof useListener>
-		unRead: Ref<number>
-		timer: Ref<number>
-		timeOut: Ref<any>
-	} & ReturnType<typeof useErrorHandler> &
-		ReturnType<typeof useLoadingHandler>
->
+const store = createStore(
+	<
+		Record<
+			string,
+			{
+				notifications: Ref<NotificationEntity[]>
+				hasMore: Ref<boolean>
+				fetched: Ref<boolean>
+				listener: ReturnType<typeof useListener>
+				unRead: Ref<number>
+				timer: Ref<number>
+				timeOut: Ref<any>
+			} & ReturnType<typeof useErrorHandler> &
+				ReturnType<typeof useLoadingHandler>
+		>
+	>{},
+	'notifications/notifications',
+)
 
 export const useNotificationList = () => {
 	const { id } = useAuth()

@@ -3,15 +3,18 @@ import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth'
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAsyncFn } from '../core/hooks'
+import { createStore } from '../core/store'
 import { storage } from '@utils/storage'
 import { AuthUseCases, EmailSigninFactory, EmailSignupFactory } from '@modules/auth'
 import { useErrorHandler, useSuccessHandler } from '@app/composables/core/states'
 import { createSession } from '@app/composables/auth/session'
 
-const store = {
-	referrerId: ref(undefined as string | undefined),
-	emailVerification: { email: ref(''), ...useSuccessHandler() },
-}
+const store = createStore(
+	{
+		referrerId: ref<string>(),
+	},
+	'auth/signin',
+)
 
 export const getReferrerId = async () => (await storage.get<string>('referrer')) ?? store.referrerId.value
 
@@ -54,14 +57,11 @@ export const useEmailSignup = () => {
 	return { factory, loading, error, signup }
 }
 
-export const setEmailVerificationEmail = (email: string) => (store.emailVerification.email.value = email)
-export const getEmailVerificationEmail = () => store.emailVerification.email.value
-
 export const useEmailVerification = () => {
 	const router = useRouter()
 	const sent = ref(false)
 	const token = ref('')
-	const { email, message, setMessage } = store.emailVerification
+	const { message, setMessage } = useSuccessHandler()
 
 	const {
 		asyncFn: completeVerification,
@@ -77,7 +77,6 @@ export const useEmailVerification = () => {
 		loading: sendVerificationEmailLoading,
 		error: sendVerificationEmailError,
 	} = useAsyncFn(async () => {
-		if (!email.value) return
 		await AuthUseCases.sendVerificationEmail()
 		await setMessage('An OTP was just sent to your mail')
 		sent.value = true
@@ -88,7 +87,6 @@ export const useEmailVerification = () => {
 	return {
 		token,
 		sent,
-		email,
 		message,
 		sendVerificationEmail,
 		sendVerificationEmailLoading,

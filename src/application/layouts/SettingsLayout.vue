@@ -2,7 +2,7 @@
 	<ExpandedLayout width="mdlg:!w-[75%] lg:!w-[60%]" layoutStyle="mdlg:py-5">
 		<div class="mdlg:hidden w-full flex items-center gap-3 justify-between bg-lightGray p-4">
 			<SofaIcon class="h-[15px]" name="arrow-left" @click="$utils.goBack()" />
-			<SofaNormalText class="!font-bold !text-base">{{ title }}</SofaNormalText>
+			<SofaHeading>{{ title }}</SofaHeading>
 			<span class="w-4" />
 		</div>
 
@@ -17,32 +17,30 @@
 						v-for="option in settingOptions"
 						:key="option.title"
 						class="flex flex-col gap-1 mdlg:gap-0 items-start bg-white p-2 mdlg:p-0 rounded-custom shadow-custom mdlg:shadow-none mdlg:border-none">
-						<SofaHeaderText size="xl" customClass="px-2 hidden mdlg:block mb-2" :content="option.title" />
+						<SofaHeading size="title" class="px-2 hidden mdlg:block mb-2" :content="option.title" />
 						<template v-for="(optionItem, i) in option.subPages" :key="optionItem.title">
-							<router-link
+							<SofaText
 								v-if="optionItem.show()"
+								as="router-link"
+								:content="optionItem.title"
 								class="w-full flex flex-col items-start p-2 hover:bg-lightBlue rounded-lg"
 								:class="{ 'border-t border-lightGray mdlg:border-none': i !== 0 }"
 								exactActiveClass="bg-lightBlue font-semibold"
-								:to="optionItem.to">
-								<SofaNormalText :content="optionItem.title" />
-							</router-link>
+								:to="optionItem.to" />
 						</template>
 					</div>
 
 					<div class="border-t-2 border-darkLightGray mdlg:border-0 mt-1 mdlg:mt-0 pt-4 mdlg:pt-0 flex flex-col gap-3 mdlg:gap-0">
-						<a
+						<SofaText
 							v-for="action in [
 								{ title: 'Logout', onClick: signout },
 								{ title: 'Delete account', onClick: deleteAccount },
 							]"
 							:key="action.title"
-							class="bg-white p-4 mdlg:p-2 rounded-custom shadow-custom mdlg:border-none mdlg:shadow-none mdlg:rounded-lg mdlg:hover:bg-lightBlue"
-							@click="action.onClick">
-							<SofaNormalText color="text-primaryRed">
-								{{ action.title }}
-							</SofaNormalText>
-						</a>
+							as="a"
+							:content="action.title"
+							class="bg-white text-primaryRed p-4 mdlg:p-2 rounded-custom shadow-custom mdlg:border-none mdlg:shadow-none mdlg:rounded-lg mdlg:hover:bg-lightBlue"
+							@click="action.onClick" />
 					</div>
 				</div>
 			</div>

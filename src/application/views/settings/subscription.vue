@@ -2,26 +2,26 @@
 	<SettingsLayout title="Subscription">
 		<div v-if="wallet" class="w-full flex flex-col gap-5 mdlg:!px-0 px-4">
 			<div class="w-full flex flex-col gap-3 bg-white rounded-[16px] md:!px-5 md:!py-5 px-4 py-4 shadow-custom">
-				<SofaHeaderText size="xl"> My subscription </SofaHeaderText>
+				<SofaHeading size="title"> My subscription </SofaHeading>
 
-				<SofaNormalText v-if="!wallet.subscription.active"> You have no active subscription </SofaNormalText>
+				<SofaText v-if="!wallet.subscription.active"> You have no active subscription </SofaText>
 				<template v-else-if="wallet.subscription.current && currentPlan">
 					<div class="w-full flex flex-col gap-3">
 						<div class="w-full flex flex-col items-start p-4 mdlg:p-6 bg-primaryPurple text-white rounded-xl">
-							<SofaHeaderText size="2xl" color="text-current" class="capitalize">{{ currentPlan.title }}</SofaHeaderText>
-							<SofaNormalText v-if="wallet.subscription.current.expiredAt > Date.now()" color="text-current">
+							<SofaHeading size="title3" class="capitalize">{{ currentPlan.title }}</SofaHeading>
+							<SofaText v-if="wallet.subscription.current.expiredAt > Date.now()">
 								{{ $utils.daysDiff(new Date(), new Date(wallet.subscription.current.expiredAt)) }}
 								days left
-							</SofaNormalText>
-							<SofaNormalText v-else color="text-current"> Expired </SofaNormalText>
+							</SofaText>
+							<SofaText v-else> Expired </SofaText>
 						</div>
 
 						<div v-if="userType.isOrg" class="flex flex-col gap-2 bg-lightGray p-4 mdlg:p-6 rounded-xl">
-							<SofaNormalText class="!font-bold">Plan info</SofaNormalText>
-							<SofaNormalText>
+							<SofaHeading class="!font-bold">Plan info</SofaHeading>
+							<SofaText>
 								Giving license to students that pay for and attend your learning center physically so that they get
 								cost-free access to your online classes and quizzes.
-							</SofaNormalText>
+							</SofaText>
 						</div>
 
 						<SofaCheckbox
@@ -29,7 +29,7 @@
 							v-model="autoRenewIsOn"
 							type="switch"
 							class="w-full flex justify-between p-4 border rounded-2xl border-darkLightGray">
-							<SofaNormalText customClass="!font-bold">Auto-renewal</SofaNormalText>
+							<SofaHeading>Auto-renewal</SofaHeading>
 						</SofaCheckbox>
 					</div>
 				</template>
@@ -38,14 +38,14 @@
 			<div
 				v-if="userType.isOrg && currentPlan && wallet.subscription.current"
 				class="w-full flex flex-col gap-4 bg-white rounded-2xl md:p-5 p-4 shadow-custom">
-				<SofaHeaderText size="xl" class="capitalize" content="Billing Details" />
+				<SofaHeading size="title" class="capitalize" content="Billing Details" />
 
 				<div class="w-full flex flex-col items-start p-4 mdlg:p-6 bg-primaryPurple text-white rounded-xl">
-					<SofaHeaderText size="2xl" color="text-current">
+					<SofaHeading size="title3">
 						{{ $utils.formatPrice(wallet.getCurrentBill(currentPlan), currentPlan.currency) }}
-					</SofaHeaderText>
+					</SofaHeading>
 
-					<SofaNormalText class="text-current">Current Bill</SofaNormalText>
+					<SofaText>Current Bill</SofaText>
 
 					<SofaButton
 						v-if="wallet.getCurrentBill(currentPlan) > 0"
@@ -59,13 +59,13 @@
 				</div>
 
 				<div class="flex flex-col gap-2 bg-lightGray p-4 mdlg:p-6 rounded-xl">
-					<SofaNormalText class="!font-bold">Currently licensed</SofaNormalText>
-					<SofaNormalText>{{ wallet.currentAverageMembers }} members</SofaNormalText>
+					<SofaHeading>Currently licensed</SofaHeading>
+					<SofaText>{{ wallet.currentAverageMembers }} members</SofaText>
 				</div>
 
 				<div v-if="wallet.subscription.active" class="flex flex-col gap-2 bg-lightGray p-4 mdlg:p-6 rounded-xl">
-					<SofaNormalText class="!font-bold">Next billing date</SofaNormalText>
-					<SofaNormalText>{{ $utils.formatTime(wallet.subscription.current.expiredAt) }}</SofaNormalText>
+					<SofaHeading>Next billing date</SofaHeading>
+					<SofaText>{{ $utils.formatTime(wallet.subscription.current.expiredAt) }}</SofaText>
 				</div>
 			</div>
 
@@ -73,15 +73,15 @@
 				<div
 					v-if="userType.isOrg && myApplicablePlan"
 					class="w-full flex flex-col gap-4 bg-white rounded-2xl md:p-5 p-4 shadow-custom">
-					<SofaHeaderText size="xl" class="capitalize" content="Subscription Plan" />
+					<SofaHeading size="title" class="capitalize" content="Subscription Plan" />
 
 					<div class="w-full flex flex-col items-start p-4 mdlg:p-6 bg-primaryPurple text-white rounded-xl">
-						<SofaNormalText class="text-current capitalize">{{ myApplicablePlan.title }}</SofaNormalText>
-						<SofaHeaderText size="2xl" color="text-current">
+						<SofaText class="capitalize">{{ myApplicablePlan.title }}</SofaText>
+						<SofaHeading size="title3">
 							{{ $utils.formatPrice(myApplicablePlan.amount, myApplicablePlan.currency) }}
-						</SofaHeaderText>
+						</SofaHeading>
 
-						<SofaNormalText class="text-current">per member/month</SofaNormalText>
+						<SofaText>per member/month</SofaText>
 
 						<SofaButton
 							padding="px-5 py-2"
@@ -94,26 +94,26 @@
 					</div>
 
 					<div class="flex flex-col gap-2 bg-lightGray p-4 mdlg:p-6 rounded-xl">
-						<SofaNormalText class="!font-bold">Plan info</SofaNormalText>
-						<SofaNormalText>
+						<SofaHeading>Plan info</SofaHeading>
+						<SofaText>
 							Giving license to students that pay for and attend your learning center physically so that they get cost-free
 							access to your online classes and quizzes.
-						</SofaNormalText>
+						</SofaText>
 					</div>
 				</div>
 
 				<div
 					v-if="!userType.isOrg && myApplicablePlan"
 					class="w-full flex flex-col gap-4 bg-white rounded-[16px] md:p-5 p-4 shadow-custom">
-					<SofaHeaderText size="xl" class="w-full pb-2 border-b border-lightGray">
+					<SofaHeading size="title" class="w-full pb-2 border-b border-lightGray">
 						{{ myApplicablePlan.title }}
-					</SofaHeaderText>
+					</SofaHeading>
 
 					<div class="flex flex-row gap-2 items-center">
-						<SofaHeaderText class="!text-2xl !font-bold">
+						<SofaHeading size="title3">
 							{{ $utils.formatPrice(myApplicablePlan.amount, myApplicablePlan.currency) }}
-						</SofaHeaderText>
-						<SofaNormalText customClass="!text-2xl"> / {{ myApplicablePlan.intervalInWord }}</SofaNormalText>
+						</SofaHeading>
+						<SofaText size="title3"> / {{ myApplicablePlan.intervalInWord }}</SofaText>
 					</div>
 
 					<div class="w-full flex flex-col gap-3">
@@ -122,21 +122,13 @@
 							:key="index"
 							class="w-full flex-col flex gap-1 pb-2 items-start"
 							:class="{ 'border-b border-lightGray': index != subscriptionInfo.length - 1 }">
-							<SofaIcon customClass="h-[23px] " :name="info.icon" />
-							<SofaNormalText customClass="!font-bold">
-								{{ info.title }}
-							</SofaNormalText>
-							<SofaNormalText color="text-grayColor">{{ info.value }}</SofaNormalText>
+							<SofaIcon class="h-[23px]" :name="info.icon" />
+							<SofaHeading bold>{{ info.title }}</SofaHeading>
+							<SofaText>{{ info.value }}</SofaText>
 						</div>
 					</div>
 
-					<div class="w-full flex flex-row">
-						<div class="w-auto flex flex-row">
-							<SofaButton padding="px-7 py-2" customClass="!w-auto" @click="subscribeToPlan(myApplicablePlan)">
-								Subscribe
-							</SofaButton>
-						</div>
-					</div>
+					<SofaButton padding="px-7 py-2" class="w-auto" @click="subscribeToPlan(myApplicablePlan)"> Subscribe </SofaButton>
 				</div>
 			</template>
 		</div>

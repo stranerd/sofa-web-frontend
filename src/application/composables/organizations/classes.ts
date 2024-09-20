@@ -5,15 +5,21 @@ import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
 import { useModals } from '../core/modals'
 import { useSuccessHandler } from '../core/states'
+import { createStore } from '../core/store'
 import { SelectedPaymentMethod } from '@modules/payment'
 import { ClassEntity, ClassFactory, ClassesUseCases } from '@modules/organizations'
 
-export const similarStore: Record<
-	string,
-	{
-		classes: Ref<ClassEntity[]>
-	}
-> = {}
+export const similarStore = createStore(
+	<
+		Record<
+			string,
+			{
+				classes: Ref<ClassEntity[]>
+			}
+		>
+	>{},
+	'organizations/classes/similar',
+)
 
 export const useCreateClass = (organizationId: string) => {
 	const router = useRouter()
@@ -77,13 +83,18 @@ export const useDeleteClass = () => {
 	return { loading, error, deleteClass }
 }
 
-const singleClassStore = {} as Record<
-	string,
-	{
-		class: Ref<ClassEntity | null>
-		listener: ReturnType<typeof useListener>
-	}
->
+const singleClassStore = createStore(
+	<
+		Record<
+			string,
+			{
+				class: Ref<ClassEntity | null>
+				listener: ReturnType<typeof useListener>
+			}
+		>
+	>{},
+	'organizations/classes/single',
+)
 
 export const useClass = (organizationId: string, classId: string) => {
 	const key = `${organizationId}-${classId}`

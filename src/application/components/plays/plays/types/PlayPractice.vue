@@ -43,25 +43,27 @@
 			})
 		">
 		<template v-if="showSolution" #header>
-			<div class="w-full p-4 md:py-8 flex items-center justify-center gap-2" :class="isCorrect ? 'bg-primaryGreen' : 'bg-primaryRed'">
+			<div
+				class="w-full p-4 md:py-8 flex items-center justify-center gap-2 text-white"
+				:class="isCorrect ? 'bg-primaryGreen' : 'bg-primaryRed'">
 				<SofaIcon class="h-[22px]" :name="isCorrect ? 'white-checkbox' : 'white-wrong'" />
-				<SofaHeaderText size="xl" color="text-white" :content="isCorrect ? 'Correct!' : 'Wrong!'" />
+				<SofaHeading size="title2" :content="isCorrect ? 'Correct!' : 'Wrong!'" />
 			</div>
 		</template>
 		<template v-if="isDone" #default>
 			<div class="flex flex-col gap-1">
-				<SofaHeaderText class="!font-bold md:!text-2xl text-lg" color="text-inherit" content="Congratulations!" />
-				<SofaNormalText color="text-inherit" content="You have mastered this quiz" />
+				<SofaHeading size="title2" content="Congratulations!" />
+				<SofaText content="You have mastered this quiz" />
 			</div>
 		</template>
 		<template v-if="showSolution" #postBody="{ extras }">
 			<div class="w-full flex flex-col gap-2 items-start">
-				<SofaHeaderText size="xl" content="Answer" />
-				<SofaNormalText :content="extras.question?.answer" />
+				<SofaHeading size="title2" content="Answer" />
+				<SofaText :content="extras.question?.answer" />
 			</div>
 			<div v-if="extras.question?.explanation" class="w-full flex flex-col gap-2 items-start">
-				<SofaHeaderText size="xl" content="Explanation" />
-				<SofaNormalText :content="extras.question.explanation" />
+				<SofaHeading size="title2" content="Explanation" />
+				<SofaText :content="extras.question.explanation" />
 			</div>
 		</template>
 	</Quiz>

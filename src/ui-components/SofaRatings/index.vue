@@ -10,8 +10,6 @@
 </template>
 
 <script lang="ts" setup>
-import SofaIcon from '../SofaIcon'
-
 withDefaults(
 	defineProps<{
 		count?: number

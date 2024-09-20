@@ -1,23 +1,17 @@
 <template>
 	<form v-if="wallet" class="flex flex-col gap-4 mdlg:p-6 p-4" @submit.prevent="formOptions.handler">
 		<div class="w-full hidden justify-between items-center mdlg:flex">
-			<SofaHeaderText customClass="text-xl">Withdraw money</SofaHeaderText>
-			<SofaIcon customClass="h-[20px]" name="circle-close" @click="close" />
+			<SofaHeading size="title">Withdraw money</SofaHeading>
+			<SofaIcon class="h-[20px]" name="circle-close" @click="close" />
 		</div>
 
 		<div class="w-full flex justify-between items-center sticky top-0 left-0 mdlg:hidden pt-2 pb-4 border-lightGray border-b">
-			<SofaNormalText customClass="!font-bold !text-base">Withdraw money</SofaNormalText>
-			<SofaIcon customClass="h-[20px]" name="circle-close" @click="close" />
+			<SofaHeading>Withdraw money</SofaHeading>
+			<SofaIcon class="h-[20px]" name="circle-close" @click="close" />
 		</div>
 
 		<div v-if="showAddNewAccount && activeAccountFactory" class="w-full flex flex-col gap-3">
-			<SofaTextField
-				v-model="activeAccountFactory.bankNumber"
-				customClass="rounded-custom !bg-lightGray"
-				type="text"
-				placeholder="Account number"
-				borderColor="border-transparent">
-			</SofaTextField>
+			<SofaInput v-model="activeAccountFactory.bankNumber" placeholder="Account number"> </SofaInput>
 
 			<SofaSelect
 				v-model="activeAccountFactory.bankCode"
@@ -25,33 +19,28 @@
 				:options="banks.map((bank) => ({ key: bank.code, value: bank.name }))">
 			</SofaSelect>
 
-			<SofaNormalText v-if="accountName" :content="accountName" color="text-primaryGreen" />
+			<SofaText v-if="accountName" :content="accountName" class="text-primaryGreen" />
 		</div>
 
 		<div v-else class="w-full flex flex-col gap-3">
-			<SofaTextField
-				v-model="withdrawalFactory.amount"
-				customClass="rounded-custom !bg-lightGray"
-				type="number"
-				placeholder="Amount"
-				borderColor="border-transparent">
-				<template #inner-prefix>
-					<SofaNormalText>
+			<SofaInput v-model="withdrawalFactory.amount" type="number" placeholder="Amount">
+				<template #prefix>
+					<SofaText>
 						{{ $utils.getCurrency(wallet.balance.currency) }}
-					</SofaNormalText>
+					</SofaText>
 				</template>
-			</SofaTextField>
+			</SofaInput>
 
 			<label
 				v-for="(account, index) in wallet.accounts"
 				:key="index"
 				:for="`account-${index}`"
 				:class="{ 'border border-primaryPurple': index === selectedAccountIndex }"
-				class="w-full flex items-center gap-3 p-4 rounded-custom bg-lightGray">
+				class="w-full flex items-center gap-3 p-4 rounded-custom bg-lightGray text-grayColor">
 				<SofaIcon class="h-[18px]" name="bank" />
-				<SofaNormalText class="text-grayColor capitalize flex-1 truncate">
+				<SofaText class="capitalize flex-1 truncate">
 					{{ account.bankName }}({{ account.bankNumber.slice(account.bankNumber.length - 4) }})
-				</SofaNormalText>
+				</SofaText>
 				<SofaRadio :id="`account-${index}`" v-model="selectedAccountIndex" :value="index" name="account" />
 			</label>
 

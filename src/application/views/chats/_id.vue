@@ -45,28 +45,26 @@
 						:style="`background-image: url('${userAi.image}')`"
 						class="w-[64px] h-[64px] flex flex-row items-center justify-center bg-cover bg-center rounded-full"></div>
 
-					<div class="flex flex-col gap-1">
-						<SofaHeaderText customClass="!text-base !font-bold" :content="userAi.name" />
-					</div>
+					<SofaHeading :content="userAi.name" />
 				</div>
 				<div class="w-full flex flex-row justify-start px-4 py-4 rounded-[8px] bg-fadedPurple">
-					<SofaNormalText customClass="text-left" color="text-deepGray">
+					<SofaText class="text-deepGray">
 						Hello! I am here to respond to your messages in every chat 24/7.
 						<br /><br />
 						Let us work towards your highest ever academic achievements.
-					</SofaNormalText>
+					</SofaText>
 				</div>
 			</div>
 
 			<div
 				v-if="conversation.user.id === id && !conversation.tutor"
-				class="w-full shadow-custom p-4 bg-primaryPurple rounded-[16px] flex flex-col gap-3 items-start">
+				class="w-full shadow-custom p-4 bg-primaryPurple text-white rounded-[16px] flex flex-col gap-3 items-start">
 				<div class="w-full flex flex-row gap-2 items-center justify-start">
 					<SofaIcon class="h-[24px] fill-white" name="add-tutor" />
-					<SofaNormalText color="text-white" customClass="!text-base !font-bold" content="Tutor help" />
+					<SofaHeading content="Tutor help" />
 				</div>
-				<SofaNormalText customClass="text-left" color="text-darkLightGray"> Need extra help with your work? </SofaNormalText>
-				<SofaButton bgColor="bg-white" textColor="!text-primaryPurple" padding="px-5 py-1" @click="onClickAddTutor">
+				<SofaText> Need extra help with your work? </SofaText>
+				<SofaButton bgColor="bg-white" textColor="text-primaryPurple" padding="px-5 py-1" @click="onClickAddTutor">
 					Message a tutor
 				</SofaButton>
 			</div>
@@ -76,13 +74,13 @@
 					v-if="conversation.isActive"
 					class="w-full flex items-center justify-start gap-2 text-primaryRed"
 					@click="onClickEndSession">
-					<SofaIcon customClass="h-[16px] fill-current" name="tutor" />
-					<SofaNormalText color="text-inherit">End conversation</SofaNormalText>
+					<SofaIcon class="h-[16px] fill-current" name="tutor" />
+					<SofaText>End conversation</SofaText>
 				</a>
 
-				<a class="w-full flex items-center justify-start gap-2" @click="deleteConv">
-					<SofaIcon customClass="h-[16px]" name="trash" />
-					<SofaNormalText color="text-primaryRed">Delete conversation</SofaNormalText>
+				<a class="w-full flex items-center justify-start gap-2 text-primaryRed" @click="deleteConv">
+					<SofaIcon class="h-[16px] fill-primaryRed" name="trash" />
+					<SofaText>Delete conversation</SofaText>
 				</a>
 			</div>
 
@@ -93,11 +91,11 @@
 						<SofaAvatar :size="180" :photoUrl="user?.bio.photo?.link" />
 					</router-link>
 
-					<SofaHeaderText size="xl" :content="user?.publicName" />
+					<SofaHeading size="title2" :content="user?.publicName" />
 
-					<SofaNormalText customClass="text-center" color="text-grayColor">
+					<SofaText class="text-center text-grayColor">
 						{{ user?.bio.description }}
-					</SofaNormalText>
+					</SofaText>
 				</div>
 			</template>
 		</template>

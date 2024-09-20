@@ -21,8 +21,8 @@
 		<template #left-session>
 			<form class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4" @submit.prevent="submit">
 				<div class="w-full flex flex-col">
-					<SofaHeaderText class="!font-bold"> Personal information </SofaHeaderText>
-					<SofaNormalText>Edit your profile</SofaNormalText>
+					<SofaHeading size="title"> Personal information </SofaHeading>
+					<SofaText>Edit your profile</SofaText>
 				</div>
 
 				<SofaImageLoader class="size-[96px] bg-grayColor rounded-full mx-auto" :photoUrl="profileFactory.photo?.link">
@@ -38,21 +38,13 @@
 				<SofaFormGroup>
 					<SofaLabel>First Name</SofaLabel>
 
-					<SofaTextField
-						v-model="profileFactory.first"
-						placeholder="Enter first name"
-						customClass="rounded-custom !bg-lightGray"
-						:error="profileFactory.errors.first" />
+					<SofaInput v-model="profileFactory.first" placeholder="Enter first name" :error="profileFactory.errors.first" />
 				</SofaFormGroup>
 
 				<SofaFormGroup>
 					<SofaLabel>Last Name</SofaLabel>
 
-					<SofaTextField
-						v-model="profileFactory.last"
-						placeholder="Enter last name"
-						customClass="rounded-custom !bg-lightGray"
-						:error="profileFactory.errors.last" />
+					<SofaInput v-model="profileFactory.last" placeholder="Enter last name" :error="profileFactory.errors.last" />
 				</SofaFormGroup>
 
 				<SofaFormGroup>
@@ -69,8 +61,8 @@
 		<template #middle-session>
 			<div class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4">
 				<div class="w-full flex flex-col items-start">
-					<SofaHeaderText class="!font-bold"> Page content </SofaHeaderText>
-					<SofaNormalText>Add at least 1 course and 3 quizzes you’ve published. </SofaNormalText>
+					<SofaHeading size="title"> Page content </SofaHeading>
+					<SofaText>Add at least 1 course and 3 quizzes you’ve published. </SofaText>
 				</div>
 
 				<div class="w-full flex flex-col gap-4">
@@ -100,8 +92,8 @@
 		<template #right-session>
 			<form class="w-full shadow-custom p-4 bg-white rounded-2xl flex flex-col gap-4" @submit.prevent="submit">
 				<div class="w-full flex flex-col">
-					<SofaHeaderText class="!font-bold"> Add links (optional) </SofaHeaderText>
-					<SofaNormalText>Your educational website and socials</SofaNormalText>
+					<SofaHeading size="title"> Add links (optional) </SofaHeading>
+					<SofaText>Your educational website and socials</SofaText>
 				</div>
 
 				<SocialMediaUpdate :factory="socialsFactory" />

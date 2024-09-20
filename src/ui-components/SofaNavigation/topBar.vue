@@ -6,7 +6,7 @@
 				<SofaAvatar :size="32" :photoUrl="user?.picture" @click="openSideBar" />
 
 				<div class="py-4 flex items-center justify-center">
-					<SofaHeading v-if="title" class="!font-bold !text-base" :content="title" />
+					<SofaHeading v-if="title" :content="title" />
 					<Logo withoutText class="h-[24px]" />
 				</div>
 
@@ -92,10 +92,10 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import SofaBadge from '../SofaBadge/index.vue'
-import { handleShowAddMaterial } from '@app/composables/study'
-import { useModals } from '@app/composables/core/modals'
+import SofaBadge from '../SofaBadge'
 import { useAuth } from '@app/composables/auth/auth'
+import { useModals } from '@app/composables/core/modals'
+import { handleShowAddMaterial } from '@app/composables/study'
 
 type Action = {
 	label: string

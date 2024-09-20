@@ -1,32 +1,42 @@
 <template>
-	<div class="w-full h-full flex bg-white">
-		<div class="bg-white w-full lg:w-[45%] mdlg:w-[50%] h-full overflow-y-auto flex flex-col shrink-0 md:p-8 p-4">
-			<div class="w-full flex gap-4 items-center">
-				<SofaIcon v-if="!hideBack" class="md:h-[26px] h-[20px]" name="arrow-left" @click="$utils.goBack()" />
+	<div
+		v-if="showBodyBgImage"
+		class="flex gap-2 items-center w-full lg:text-sm mdlg:text-[12px] text-xs z-[100] px-4 py-4 mdlg:py-0 sticky top-0 bg-white justify-between mdlg:shadow-custom">
+		<div class="py-2 pr-3 hidden mdlg:block">
+			<Logo class="h-[32px]" />
+		</div>
+		<SofaHeading size="title" content="Account Setup" />
+		<SofaButton class="bg-primaryPurple">Skip</SofaButton>
+	</div>
+	<div
+		:class="['w-full h-full flex', { 'bg-white': !showBodyBgImage, 'justify-center items-center': showBodyBgImage }]"
+		:style="{
+			backgroundImage: showBodyBgImage ? `url(${bodyBgImage})` : '',
+			backgroundSize: showBodyBgImage ? 'cover' : '',
+			backgroundPosition: showBodyBgImage ? 'center' : '',
+		}">
+		<div
+			:class="[
+				'bg-white min-w-fit rounded-xl overflow-y-auto flex flex-col justify-center items-center shrink-0 md:p-8 p-4',
+				showBodyBgImage ? 'w-[80%] mdlg:w-[60%]' : 'h-full w-full lg:w-[45%] mdlg:w-[50%]',
+			]">
+			<div v-if="!showBodyBgImage" class="w-full py-4">
+				<div class="w-full flex gap-4 items-center pt-1">
+					<SofaIcon v-if="!hideBack" class="md:h-[26px] h-[20px]" name="arrow-left" @click="$utils.goBack()" />
 
-				<div class="w-full flex flex-col md:justify-center md:items-center justify-start items-start gap-1">
-					<SofaHeaderText class="md:!text-2xl text-lg" :content="title" />
-					<SofaNormalText v-if="subTitle" color="text-grayColor" class="!font-normal" :content="subTitle" />
+					<div class="w-full flex flex-col justify-center items-center gap-1">
+						<SofaHeading size="title" :content="title" />
+						<SofaText v-if="subTitle" class="text-grayColor" :content="subTitle" />
+					</div>
 				</div>
 			</div>
 
-			<div class="h-full flex flex-col items-center gap-4 justify-center w-full md:px-10 px-0">
+			<div class="flex flex-col items-center gap-4 justify-center w-full md:px-10 px-0">
 				<slot />
 			</div>
 		</div>
 
-		<SofaImageLoader photoUrl="/images/auth-bg.png" class="bg-primaryPurple hidden mdlg:flex h-full mdlg:w-[50%] lg:w-[55%]">
-			<div class="w-full h-full bg-deepGray bg-opacity-75 flex flex-col gap-5 p-[14%] justify-center items-center">
-				<div class="w-full bg-white rounded-custom px-5 py-3 flex gap-2 items-center">
-					<SofaNormalText class="!font-bold !text-base"> Did you know? </SofaNormalText>
-					<SofaIcon name="idea" class="h-[20px]" />
-				</div>
-				<SofaNormalText color="text-white" class="!text-2xl">
-					The human brain can store about 2.5 petabytes of information? That's roughly equivalent to three million hours of TV
-					shows.
-				</SofaNormalText>
-			</div>
-		</SofaImageLoader>
+		<SofaImageLoader v-if="hideBack" :photoUrl="bgImage" class="bg-primaryPurple hidden mdlg:flex h-full mdlg:w-[50%] lg:w-[55%]" />
 	</div>
 </template>
 
@@ -36,10 +46,16 @@ withDefaults(
 		title: string
 		subTitle?: string
 		hideBack?: boolean
+		bgImage?: string
+		bodyBgImage?: string
+		showBodyBgImage?: boolean
 	}>(),
 	{
 		subTitle: '',
 		hideBack: false,
+		bgImage: '/images/auth.png',
+		bodyBgImage: '/images/auth-setup-frame.svg',
+		showBodyBgImage: false,
 	},
 )
 </script>

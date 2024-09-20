@@ -37,23 +37,23 @@
 									class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex gap-3 bg-white text-deepGray p-4 rounded-custom"
 									:class="{ 'flex-col justify-center items-center': extras.isMine }">
 									<template v-if="extras.isMine">
-										<SofaNormalText
-											color="text-grayColor !text-center"
+										<SofaText
+											class="text-grayColor !text-center"
 											:content="`You are hosting this ${play.singularizedType}`" />
-										<SofaHeaderText :content="play.title" class="!text-center !font-extrabold" size="xl" />
+										<SofaHeading :content="play.title" size="title" />
 
 										<div class="w-full flex items-center justify-center gap-4">
 											<a class="gap-2 items-center flex" @click="extras.share()">
 												<SofaIcon class="h-[16px]" name="share" />
-												<SofaNormalText color="text-inherit" content="Share" />
+												<SofaText content="Share" />
 											</a>
 											<a class="gap-2 items-center flex" @click="extras.openQr()">
 												<SofaIcon class="h-[16px]" name="scan" />
-												<SofaNormalText color="text-inherit" content="View QR" />
+												<SofaText content="View QR" />
 											</a>
 											<a class="gap-2 items-center flex" @click="extras.copy()">
 												<SofaIcon class="h-[16px]" name="copy" />
-												<SofaNormalText color="text-inherit" content="Copy" />
+												<SofaText content="Copy" />
 											</a>
 										</div>
 									</template>
@@ -65,20 +65,17 @@
 												<SofaIcon class="h-[16px]" name="share" @click="extras.share()" />
 											</div>
 											<div class="flex gap-2 items-center">
-												<SofaNormalText
-													color="text-primaryPurple"
-													class="capitalize"
-													:content="play.singularizedType" />
+												<SofaText class="text-primaryPurple capitalize" :content="play.singularizedType" />
 												<span class="size-[5px] rounded-full bg-primaryPurple" />
-												<SofaNormalText
-													color="text-primaryPurple"
+												<SofaText
+													class="text-primaryPurple"
 													:content="`${play.questions.length} question${play.questions.length > 1 ? 's' : ''}`" />
 											</div>
 											<div class="w-full flex items-start gap-2 flex-nowrap">
 												<SofaAvatar :size="20" :photoUrl="play.user.bio.photo?.link" />
-												<SofaNormalText
-													color="text-bodyBlack"
-													class="!font-semibold"
+												<SofaHeading
+													bold
+													class="text-bodyBlack"
 													:content="`Hosted by ${play.user.bio.publicName}`" />
 											</div>
 										</div>
@@ -88,9 +85,9 @@
 							<div
 								v-else
 								class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex gap-3 bg-white text-deepGray p-4 rounded-custom flex-col justify-center items-center">
-								<SofaNormalText color="text-inherit" content="You are about to take a test" />
-								<SofaHeaderText :content="play.title" color="text-inherit" class="!font-extrabold" size="xl" />
-								<SofaNormalText color="text-inherit" :content="`${play.questions.length} questions`" />
+								<SofaText content="You are about to take a test" />
+								<SofaHeading :content="play.title" size="title" />
+								<SofaText :content="`${play.questions.length} questions`" />
 							</div>
 						</div>
 					</template>
@@ -99,10 +96,9 @@
 						<div
 							v-if="play.isGames() || play.isAssessments()"
 							class="w-full h-full overflow-y-auto flex flex-col gap-4 my-auto py-4 items-center">
-							<SofaHeaderText class="md:!text-3xl text-xl" color="text-white" content="Lobby" />
-							<SofaNormalText
-								color="text-white"
-								class="-mt-4"
+							<SofaHeading size="title" color="text-white" content="Lobby" />
+							<SofaText
+								class="-mt-4 text-white"
 								:content="
 									extras.isMine
 										? play.isAssessments()
@@ -115,15 +111,12 @@
 								:key="user.id"
 								class="w-full flex items-center justify-center p-3 rounded-custom border-4 bg-white"
 								:class="user.id === extras.authId ? 'border-lightBlue' : 'border-transparent'">
-								<SofaNormalText
-									color="text-deepGray"
-									class="!font-semibold"
-									:content="user.id === extras.authId ? 'You' : user.publicName" />
+								<SofaText bold class="text-deepGray" :content="user.id === extras.authId ? 'You' : user.publicName" />
 							</div>
 							<div
 								v-if="participants.length == 0"
 								class="w-full flex items-center justify-center p-3 rounded-custom border-2 bg-white">
-								<SofaNormalText content="Waiting for participants!" />
+								<SofaText content="Waiting for participants!" />
 							</div>
 						</div>
 						<div v-else />

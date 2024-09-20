@@ -39,7 +39,7 @@
 		</SofaTextarea>
 
 		<div class="w-full hidden md:flex items-center justify-center gap-3 bg-primaryPurple text-white rounded-custom p-5">
-			<SofaNormalText color="text-inherit" content="Choose image to add to this question (optional)" />
+			<SofaText content="Choose image to add to this question (optional)" />
 			<SofaFileInput v-model="factory.questionMedia" accept="image/*" class="w-auto">
 				<SofaButton bgColor="bg-white" textColor="text-bodyBlack">Add Image</SofaButton>
 			</SofaFileInput>
@@ -172,14 +172,14 @@
 
 		<a v-if="factory.canAddOption" class="self-end flex justify-end gap-2 items-center" @click="factory.addOption">
 			<SofaIcon name="add" class="h-[24px] fill-current" />
-			<SofaNormalText color="text-inherit" content="Add option" />
+			<SofaText content="Add option" />
 		</a>
 
 		<div class="w-full flex flex-col border-t border-lightGray pt-4">
 			<SofaTextarea
 				v-model="factory.explanation"
 				:error="factory.errors.explanation"
-				class="!bg-white h-[130px]"
+				class="!bg-white h-[130px] mdlg:h-[180px] shrink-0"
 				placeholder="Explanation"
 				:richEditor="true">
 				<template v-if="!$screen.mobile" #prefix>

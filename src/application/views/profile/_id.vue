@@ -2,7 +2,7 @@
 	<ExpandedLayout v-if="user" width="mdlg:!w-[85%] lg:!w-[75%]" layoutStyle="mdlg:pt-6">
 		<div class="w-full flex mdlg:hidden items-center gap-3 justify-between bg-white p-4">
 			<SofaIcon class="h-[15px]" name="arrow-left" @click="$utils.goBack()" />
-			<SofaNormalText class="!font-bold !text-base" :content="user.publicName" />
+			<SofaHeading :content="user.publicName" />
 			<div />
 		</div>
 
@@ -13,8 +13,8 @@
 						<SofaAvatar :photoUrl="user.bio.photo?.link" :size="110" class="-mt-[71px]" />
 
 						<div class="flex flex-col">
-							<UserName :user="user" :avatar="false" name class="font-bold text-title" />
-							<SofaNormalText class="capitalize" :content="user.userType.type" />
+							<UserName :user="user" :avatar="false" name size="title" bold />
+							<SofaText class="capitalize" :content="user.userType.type" />
 						</div>
 					</div>
 
@@ -41,8 +41,8 @@
 								class="flex mdlg:flex-row mdlg:gap-2 flex-col gap-1 items-center">
 								<SofaIcon :name="item.icon" class="h-[40px]" />
 								<div class="flex flex-col items-center">
-									<SofaNormalText :content="item.title" />
-									<SofaHeaderText :content="item.value.toString()" class="!font-bold" />
+									<SofaText :content="item.title" />
+									<SofaHeading size="title" :content="item.value.toString()" />
 								</div>
 							</div>
 						</div>
@@ -57,13 +57,13 @@
 				</div>
 
 				<div class="w-full flex gap-6 items-center">
-					<SofaNormalText
+					<SofaHeading
 						v-for="item in ['content', 'about']"
 						:key="item"
 						as="router-link"
 						:to="`/profile/${user.id}?tab=${item}`"
-						class="!font-semibold capitalize pb-2 border-b-2 border-transparent text-deepGray"
-						:class="{ '!text-primaryPurple !border-primaryPurple': currentTab === item }"
+						class="capitalize pb-2 border-b-2 border-transparent text-deepGray"
+						:class="{ '!text-primaryPurple !border-current': currentTab === item }"
 						:content="item" />
 				</div>
 			</div>
@@ -73,17 +73,18 @@
 		<template v-if="currentTab == 'content'">
 			<div class="w-full flex flex-col gap-3 py-4">
 				<div v-if="materials.length" class="w-full mdlg:px-0 px-4">
-					<div class="w-full px-4 py-1 bg-white rounded-custom flex gap-1 items-center justify-start">
-						<SofaIcon name="search-black" class="h-[17px]" />
-						<SofaTextField v-model="searchQuery" customClass="!border-none w-full grow" placeholder="Search" />
-					</div>
+					<SofaInput v-model="searchQuery" placeholder="Search" type="search" class="!bg-white text-bodyBlack">
+						<template #prefix>
+							<SofaIcon name="search-black" class="h-[17px]" />
+						</template>
+					</SofaInput>
 				</div>
 
 				<div class="w-full flex flex-col mdlg:gap-4 gap-3 pl-4 mdlg:pl-0">
 					<div class="w-full flex gap-2 pr-4 mdlg:pr-0 items-center justify-between">
-						<SofaNormalText class="!font-bold" content="Resources" />
-						<SofaNormalText
-							color="text-primaryPink"
+						<SofaHeading content="Resources" />
+						<SofaText
+							class="text-primaryPink"
 							as="router-link"
 							content="View all"
 							:to="`/marketplace/search?userId=${user.id}&userName=${user.publicName}`" />
@@ -113,14 +114,14 @@
 		<template v-if="currentTab == 'about'">
 			<div class="w-full flex flex-col gap-4 mdlg:p-0 p-4">
 				<div class="w-full flex shadow-custom p-6 rounded-2xl bg-white flex-col gap-2">
-					<SofaNormalText class="!font-bold" content="Bio" />
-					<SofaNormalText :content="user.bio.description" />
+					<SofaHeading content="Bio" />
+					<SofaText :content="user.bio.description" />
 				</div>
 
 				<div class="w-full flex shadow-custom p-6 rounded-2xl bg-white flex-col gap-2">
-					<SofaNormalText class="!font-bold" content="Links" />
+					<SofaHeading content="Links" />
 					<div class="w-full flex gap-5 items-center">
-						<SofaNormalText v-if="user.socials.length === 0" color="text-grayColor" content="No socials" />
+						<SofaText v-if="user.socials.length === 0" class="text-grayColor" content="No socials" />
 						<a v-for="(item, index) in user.socials" :key="index" :href="item.link" target="_blank">
 							<SofaIcon :name="socials[item.ref] ?? 'website'" class="h-5 fill-deepGray" />
 						</a>

@@ -1,12 +1,12 @@
 <template>
 	<form class="flex flex-col p-4 mdlg:p-6 mdlg:gap-5 gap-3" @submit.prevent="submit">
 		<div class="w-full hidden justify-between items-center mdlg:flex">
-			<SofaHeaderText class="text-xl">Choose payment method</SofaHeaderText>
+			<SofaHeading size="title">Choose payment method</SofaHeading>
 			<SofaIcon class="h-[20px]" name="circle-close" @click="close" />
 		</div>
 
 		<div class="w-full flex justify-between items-center mdlg:hidden pt-2 pb-4 border-lightGray border-b">
-			<SofaNormalText class="!font-bold !text-base">Choose payment method</SofaNormalText>
+			<SofaHeading>Choose payment method</SofaHeading>
 			<SofaIcon class="h-[20px]" name="circle-close" @click="close" />
 		</div>
 

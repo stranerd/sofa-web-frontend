@@ -17,11 +17,7 @@
 				</div>
 			</div>
 			<div class="w-full mdlg:w-1/2 flex flex-col gap-4">
-				<SofaInput
-					v-model="factory.title"
-					type="text"
-					placeholder="Name your class (e.g JAMB Class)"
-					:error="factory.errors.title" />
+				<SofaInput v-model="factory.title" placeholder="Name your class (e.g JAMB Class)" :error="factory.errors.title" />
 				<SofaTextarea
 					v-model="factory.description"
 					class="h-[90px] resize-none"

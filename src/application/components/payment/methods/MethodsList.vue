@@ -1,6 +1,6 @@
 <template>
 	<div class="flex flex-col gap-4">
-		<SofaHeaderText size="xl"> Payment methods </SofaHeaderText>
+		<SofaHeading size="title"> Payment methods </SofaHeading>
 
 		<a class="w-full flex items-center gap-3 p-3 text-grayColor" @click="addMethod">
 			<SofaIcon class="h-[18px] fill-current" name="add" />

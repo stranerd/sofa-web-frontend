@@ -1,5 +1,5 @@
 <template>
-	<main class="w-full flex flex-col gap-[50px] mdlg:gap-[150px] bg-white mx-auto">
+	<main class="w-full flex flex-col gap-12 mdlg:gap-36 bg-white mx-auto">
 		<header class="flex flex-col items-center justify-center relative">
 			<HomeNavbar class="mb-[44px] z-50" />
 			<!-- Link -->
@@ -34,7 +34,7 @@
 						</RouterLink>
 						<RouterLink
 							to="/"
-							class="flex items-center justify-center gap-[10px] border border-purple text-purple py-[10px] px-[30px] h-[44px] rounded-[22px]">
+							class="flex items-center justify-center gap-2.5 border border-purple text-purple py-[10px] px-[30px] h-[44px] rounded-[22px]">
 							<SofaIcon name="solar_play-circle-bold" />
 							<span class="text-purple">Watch video</span>
 						</RouterLink>

@@ -1,36 +1,23 @@
 <template>
 	<SettingsLayout title="Security">
 		<div class="w-full flex flex-col gap-5 mdlg:px-0 px-4">
-			<form
-				ref="formComp"
-				class="w-full flex flex-col gap-4 bg-white rounded-2xl md:p-5 p-4 shadow-custom"
-				@submit.prevent="updatePassword">
-				<SofaHeaderText size="xl" content="Password" />
+			<form class="w-full flex flex-col gap-4 bg-white rounded-2xl md:p-5 p-4 shadow-custom" @submit.prevent="updatePassword">
+				<SofaHeading size="title" content="Password" />
 
-				<SofaTextField
+				<SofaInput
 					v-if="hasPassword"
 					v-model="factory.oldPassword"
-					customClass="rounded-custom !bg-lightGray"
 					type="password"
 					placeholder="Current password"
-					:error="factory.errors.oldPassword"
-					borderColor="border-transparent" />
+					:error="factory.errors.oldPassword" />
 
-				<SofaTextField
-					v-model="factory.password"
-					customClass="rounded-custom !bg-lightGray"
-					type="password"
-					placeholder="New password"
-					:error="factory.errors.password"
-					borderColor="border-transparent" />
+				<SofaInput v-model="factory.password" type="password" placeholder="New password" :error="factory.errors.password" />
 
-				<SofaTextField
+				<SofaInput
 					v-model="factory.cPassword"
-					customClass="rounded-custom !bg-lightGray"
 					type="password"
 					placeholder="Confirm new password"
-					:error="factory.errors.cPassword"
-					borderColor="border-transparent" />
+					:error="factory.errors.cPassword" />
 
 				<SofaButton :disabled="!factory.valid" type="submit" padding="px-7 py-2" class="self-end"> Update </SofaButton>
 			</form>

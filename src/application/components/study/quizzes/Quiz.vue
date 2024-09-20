@@ -7,19 +7,10 @@
 				class="p-4 md:py-8 w-full flex justify-center shadow-custom"
 				:class="{ 'md:bg-white': !isDark, 'text-white': isDark }">
 				<div class="lg:w-[50%] mdlg:w-[70%] md:w-[80%] w-full flex items-center gap-4 justify-between">
-					<SofaIcon class="md:hidden" customClass="h-[19px]" name="circle-close" @click="$utils.goBack()" />
-					<SofaHeaderText size="xl" customClass="!font-bold !text-sm truncate" color="text-inherit" :content="title" />
-					<SofaNormalText
-						class="md:hidden whitespace-nowrap"
-						:content="`${index + 1}/${questions.length}`"
-						color="text-inherit" />
-					<SofaNormalText
-						as="a"
-						class="hidden md:inline"
-						customClass="!text-base whitespace-nowrap"
-						color="text-inherit"
-						content="Exit"
-						@click="$utils.goBack()" />
+					<SofaIcon class="md:hidden h-[19px]" name="circle-close" @click="$utils.goBack()" />
+					<SofaHeading size="title" color="text-inherit" :content="title" />
+					<SofaText class="md:hidden whitespace-nowrap" :content="`${index + 1}/${questions.length}`" />
+					<SofaText as="a" class="hidden md:inline whitespace-nowrap" content="Exit" @click="$utils.goBack()" />
 				</div>
 			</div>
 			<div v-else />
@@ -52,7 +43,6 @@
 					<SofaButton
 						v-if="leftButton && !isInModal"
 						class="w-full md:w-auto mr-auto"
-						customClass="md:font-semibold"
 						padding="py-3 md:px-6"
 						:disabled="leftButton.disabled"
 						:bgColor="leftButton.bgColor"
@@ -74,7 +64,6 @@
 					<SofaButton
 						v-if="rightButton && !isInModal"
 						class="w-full md:w-auto ml-auto"
-						customClass="md:font-semibold"
 						padding="py-3 md:px-6"
 						:disabled="rightButton.disabled"
 						:bgColor="rightButton.bgColor"

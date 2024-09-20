@@ -1,18 +1,24 @@
-import { Ref, computed, onMounted, onUnmounted, ref } from 'vue'
 import { addToArray } from 'valleyed'
+import { Ref, computed, onMounted, onUnmounted, ref } from 'vue'
 import { useAuth } from '../auth/auth'
 import { useAsyncFn } from '../core/hooks'
 import { useListener } from '../core/listener'
+import { createStore } from '../core/store'
 import { ConversationEntity, MessageEntity, MessageFactory, MessagesUseCases } from '@modules/conversations'
 
-const store = {} as Record<
-	string,
-	{
-		messages: Ref<MessageEntity[]>
-		hasMore: Ref<boolean>
-		listener: ReturnType<typeof useListener>
-	}
->
+const store = createStore(
+	<
+		Record<
+			string,
+			{
+				messages: Ref<MessageEntity[]>
+				hasMore: Ref<boolean>
+				listener: ReturnType<typeof useListener>
+			}
+		>
+	>{},
+	'conversations/messages',
+)
 
 export const useMessages = (conversation: ConversationEntity) => {
 	const conversationId = conversation.id

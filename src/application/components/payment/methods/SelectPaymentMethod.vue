@@ -1,16 +1,16 @@
 <template>
 	<div class="flex flex-col gap-4">
 		<a v-if="payOnline" class="w-full flex items-center gap-3 p-3 bg-lightGray rounded-custom" @click="payOnline">
-			<SofaIcon customClass="h-[20px] fill-deepGray" name="socials-website" />
-			<SofaNormalText> Pay online </SofaNormalText>
+			<SofaIcon class="h-[20px] fill-deepGray" name="socials-website" />
+			<SofaText> Pay online </SofaText>
 		</a>
 		<a
 			v-if="showWallet && wallet"
 			class="w-full flex items-center gap-3 p-3 bg-lightGray rounded-custom"
 			:class="{ 'border-primaryBlue border-2': selectedMethod === true }"
 			@click="selectedMethod = true">
-			<SofaIcon customClass="h-[25px]" name="wallet" />
-			<SofaNormalText> Wallet ({{ balance }}) {{ wallet.balance.amount < amount ? '- Insufficient funds' : '' }} </SofaNormalText>
+			<SofaIcon class="h-[25px]" name="wallet" />
+			<SofaText> Wallet ({{ balance }}) {{ wallet.balance.amount < amount ? '- Insufficient funds' : '' }} </SofaText>
 		</a>
 		<a
 			v-for="method in methods"
@@ -18,8 +18,8 @@
 			class="w-full flex items-center gap-3 p-3 bg-lightGray rounded-custom"
 			:class="{ 'border-primaryBlue border-2': selectedMethod === method.id }"
 			@click="selectedMethod = method.id">
-			<SofaIcon customClass="h-[20px]" name="atm-card" />
-			<SofaNormalText> **** **** **** {{ method.data.last4Digits }} </SofaNormalText>
+			<SofaIcon class="h-[20px]" name="atm-card" />
+			<SofaText> **** **** **** {{ method.data.last4Digits }} </SofaText>
 		</a>
 		<a class="w-full flex items-center gap-3 p-3 border-2 border-darkLightGray text-grayColor rounded-custom" @click="addMethod">
 			<SofaIcon class="h-[18px]" name="add" />
@@ -30,7 +30,7 @@
 			class="col-span-1 flex items-center p-3 gap-2 rounded-custom border-2 border-darkLightGray"
 			@click="showFundWallet">
 			<SofaIcon class="h-[16px]" name="fund-wallet" />
-			<SofaNormalText class="text-grayColor">Fund wallet</SofaNormalText>
+			<SofaText class="text-grayColor">Fund wallet</SofaText>
 		</a>
 	</div>
 </template>

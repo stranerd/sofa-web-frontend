@@ -76,8 +76,15 @@ export abstract class BaseFactory<E, T, K extends Record<string, any>> extends C
 		return check.valid
 	}
 
-	isValid(property: keyof K) {
-		return this.checkValidity(property, this.values[property]).valid
+	isValid(...keys: (keyof K)[]) {
+		return keys.map((key) => this.checkValidity(key, this.values[key]).valid).every(Boolean)
+	}
+
+	isValidExcept(...keys: (keyof K)[]) {
+		return this.#keys
+			.filter((key) => !keys.includes(key))
+			.map((key) => this.isValid(key))
+			.every(Boolean)
 	}
 
 	checkValidity(property: keyof K, value: any) {

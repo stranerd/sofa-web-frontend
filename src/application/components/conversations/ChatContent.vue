@@ -2,7 +2,7 @@
 	<div class="w-full flex shadow-custom mdlg:bg-white rounded-2xl justify-between grow h-full flex-col">
 		<div class="w-full flex p-4 rounded-t-2xl gap-3 items-center justify-between border-b border-darkLightGray text-left">
 			<div class="flex items-center gap-3 flex-1">
-				<SofaIcon class="mdlg:hidden" customClass="h-[15px]" name="arrow-left" @click="$utils.goBack()" />
+				<SofaIcon class="mdlg:hidden h-[15px]" name="arrow-left" @click="$utils.goBack()" />
 				<SofaAvatar :photoUrl="data.photoUrl" :size="$screen.desktop ? 40 : 34" />
 				<div class="flex flex-col">
 					<SofaCustomInput
@@ -11,12 +11,8 @@
 						class="!px-0"
 						:autoFocus="true"
 						@onBlur="submitTitle" />
-					<SofaNormalText
-						v-else
-						class="!font-bold w-full !text-sm mdlg:!text-base !line-clamp-1"
-						:content="model"
-						@click="editTitle = canEditTitle ?? false" />
-					<SofaNormalText class="!text-[12px] line-clamp-1" :content="data.userNames.join(', ')" />
+					<SofaHeading v-else size="sub" class="w-full" :content="model" @click="editTitle = canEditTitle ?? false" />
+					<SofaText size="sub" clamp :content="data.userNames.join(', ')" />
 				</div>
 			</div>
 			<slot v-if="!editTitle" name="top-extras" />

@@ -7,13 +7,7 @@
 
 		<div class="w-full md:grid md:grid-cols-2 flex flex-col-reverse gap-4">
 			<div class="col-span-1 w-full flex flex-col gap-3">
-				<SofaTextField
-					v-model="factory.title"
-					customClass="rounded-custom !bg-lightGray"
-					type="text"
-					placeholder="Enter title"
-					borderColor="border-transparent"
-					:error="factory.errors.title" />
+				<SofaInput v-model="factory.title" placeholder="Enter title" :error="factory.errors.title" />
 
 				<SofaTextarea v-model="factory.description" :rows="4" placeholder="Enter description" :error="factory.errors.description" />
 
@@ -24,22 +18,20 @@
 					:options="topics.map((t) => ({ key: t.title, value: t.title }))"
 					custom />
 
-				<SofaTextField
+				<SofaInput
 					v-if="auth?.roles.isVerified"
 					v-model="factory.amount"
 					type="number"
-					customClass="rounded-custom !bg-lightGray"
 					placeholder="Enter price"
-					:error="factory.errors.amount"
-					borderColor="border-transparent">
-					<template #inner-suffix>
+					:error="factory.errors.amount">
+					<template #suffix>
 						<div class="flex items-center gap-1 border-l-2 border-darkLightGray pl-3">
 							<SofaHeading size="title" class="text-deepGray">
 								{{ $utils.getCurrency(factory.currency) }}
 							</SofaHeading>
 						</div>
 					</template>
-				</SofaTextField>
+				</SofaInput>
 			</div>
 
 			<div class="col-span-1 flex flex-col w-full pb-4 md:pb-0">
@@ -57,12 +49,7 @@
 		</div>
 
 		<div class="w-full flex flex-col gap-2">
-			<SofaTextField
-				v-model="factory.tagString"
-				customClass="rounded-custom !bg-lightGray"
-				name="Tags"
-				placeholder="Tags (Comma separated for multiple)"
-				borderColor="border-transparent" />
+			<SofaInput v-model="factory.tagString" name="Tags" placeholder="Tags (Comma separated for multiple)" />
 			<div class="w-full flex flex-wrap gap-2 items-center">
 				<template v-for="(item, index) in factory.tags" :key="index">
 					<div class="p-2 border-2 flex items-center gap-2 rounded-custom border-darkLightGray">

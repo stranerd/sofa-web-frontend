@@ -20,6 +20,7 @@ declare global {
 		| 'arrow-right-round'
 		| 'arrow-right'
 		| 'atm-card'
+		| 'auth-agent'
 		| 'auth-organization'
 		| 'auth-student'
 		| 'auth-tutor'

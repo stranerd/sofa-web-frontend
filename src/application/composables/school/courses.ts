@@ -1,18 +1,22 @@
 import { addToArray } from 'valleyed'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useAsyncFn } from '../core/hooks'
+import { createStore } from '../core/store'
 import { CourseEntity, CourseFactory, CoursesUseCases } from '@modules/school'
 import { useSuccessHandler } from '@app/composables/core/states'
 
-const store = {
-	courses: ref([] as CourseEntity[]),
-	departments: {} as Record<string, boolean>,
-	faculties: {} as Record<string, boolean>,
-	institutions: {} as Record<string, boolean>,
-	searchMode: ref(false),
-	searchValue: ref(''),
-	searchResults: ref([] as CourseEntity[]),
-}
+const store = createStore(
+	{
+		courses: ref([] as CourseEntity[]),
+		departments: {} as Record<string, boolean>,
+		faculties: {} as Record<string, boolean>,
+		institutions: {} as Record<string, boolean>,
+		searchMode: ref(false),
+		searchValue: ref(''),
+		searchResults: ref([] as CourseEntity[]),
+	},
+	'school/courses',
+)
 
 const { asyncFn: fetchDepartmentCourses } = useAsyncFn(async (departmentId: string) => {
 	if (store.departments[departmentId]) return

@@ -1,8 +1,8 @@
 <template>
 	<ExpandedLayout v-if="!index && !$screen.desktop" :hide="{ top: true, bottom: true }">
 		<div class="w-full flex items-center gap-3 z-50 justify-between bg-lightGray p-4 sticky top-0 left-0">
-			<SofaIcon customClass="h-[15px]" name="arrow-left" @click="$utils.goBack()" />
-			<SofaNormalText customClass="!font-bold !text-base">{{ title }}</SofaNormalText>
+			<SofaIcon class="h-[15px]" name="arrow-left" @click="$utils.goBack()" />
+			<SofaHeading>{{ title }}</SofaHeading>
 			<span class="w-4" />
 		</div>
 		<div v-if="tabs.length" class="w-full">
@@ -13,9 +13,8 @@
 					class="px-6 py-2 rounded-custom flex items-center justify-center"
 					:class="(currentTab && item.id === currentTab) || (!currentTab && i === 0) ? 'bg-primaryPurple' : 'bg-white'"
 					:to="`${$route.path}?tab=${item.id}`">
-					<SofaNormalText
+					<SofaHeading
 						:color="(currentTab && item.id === currentTab) || (!currentTab && i === 0) ? 'text-white' : 'text-deepGray'"
-						class="!font-semibold truncate"
 						:content="item.name" />
 				</router-link>
 			</div>
@@ -35,12 +34,12 @@
 					:to="item.routePath"
 					exactActiveClass="bg-lightBlue font-semibold">
 					<SofaIcon :name="item.icon" class="h-[17px] fill-deepGray" />
-					<SofaNormalText>{{ item.title }}</SofaNormalText>
+					<SofaText>{{ item.title }}</SofaText>
 				</router-link>
 
 				<div class="w-full flex items-center justify-between px-2 mt-3 mb-2">
-					<SofaNormalText customClass="!font-bold">Folders</SofaNormalText>
-					<SofaNormalText color="text-primaryPink" as="a" @click="generateNewFolder">Add</SofaNormalText>
+					<SofaHeading>Folders</SofaHeading>
+					<SofaText class="text-primaryPink" as="a" @click="generateNewFolder">Add</SofaText>
 				</div>
 
 				<component
@@ -50,7 +49,7 @@
 					class="w-full flex items-center justify-start text-left gap-3 px-4 py-3 relative rounded-[8px] hover:bg-lightBlue group folder-link"
 					:to="`/library/folders/${item.id}`"
 					exactActiveClass="bg-lightBlue font-semibold">
-					<SofaIcon name="folder" customClass="h-[16px]" />
+					<SofaIcon name="folder" class="h-[16px]" />
 
 					<SofaCustomInput
 						v-if="item.id === factory.entityId"
@@ -60,7 +59,7 @@
 						placeholder="Folder name"
 						@onBlur="saveFolder"
 						@onEnter="saveFolder" />
-					<SofaNormalText v-else class="truncate grow">{{ item.title }}</SofaNormalText>
+					<SofaText v-else class="grow" clamp>{{ item.title }}</SofaText>
 
 					<div
 						v-if="item.id !== factory.entityId"
@@ -72,7 +71,7 @@
 
 				<template v-if="organizations.length">
 					<div class="w-full flex items-center justify-between px-2 mt-3 mb-2">
-						<SofaNormalText customClass="!font-bold">Organizations</SofaNormalText>
+						<SofaHeading>Organizations</SofaHeading>
 					</div>
 					<router-link
 						v-for="item in organizations"
@@ -80,8 +79,8 @@
 						class="w-full flex items-center justify-start gap-3 px-4 py-3 rounded-[8px] hover:bg-lightBlue"
 						:to="`/library/organizations/${item.id}`"
 						exactActiveClass="bg-lightBlue font-semibold">
-						<SofaIcon name="organization" customClass="h-[20px]" />
-						<SofaNormalText class="truncate">{{ item.name }}</SofaNormalText>
+						<SofaIcon name="organization" class="h-[20px]" />
+						<SofaText clamp>{{ item.name }}</SofaText>
 					</router-link>
 				</template>
 			</div>
@@ -96,14 +95,14 @@
 						:to="item.routePath"
 						class="w-full flex items-center justify-start gap-3 p-4 border-b border-lightGray">
 						<SofaIcon :name="item.icon" class="h-[16px] fill-deepGray" />
-						<SofaNormalText>{{ item.title }}</SofaNormalText>
+						<SofaText>{{ item.title }}</SofaText>
 					</router-link>
 				</div>
 
 				<div class="w-full flex flex-col gap-2">
 					<div class="w-full flex items-center justify-between px-2 mt-3 mb-2">
-						<SofaNormalText customClass="!font-bold">Folders</SofaNormalText>
-						<SofaNormalText color="text-primaryPink" @click="generateNewFolder">Add</SofaNormalText>
+						<SofaHeading>Folders</SofaHeading>
+						<SofaText class="text-primaryPink" @click="generateNewFolder">Add</SofaText>
 					</div>
 
 					<component
@@ -113,7 +112,7 @@
 						class="w-full flex items-center relative gap-3 p-4 rounded-custom text-left bg-white shadow-custom group folder-link"
 						:to="`/library/folders/${item.id}`"
 						exactActiveClass="bg-lightBlue font-semibold">
-						<SofaIcon name="folder" customClass="h-[16px]" />
+						<SofaIcon name="folder" class="h-[16px]" />
 						<SofaCustomInput
 							v-if="item.id === factory.entityId"
 							v-model="factory.title"
@@ -122,7 +121,7 @@
 							class="grow !py-1 !bg-lightGray rounded"
 							@onBlur="saveFolder"
 							@onEnter="saveFolder" />
-						<SofaNormalText v-else class="truncate grow">{{ item.title }}</SofaNormalText>
+						<SofaText v-else class="grow" clamp>{{ item.title }}</SofaText>
 
 						<div
 							v-if="item.id !== factory.entityId"
@@ -135,7 +134,7 @@
 
 				<template v-if="organizations.length">
 					<div class="w-full flex items-center justify-between px-2 mt-3 mb-2">
-						<SofaNormalText customClass="!font-bold">Organizations</SofaNormalText>
+						<SofaHeading>Organizations</SofaHeading>
 					</div>
 					<router-link
 						v-for="item in organizations"
@@ -143,8 +142,8 @@
 						class="w-full flex items-center relative justify-start gap-2 p-4 rounded-custom bg-white shadow-custom"
 						:to="`/library/organizations/${item.id}`"
 						exactActiveClass="bg-lightBlue font-semibold">
-						<SofaIcon name="organization" customClass="h-[20px]" />
-						<SofaNormalText class="truncate">{{ item.name }}</SofaNormalText>
+						<SofaIcon name="organization" class="h-[20px]" />
+						<SofaHeading clamp>{{ item.name }}</SofaHeading>
 					</router-link>
 				</template>
 			</div>
@@ -157,9 +156,8 @@
 							class="px-6 py-2 rounded-custom flex items-center justify-center"
 							:class="(currentTab && item.id === currentTab) || (!currentTab && i === 0) ? 'bg-primaryPurple' : 'bg-white'"
 							:to="`${$route.path}?tab=${item.id}`">
-							<SofaNormalText
-								:color="(currentTab && item.id === currentTab) || (!currentTab && i === 0) ? 'text-white' : 'text-deepGray'"
-								class="!font-semibold truncate"
+							<SofaHeading
+								:class="(currentTab && item.id === currentTab) || (!currentTab && i === 0) ? 'text-white' : 'text-deepGray'"
 								:content="item.name" />
 						</router-link>
 					</div>

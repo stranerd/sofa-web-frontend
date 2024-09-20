@@ -1,7 +1,7 @@
 <template>
 	<div
 		:data-error="error"
-		class="w-full gap-2 p-3 mdlg:p-4 flex items-center text-sub rounded-lg bg-lightGray border border-darkLightGray group-focus-within:!border-primaryBlue has-error">
+		class="w-full gap-2 p-3 mdlg:p-4 flex items-center font-size-sub rounded-lg bg-lightGray border border-darkLightGray group-focus-within:!border-primaryBlue has-error">
 		<slot name="prefix" />
 		<input
 			v-model="content"
@@ -23,7 +23,6 @@
 
 <script lang="ts" setup generic="T">
 import { ref } from 'vue'
-import SofaIcon from '../SofaIcon'
 
 withDefaults(
 	defineProps<{
