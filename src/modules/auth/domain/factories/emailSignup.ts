@@ -1,22 +1,17 @@
 import { isEqualTo, v } from 'valleyed'
 import { NewUser } from '../entities/auth'
-import { BaseFactory, Media } from '@modules/core'
+import { BaseFactory } from '@modules/core'
 
-type Keys = Omit<NewUser, 'name'> & {
-	first: string
-	last: string
+type Keys = {
+	email: string
+	password: string
 	cPassword: string
-	photo: Media | null
 	termsAccepted: boolean
 }
 
 export class EmailSignupFactory extends BaseFactory<null, NewUser, Keys> {
 	readonly rules = {
-		first: v.string().min(1),
-		last: v.string(),
-		description: v.string(),
 		email: v.string().email(),
-		photo: v.file().image().nullable(),
 		password: v.string().min(8).max(16),
 		cPassword: v
 			.string()
@@ -25,36 +20,26 @@ export class EmailSignupFactory extends BaseFactory<null, NewUser, Keys> {
 			.custom((val) => isEqualTo(this.password)(val).valid, 'is not equal'),
 		termsAccepted: v.is(true),
 	}
+	protected onSet = {
+		password: () => {
+			this.set('cPassword', this.cPassword)
+		},
+	}
 
 	reserved = []
 
 	constructor() {
 		super({
-			first: '',
-			last: '',
 			email: '',
 			password: '',
 			cPassword: '',
-			description: '',
-			photo: null,
 			termsAccepted: false,
 		})
 	}
 
-	set password(value: string) {
-		this.set('password', value)
-		this.set('cPassword', '')
-	}
-
 	model = () => {
-		const { first, last, email, password, description, photo } = this.validValues
-		return {
-			name: { first, last },
-			email,
-			password,
-			description,
-			photo: photo,
-		}
+		const { email, password } = this.validValues
+		return { email, password }
 	}
 
 	load = (entity: null) => {

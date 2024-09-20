@@ -56,7 +56,7 @@ export type Phone = {
 	number: string
 }
 
-export type NewUser = Pick<AuthDetails, 'email' | 'photo' | 'description' | 'name'> & {
+export type NewUser = Pick<AuthDetails, 'email'> & {
 	password: string
 }
 
