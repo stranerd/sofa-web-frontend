@@ -4,6 +4,7 @@ import Components from 'unplugin-vue-components/vite'
 import { defineConfig } from 'vite'
 import Checker from 'vite-plugin-checker'
 import Compression from 'vite-plugin-compression'
+import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import Pages from 'vite-plugin-pages'
 import vueDevTools from 'vite-plugin-vue-devtools'
 import { watch } from 'vite-plugin-watch'
@@ -59,6 +60,7 @@ export default defineConfig({
 						// stylelint: { lintCommand: 'stylelint ./src/**/*.{css,scss,vue}' }
 					}),
 					vueDevTools(),
+					nodePolyfills({ include: ['util'] }),
 				]
 			: []),
 	],
