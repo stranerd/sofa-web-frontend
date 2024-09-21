@@ -2,6 +2,7 @@
 	<button
 		:disabled="loading || disabled"
 		class="focus:outline-none disabled:opacity-75 rounded-lg flex gap-2 font-bold items-center font-size-sub justify-center whitespace-nowrap"
+		:type="type"
 		:class="{
 			'shadow-button': shadow,
 			[padding]: true,
@@ -27,6 +28,7 @@ withDefaults(
 		loading?: boolean
 		shadow?: boolean
 		disabled?: boolean
+		type?: 'reset' | 'submit' | 'button'
 	}>(),
 	{
 		color: 'blue',
@@ -35,6 +37,7 @@ withDefaults(
 		loading: false,
 		shadow: false,
 		disabled: false,
+		type: 'button',
 	},
 )
 </script>

@@ -59,7 +59,7 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 					v
 						.object({
 							institutionId: v.string().min(1),
-							courseIds: v.array(v.string().min(1)).min(1),
+							courseIds: v.array(v.string().min(1)),
 						})
 						.parse(val),
 				),

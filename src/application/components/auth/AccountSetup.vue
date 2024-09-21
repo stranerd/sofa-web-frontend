@@ -1,5 +1,5 @@
 <template>
-	<form class="w-full flex flex-col gap-4" @submit.prevent="handleAccountSetup">
+	<form class="w-full flex flex-col gap-4" @submit.prevent="submit">
 		<div v-if="!isProfileEducation && !isProfilePhone" class="flex items-center gap-2 justify-center w-full">
 			<template v-for="(option, index) in accountSetupOptions.filter((o) => !o.hide)" :key="option.id">
 				<a
@@ -188,7 +188,7 @@
 						<SofaHeading v-if="typeFactory.isOrganization" content="What exams does your organization cover?" />
 
 						<div class="w-full flex justify-center items-center flex-wrap gap-3">
-							<SofaBadge class="flex items-center gap-2" color="gray">Enter exam</SofaBadge>
+							<SofaBadge class="flex items-center gap-2" color="gray">Select exams</SofaBadge>
 							<SofaBadge
 								v-for="exam in gatewayExams"
 								:key="exam.id"
@@ -215,9 +215,9 @@
 					<div
 						v-for="exam in typeFactory.institutions"
 						:key="exam.institutionId"
-						class="w-full flex justify-start items-center flex-wrap gap-3 py-2">
+						class="w-full flex justify-center items-center flex-wrap gap-3 py-2">
 						<SofaBadge class="flex items-center gap-2" color="gray">
-							Enter exams for {{ gatewayExams.find((e) => e.id === exam.institutionId)?.title ?? '' }}
+							Select exams for {{ gatewayExams.find((e) => e.id === exam.institutionId)?.title ?? '' }}
 						</SofaBadge>
 						<SofaBadge
 							v-for="course in courses.filter((c) => c.institutionId === exam.institutionId)"
@@ -335,7 +335,7 @@ const accountSetupOptions = computed<{ name: string; id: Tab; hide: boolean; don
 	},
 ])
 
-const handleAccountSetup = async () => {
+const submit = async () => {
 	if (isDisabled.value) return
 	if (tab.value === 'profile') {
 		const res = await Promise.all([updateProfile(), updateLocation()])
