@@ -53,13 +53,13 @@ export default defineConfig({
 		...(!skipCompression ? [Compression({ algorithm: 'brotliCompress' })] : []),
 		...(isDev
 			? [
+					vueDevTools(),
 					Checker({
 						typescript: true,
 						vueTsc: true,
 						// eslint: { lintCommand: 'eslint ./src' }
 						// stylelint: { lintCommand: 'stylelint ./src/**/*.{css,scss,vue}' }
 					}),
-					vueDevTools(),
 					nodePolyfills({ include: ['util'] }),
 				]
 			: []),
