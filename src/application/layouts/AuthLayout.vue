@@ -1,33 +1,23 @@
 <template>
-	<div
-		v-if="showBodyBgImage"
-		class="flex gap-2 items-center w-full lg:text-sm mdlg:text-[12px] text-xs z-[100] px-4 py-4 mdlg:py-0 sticky top-0 bg-white justify-between mdlg:shadow-custom">
-		<div class="py-2 pr-3 hidden mdlg:block">
-			<Logo class="h-[32px]" />
-		</div>
+	<div v-if="accountSetup" class="flex gap-2 items-center w-full z-[100] p-4 sticky top-0 bg-white justify-between mdlg:shadow-custom">
+		<Logo class="h-[32px] max-mdlg:hidden" />
 		<SofaHeading size="title" content="Account Setup" />
-		<SofaButton class="bg-primaryPurple">Skip</SofaButton>
+		<span />
 	</div>
 	<div
-		:class="['w-full h-full flex', { 'bg-white': !showBodyBgImage, 'justify-center items-center': showBodyBgImage }]"
-		:style="{
-			backgroundImage: showBodyBgImage ? `url(${bodyBgImage})` : '',
-			backgroundSize: showBodyBgImage ? 'cover' : '',
-			backgroundPosition: showBodyBgImage ? 'center' : '',
-		}">
+		:class="['w-full h-full flex bg-cover bg-center', { 'bg-white': !accountSetup, 'justify-center items-center': accountSetup }]"
+		:style="accountSetup ? { backgroundImage: `url(${bodyBgImage})` } : undefined">
 		<div
 			:class="[
 				'bg-white min-w-fit rounded-xl overflow-y-auto flex flex-col justify-center items-center shrink-0 md:p-8 p-4',
-				showBodyBgImage ? 'w-[80%] mdlg:w-[60%]' : 'h-full w-full lg:w-[45%] mdlg:w-[50%]',
+				accountSetup ? 'w-[80%] mdlg:w-[60%]' : 'h-full w-full lg:w-[45%] mdlg:w-[50%]',
 			]">
-			<div v-if="!showBodyBgImage" class="w-full py-4">
-				<div class="w-full flex gap-4 items-center pt-1">
-					<SofaIcon v-if="!hideBack" class="md:h-[26px] h-[20px]" name="arrow-left" @click="$utils.goBack()" />
+			<div v-if="!accountSetup" class="w-full flex gap-4 items-center py-4">
+				<SofaIcon v-if="!hideBack" class="md:h-[26px] h-[20px]" name="arrow-left" @click="$utils.goBack()" />
 
-					<div class="w-full flex flex-col justify-center items-center gap-1">
-						<SofaHeading size="title" :content="title" />
-						<SofaText v-if="subTitle" class="text-grayColor" :content="subTitle" />
-					</div>
+				<div class="w-full flex flex-col justify-center items-center gap-1">
+					<SofaHeading size="title" :content="title" />
+					<SofaText v-if="subTitle" class="text-grayColor" :content="subTitle" />
 				</div>
 			</div>
 
@@ -48,14 +38,14 @@ withDefaults(
 		hideBack?: boolean
 		bgImage?: string
 		bodyBgImage?: string
-		showBodyBgImage?: boolean
+		accountSetup?: boolean
 	}>(),
 	{
 		subTitle: '',
 		hideBack: false,
 		bgImage: '/images/auth.png',
 		bodyBgImage: '/images/auth-setup-frame.svg',
-		showBodyBgImage: false,
+		accountSetup: false,
 	},
 )
 </script>

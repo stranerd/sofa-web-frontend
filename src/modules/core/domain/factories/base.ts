@@ -51,7 +51,7 @@ export abstract class BaseFactory<E, T, K extends Record<string, any>> extends C
 	}
 
 	get valid() {
-		return this.#keys.map((key) => this.isValid(key)).every(Boolean)
+		return this.isValid(...this.#keys)
 	}
 
 	get hasChanges() {
@@ -81,10 +81,7 @@ export abstract class BaseFactory<E, T, K extends Record<string, any>> extends C
 	}
 
 	isValidExcept(...keys: (keyof K)[]) {
-		return this.#keys
-			.filter((key) => !keys.includes(key))
-			.map((key) => this.isValid(key))
-			.every(Boolean)
+		return this.isValid(...this.#keys.filter((key) => !keys.includes(key)))
 	}
 
 	checkValidity(property: keyof K, value: any) {

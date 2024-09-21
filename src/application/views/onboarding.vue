@@ -1,5 +1,5 @@
 <template>
-	<AuthLayout title="Choose account type" :hideBack="!type" bgImage="/images/auth-setup.png" :showBodyBgImage="type ? true : false">
+	<AuthLayout title="Choose account type" :hideBack="!type" bgImage="/images/auth-setup.png" :accountSetup="!!type">
 		<AccountSetup v-if="type" />
 		<div v-else class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6 place-items-center mt-24 md:mt-0 w-full">
 			<router-link
@@ -23,7 +23,7 @@
 
 <script lang="ts">
 import { useHead } from '@unhead/vue'
-import { ref, computed, defineComponent } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { UserType } from '@modules/users'
 
@@ -35,7 +35,6 @@ export default defineComponent({
 			({ to }) => {
 				const type = to.query.type as UserType | undefined
 				if (!type || Object.values(UserType).includes(type)) return
-				return '/onboarding'
 			},
 		],
 	},
@@ -47,33 +46,33 @@ export default defineComponent({
 			{
 				value: UserType.student,
 				label: 'Student',
-				icon: 'auth-student' as const,
+				icon: 'auth-student',
 				bgClass: 'bg-primaryBlue',
 				description: 'For both academic and vocational learners alike.',
 			},
 			{
 				value: UserType.teacher,
 				label: 'Teacher',
-				icon: 'auth-tutor' as const,
+				icon: 'auth-tutor',
 				bgClass: 'bg-primaryGreen',
 				description: 'For tutors and creators of learning materials',
 			},
 			{
 				value: UserType.organization,
 				label: 'Organization',
-				icon: 'auth-organization' as const,
+				icon: 'auth-organization',
 				bgClass: 'bg-primaryPurple',
 				description: 'For businesses, enterprises, and academic institutions.',
 			},
-			//will be added when needed.
-			// {
-			// 	value: UserType.agent,
-			// 	label: 'Agent',
-			// 	icon: 'auth-agent' as const,
-			// 	bgClass: 'bg-primaryPurplePink',
-			// 	description: 'For individuals who want to earn by referring users.',
-			// },
-		])
+			/* will be added when needed.
+			{
+				value: UserType.agent,
+				label: 'Agent',
+				icon: 'auth-agent',
+				bgClass: 'bg-primaryPurplePink',
+				description: 'For individuals who want to earn by referring users.',
+			}, */
+		] as const)
 
 		return { type, userTypes, UserType }
 	},

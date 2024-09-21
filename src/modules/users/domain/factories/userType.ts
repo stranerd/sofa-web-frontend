@@ -204,13 +204,13 @@ export class UserTypeFactory extends BaseFactory<UserEntity, UserTypeData, Keys>
 
 		if (entity.type.type === UserType.student) {
 		} else if (entity.type.type === UserType.teacher) {
-			this.degree = entity.type.degree
-			this.workplace = entity.type.workplace
+			this.degree = entity.type.degree ?? ''
+			this.workplace = entity.type.workplace ?? ''
 		} else if (entity.type.type === UserType.organization) {
 			this.name = entity.type.name
-			this.code = entity.type.code
-			this.teachersSize = entity.type.teachersSize
-			this.studentsSize = entity.type.studentsSize
+			this.code = entity.type.code ?? ''
+			this.teachersSize = entity.type.teachersSize ?? ''
+			this.studentsSize = entity.type.studentsSize ?? ''
 		}
 	}
 
