@@ -23,12 +23,12 @@
 		">
 		<template #prestart="{ extras }">
 			<div class="w-full my-auto flex flex-col gap-6 items-center">
-				<div class="w-full bg-white text-grayColor p-8 flex flex-col gap-2 items-center">
-					<SofaHeading class="text-bodyBlack" :content="play.title" size="title2" />
-					<SofaText :content="`${quizProps.questions.length} questions`" size="mid" />
+				<div class="w-full bg-white p-8 flex flex-col gap-2 items-center">
+					<SofaHeading :content="play.title" size="title2" />
+					<SofaText :content="`${quizProps.questions.length} questions`" size="mid" class="text-grayColor" />
 				</div>
 				<SofaHeading content="starting in" size="title2" />
-				<div class="p-6 aspect-square min-w-[5rem] flex items-center rounded-full justify-center bg-white text-bodyBlack">
+				<div class="p-6 aspect-square min-w-[5rem] flex items-center rounded-full justify-center bg-white">
 					<SofaHeading size="title2" :content="`${extras.startCountdown}`" />
 				</div>
 			</div>

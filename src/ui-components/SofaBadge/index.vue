@@ -17,6 +17,8 @@
 			'text-grayColor bg-opacity-75 border border-darkLightGray': color === 'gray' && inverted,
 			'bg-primaryPink text-white': color === 'pink' && !inverted,
 			'text-primaryPink bg-opacity-25': color === 'pink' && inverted,
+			'bg-bodyBlack text-white': color === 'body' && !inverted,
+			'bg-white text-bodyBlack': color === 'body' && inverted,
 		}">
 		<slot />
 	</component>
@@ -24,7 +26,7 @@
 <script lang="ts" setup>
 withDefaults(
 	defineProps<{
-		color?: 'purple' | 'green' | 'blue' | 'orange' | 'gray' | 'pink' | 'red'
+		color?: 'purple' | 'green' | 'blue' | 'orange' | 'gray' | 'pink' | 'red' | 'body'
 		inverted?: boolean
 		as?: string
 	}>(),

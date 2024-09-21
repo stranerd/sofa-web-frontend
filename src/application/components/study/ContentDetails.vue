@@ -4,7 +4,7 @@
 			<div class="w-full flex mdlg:flex mdlg:flex-row flex-col relative h-auto items-start justify-start gap-4">
 				<SofaImageLoader class="w-full mdlg:w-[25%] shrink-0 rounded-custom" :photoUrl="material.picture">
 					<div v-if="price && price.amount > 0" class="flex gap-2 items-center justify-end absolute bottom-0 left-0 w-full p-2">
-						<SofaBadge class="!bg-bodyBlack !bg-opacity-50 !text-white !px-4 !py-2 rounded-custom">
+						<SofaBadge color="body" class="bg-opacity-50 !px-4 !py-2 rounded-custom">
 							{{ $utils.formatPrice(price.amount, price.currency) }}
 						</SofaBadge>
 					</div>
@@ -77,11 +77,9 @@
 				v-for="(tab, index) in tabs.filter((tab) => !tab.hide)"
 				:key="index"
 				bold
-				:class="[
-					selectedTab == tab.key ? 'text-bodyBlack' : 'text-grayColor',
-					selectedTab == tab.key ? 'border-bodyBlack' : 'border-transparent',
-				]"
-				class="!font-semibold pb-2 border-b-2"
+				:class="[selectedTab == tab.key ? 'text-bodyBlack border-current' : 'text-grayColor border-transparent']"
+				body
+				class="pb-2 border-b-2"
 				as="a"
 				:content="tab.name"
 				@click="selectedTab = tab.key" />

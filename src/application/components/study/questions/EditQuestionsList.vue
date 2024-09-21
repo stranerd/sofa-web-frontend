@@ -12,7 +12,7 @@
 					<span class="size-[4px] rounded-full bg-deepGray" />
 					<SofaHeading :content="QuestionEntity.getLabel(factory.entityId === element.id ? factory.type : element.type)" />
 
-					<div class="flex flex-row-reverse items-center ml-auto text-bodyBlack">
+					<div class="flex flex-row-reverse items-center ml-auto">
 						<template v-for="(user, i) in users[element.id] ?? []" :key="user.id">
 							<SofaAvatar v-if="i < 3" :photoUrl="user.bio.photo?.link" :size="28" class="-ml-1" />
 							<SofaAvatar v-if="i === 3" bgColor="bg-darkBody !bg-opacity-80 text-lightGray" :size="28" class="-ml-1">
@@ -62,12 +62,12 @@
 				v-for="(element, index) in reactiveQuestions"
 				:key="index"
 				class="size-[48px] shrink-0 rounded-custom items-center justify-center flex relative"
-				:class="selectedQuestionId === element.id ? 'bg-primaryPurple' : 'bg-lightGray'"
+				:class="selectedQuestionId === element.id ? 'bg-primaryPurple text-white' : 'bg-lightGray'"
 				@click="selectQuestion(element)">
-				<SofaText :class="selectedQuestionId === element.id ? 'text-white' : 'text-bodyBlack'" :content="`${index + 1}`" />
+				<SofaText :content="`${index + 1}`" />
 				<SofaText
 					v-if="users[element.id]?.length"
-					class="text-lightGray aspect-square leading-none h-4 rounded-full flex items-center justify-center bg-primaryRed absolute right-[-0.25rem] top-[-0.25rem]"
+					class="aspect-square leading-none h-4 rounded-full flex items-center justify-center bg-primaryRed text-white absolute right-[-0.25rem] top-[-0.25rem]"
 					:content="`${users[element.id].length}`" />
 			</a>
 		</VueDraggable>

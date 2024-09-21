@@ -13,7 +13,7 @@
 	</ExpandedLayout>
 	<FullLayout v-else :topbarOptions="{ title }" :hide="{ right: true }">
 		<template #left-session>
-			<div class="w-full shadow-custom bg-white text-bodyBlack rounded-2xl flex flex-col p-4 gap-4">
+			<div class="w-full shadow-custom bg-white rounded-2xl flex flex-col p-4 gap-4">
 				<div v-if="user" class="w-full flex items-center gap-3">
 					<SofaAvatar :size="84" :photoUrl="user.bio.photo?.link" />
 
@@ -25,14 +25,14 @@
 				</div>
 
 				<div v-if="user && userType.isStudent" class="w-full grid grid-cols-2 gap-3">
-					<div class="p-3 rounded-custom bg-lightGray text-bodyBlack col-span-1 flex gap-3 justify-start items-center">
+					<div class="p-3 rounded-custom bg-lightGray col-span-1 flex gap-3 justify-start items-center">
 						<SofaIcon class="h-[40px]" name="xp-points" />
 						<div class="flex flex-col items-start justify-center">
 							<SofaHeading> {{ $utils.formatNumber(user.account.rankings.overall.value, 2) }} xp </SofaHeading>
 							<SofaText content="Point" />
 						</div>
 					</div>
-					<div class="p-3 rounded-custom bg-lightGray text-bodyBlack col-span-1 flex gap-3 justify-start items-center">
+					<div class="p-3 rounded-custom bg-lightGray col-span-1 flex gap-3 justify-start items-center">
 						<SofaIcon class="h-[40px]" name="streak-new" />
 						<div class="flex flex-col items-start justify-center">
 							<SofaHeading>
@@ -86,7 +86,7 @@
 				<slot name="pre-crumbs" />
 				<div
 					v-if="$screen.desktop && breadcrumbs"
-					class="bg-white text-bodyBlack py-3 px-6 rounded-t-2xl border-b border-lightGray flex items-center gap-4"
+					class="bg-white py-3 px-6 rounded-t-2xl border-b border-lightGray flex items-center gap-4"
 					:class="{ 'rounded-b-2xl': rounded }">
 					<SofaIcon v-if="!index" class="h-[15px]" name="arrow-left" @click="$utils.goBack()" />
 					<div class="flex items-center gap-1 shrink-0">

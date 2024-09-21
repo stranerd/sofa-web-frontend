@@ -17,7 +17,7 @@
 			<div class="w-full h-full flex flex-col mdlg:gap-5 gap-3 p-4 mdlg:p-0 mdlg:pr-4">
 				<div class="flex gap-3 items-center">
 					<SofaIcon class="h-[15px] mdlg:hidden" name="arrow-left" @click="$utils.goBack()" />
-					<SofaInput v-model="query" placeholder="Search for anything" type="search" class="!bg-white text-bodyBlack">
+					<SofaInput v-model="query" placeholder="Search for anything" type="search" class="!bg-white">
 						<template v-if="$screen.lt('mdlg')" #prefix>
 							<SofaIcon name="search-black" class="h-[17px]" />
 						</template>

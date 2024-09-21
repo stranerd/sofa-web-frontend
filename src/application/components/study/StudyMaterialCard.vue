@@ -2,7 +2,7 @@
 	<Card :as="isRoute ? 'router-link' : 'div'" :image="material.picture" v-bind="$attrs" :wrapped="wrapped" :to="material.pageLink">
 		<template v-if="price && price.amount > 0" #image-content>
 			<div class="flex gap-2 items-center justify-end absolute bottom-0 left-0 w-full p-2">
-				<SofaBadge class="!bg-bodyBlack !bg-opacity-50 !text-white !px-4 !py-2 rounded-custom">
+				<SofaBadge color="body" class="bg-opacity-50 !px-4 !py-2 rounded-custom">
 					{{ $utils.formatPrice(price.amount, price.currency) }}
 				</SofaBadge>
 			</div>

@@ -23,7 +23,7 @@
 					<SofaHeading>
 						{{ user.account.streak.count }} {{ $utils.pluralize(user.account.streak.count, 'day', 'days') }}
 					</SofaHeading>
-					<SofaText class="text-bodyBlack">Streak</SofaText>
+					<SofaText>Streak</SofaText>
 				</div>
 			</div>
 		</div>

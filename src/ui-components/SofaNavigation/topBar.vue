@@ -20,8 +20,8 @@
 				<router-link
 					v-for="tab in tabs"
 					:key="tab.name"
-					class="py-4 flex items-center justify-center gap-2 text-bodyBlack border-b-2 border-transparent"
-					:class="{ '!text-primaryPurple !border-primaryPurple': $utils.tabIsActive(tab.path) }"
+					class="py-4 flex items-center justify-center gap-2 border-b-2 border-transparent"
+					:class="{ 'text-primaryPurple !border-current': $utils.tabIsActive(tab.path) }"
 					:to="tab.path">
 					<SofaIcon :name="tab.icon" class="h-[18px] fill-current" />
 					<SofaHeading :content="tab.name" />

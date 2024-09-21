@@ -9,7 +9,7 @@
 			<SofaHeading :content="classInst.title" />
 			<span class="w-4" />
 		</div>
-		<div class="w-full mdlg:rounded-2xl flex flex-col max-h-full overflow-y-auto px-4 pb-4 mdlg:p-4 bg-white text-deepGray">
+		<div class="w-full mdlg:rounded-2xl flex flex-col max-h-full overflow-y-auto px-4 pb-4 mdlg:p-4 bg-white">
 			<div class="w-full flex mdlg:flex-row flex-col items-start gap-4">
 				<SofaImageLoader class="w-full mdlg:w-[33%] aspect-video rounded-custom" :photoUrl="classInst.picture" />
 				<div class="w-full flex flex-col gap-2 grow">

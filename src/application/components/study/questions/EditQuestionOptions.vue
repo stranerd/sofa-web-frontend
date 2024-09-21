@@ -43,7 +43,7 @@
 			</div>
 		</div>
 
-		<div class="rounded-b-xl w-full p-4 mdlg:pb-0 mdlg:px-0 border-t-2 border-[#F2F5F8] flex flex-col gap-4 text-bodyBlack">
+		<div class="rounded-b-xl w-full p-4 mdlg:pb-0 mdlg:px-0 border-t-2 border-[#F2F5F8] flex flex-col gap-4">
 			<a class="w-full flex mdlg:hidden items-center justify-start gap-3" @click="emits('showCurrentlyEditing')">
 				<SofaIcon name="edit" class="h-[16px] fill-grayColor" />
 				<SofaText content="Currently editing" />

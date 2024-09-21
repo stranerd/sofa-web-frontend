@@ -34,7 +34,7 @@
 						<div class="px-4 pt-4 md:pt-8 w-full flex justify-center shadow-custom">
 							<template v-if="play.isGames() || play.isAssessments()">
 								<div
-									class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex gap-3 bg-white text-deepGray p-4 rounded-custom"
+									class="lg:!w-[50%] mdlg:!w-[70%] md:!w-[80%] w-full flex gap-3 bg-white p-4 rounded-custom"
 									:class="{ 'flex-col justify-center items-center': extras.isMine }">
 									<template v-if="extras.isMine">
 										<SofaText
@@ -73,10 +73,7 @@
 											</div>
 											<div class="w-full flex items-start gap-2 flex-nowrap">
 												<SofaAvatar :size="20" :photoUrl="play.user.bio.photo?.link" />
-												<SofaHeading
-													bold
-													class="text-bodyBlack"
-													:content="`Hosted by ${play.user.bio.publicName}`" />
+												<SofaHeading bold :content="`Hosted by ${play.user.bio.publicName}`" />
 											</div>
 										</div>
 									</template>

@@ -1,7 +1,7 @@
 <template>
 	<FullLayout :topbarOptions="{ title }" :hide="{ right: true }">
 		<template #left-session>
-			<div class="w-full min-h-full shadow-custom bg-white text-bodyBlack rounded-2xl flex flex-col px-4">
+			<div class="w-full min-h-full shadow-custom bg-white rounded-2xl flex flex-col px-4">
 				<div
 					v-for="(tab, index) in tabs"
 					:key="index"

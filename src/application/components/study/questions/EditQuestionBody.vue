@@ -1,5 +1,5 @@
 <template>
-	<div class="w-full flex flex-col gap-4 text-bodyBlack text-left">
+	<div class="w-full flex flex-col gap-4 text-left">
 		<div v-if="factory.isFillInBlanks" class="w-full flex items-center flex-wrap gap-1 md:gap-2">
 			<span v-for="(item, index) in factory.fillInBlanksAnswers" :key="index" class="flex items-center gap-1">
 				<SofaCustomInput

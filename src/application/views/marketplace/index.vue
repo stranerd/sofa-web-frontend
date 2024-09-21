@@ -9,7 +9,7 @@
 			</SofaText>
 
 			<form class="w-[40%] shadow-custom">
-				<SofaInput v-model="searchQuery" placeholder="Search for anything" type="search" class="!bg-white text-bodyBlack">
+				<SofaInput v-model="searchQuery" placeholder="Search for anything" type="search" class="!bg-white">
 					<template #prefix>
 						<SofaIcon name="filter" class="h-[15px]" @click="$router.push('/marketplace/search')" />
 						<SofaText
@@ -26,7 +26,7 @@
 		</div>
 
 		<form class="w-full p-4 mdlg:hidden" @submit.prevent="handleSearch">
-			<SofaInput v-model="searchQuery" placeholder="Search" type="search" class="!bg-white text-bodyBlack">
+			<SofaInput v-model="searchQuery" placeholder="Search" type="search" class="!bg-white">
 				<template #prefix>
 					<SofaIcon name="filter" class="h-[15px]" @click="$router.push('/marketplace/search')" />
 					<SofaIcon name="search-black" class="h-[15px]" @click="handleSearch" />

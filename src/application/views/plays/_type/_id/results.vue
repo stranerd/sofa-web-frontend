@@ -6,7 +6,7 @@
 		<PlayWrapper :id="$route.params.id as string" :type="type" :skipQuestions="true" :skipStatusNav="true">
 			<template #default="{ play, extras }">
 				<div class="flex flex-col lg:w-[50%] mdlg:w-[70%] md:w-[80%] w-full h-full p-4 mdlg:p-6 gap-4">
-					<div class="flex grow flex-col items-center text-bodyBlack" :class="{ '!text-white': isDark }">
+					<div class="flex grow flex-col items-center">
 						<template v-if="!play.isClosed || tab === 'leaderboard'">
 							<SofaHeading size="title3" content="Scoreboard" />
 							<SofaText
@@ -29,7 +29,7 @@
 								<div
 									v-for="score in extras.scores"
 									:key="score.user.id"
-									class="w-full flex items-center justify-between gap-2 p-4 rounded-custom bg-white text-deepGray"
+									class="w-full flex items-center justify-between gap-2 p-4 rounded-custom bg-white"
 									:class="{ '!bg-lightBlue': score.user.id === extras.authId }">
 									<SofaAvatar :photoUrl="score.user.picture" :size="$screen.desktop ? 64 : 48" />
 									<div class="grow">

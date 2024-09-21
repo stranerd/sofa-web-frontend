@@ -27,7 +27,7 @@
 					<input
 						v-model="factory.body"
 						:disabled="!conversation.accepted?.is"
-						class="w-full text-bodyBlack focus:outline-none !max-h-[80px] overflow-hidden rounded-lg p-3 items-start text-left overflow-y-auto"
+						class="w-full focus:outline-none !max-h-[80px] overflow-hidden rounded-lg p-3 items-start text-left overflow-y-auto"
 						placeholder="Enter message" />
 					<button type="submit" class="min-w-[45px] h-[40px] flex items-center justify-center pr-[5px]">
 						<SofaIcon name="send" class="h-[19px]" />

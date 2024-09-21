@@ -2,11 +2,11 @@
 	<component :is="Teleport" to="body">
 		<transition name="fade" appear>
 			<div
-				class="fixed top-0 w-[100dvw] h-[100dvh] z-[1000] bg-black text-white bg-opacity-40 flex flex-col items-center mdlg:justify-start justify-end">
+				class="fixed top-0 w-[100dvw] h-[100dvh] z-[1000] bg-black bg-opacity-40 flex flex-col items-center mdlg:justify-start justify-end">
 				<div class="h-full w-full absolute top-0 left-0" @click="close" />
 				<div
 					ref="modal"
-					class="z-[1] w-full mdlg:w-[50%] overflow-y-auto bg-white text-bodyBlack rounded-t-2xl mdlg:rounded-b-2xl"
+					class="z-[1] w-full mdlg:w-[50%] overflow-y-auto bg-white rounded-t-2xl mdlg:rounded-b-2xl"
 					:class="{ [maxWidth]: true, [maxHeight]: true, [containerClass]: true, 'mdlg:my-[5dvh]': !popover }"
 					:style="$screen.desktop ? calculatePosition() : ''">
 					<slot />

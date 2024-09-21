@@ -1,8 +1,6 @@
 <template>
 	<div class="flex flex-col mdlg:gap-4 h-full">
-		<div
-			v-if="user"
-			class="w-full mdlg:shadow-custom mdlg:bg-white mdlg:text-bodyBlack mdlg:rounded-2xl flex flex-col gap-4 p-4 mdlg:p-6">
+		<div v-if="user" class="w-full mdlg:shadow-custom mdlg:bg-white mdlg:rounded-2xl flex flex-col gap-4 p-4 mdlg:p-6">
 			<SofaHeading content="Overview" />
 
 			<div class="flex overflow-x-auto scrollbar-hide mdlg:grid mdlg:grid-cols-2 gap-2 mdlg:gap-4">

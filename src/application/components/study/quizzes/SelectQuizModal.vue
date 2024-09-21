@@ -8,7 +8,7 @@
 			<SofaHeading content="Select a quiz" />
 			<SofaIcon class="h-[19px]" name="circle-close" @click="close" />
 		</div>
-		<SofaInput v-model="searchQuery" placeholder="Search for quiz" type="search" class="!bg-white text-bodyBlack flex-1">
+		<SofaInput v-model="searchQuery" placeholder="Search for quiz" type="search" class="!bg-white flex-1">
 			<template #prefix>
 				<SofaIcon name="search-black" class="h-[17px]" />
 			</template>

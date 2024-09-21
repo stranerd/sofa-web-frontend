@@ -4,7 +4,7 @@
 			<template v-for="(listItem, itemIndex) in section.items" :key="itemIndex">
 				<a
 					:id="getItemId(listItem)"
-					class="rounded-custom p-3 flex flex-col gap-1 border border-grayColor bg-white text-bodyBlack shrink-0"
+					class="rounded-custom p-3 flex flex-col gap-1 border border-grayColor bg-white shrink-0"
 					:class="{ '!bg-primaryPurple !border-primaryPurple !text-white': isItemSelected(listItem) }"
 					@click="onClickItem(listItem)">
 					<SofaText>{{ section.label }} - {{ listItem.title }}</SofaText>

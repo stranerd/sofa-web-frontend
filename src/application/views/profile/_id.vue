@@ -73,7 +73,7 @@
 		<template v-if="currentTab == 'content'">
 			<div class="w-full flex flex-col gap-3 py-4">
 				<div v-if="materials.length" class="w-full mdlg:px-0 px-4">
-					<SofaInput v-model="searchQuery" placeholder="Search" type="search" class="!bg-white text-bodyBlack">
+					<SofaInput v-model="searchQuery" placeholder="Search" type="search" class="!bg-white">
 						<template #prefix>
 							<SofaIcon name="search-black" class="h-[17px]" />
 						</template>
