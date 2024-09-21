@@ -2,24 +2,8 @@
 	<ClassLessonLayout v-model="lesson" v-model:classInst="classInst" title="Curriculum" roundedTabs>
 		<template v-if="lesson?.curriculum.length" #post-tabs>
 			<div class="flex items-center ml-auto py-1">
-				<SofaButton
-					v-if="canEditLesson"
-					bgColor="bg-primaryBlue"
-					textColor="text-white"
-					padding="px-6 py-3"
-					class="mr-2"
-					@click="editLesson">
-					Edit lesson
-				</SofaButton>
-				<SofaButton
-					v-if="canEditCurr"
-					bgColor="bg-primaryBlue"
-					textColor="text-white"
-					padding="px-6 py-3"
-					class="mr-2"
-					@click="editCurr">
-					Edit curriculum
-				</SofaButton>
+				<SofaButton v-if="canEditLesson" padding="px-6 py-3" class="mr-2" @click="editLesson"> Edit lesson </SofaButton>
+				<SofaButton v-if="canEditCurr" padding="px-6 py-3" class="mr-2" @click="editCurr"> Edit curriculum </SofaButton>
 				<SofaText
 					v-for="(tab, i) in tabs"
 					:key="tab.value"
@@ -48,24 +32,8 @@
 					:primary="canEditCurr ? { label: 'Add curriculum', action: editCurr } : undefined" />
 				<template v-else>
 					<div v-if="!$screen.desktop" class="flex items-center justify-end">
-						<SofaButton
-							v-if="canEditLesson"
-							bgColor="bg-primaryBlue"
-							textColor="text-white"
-							padding="px-6 py-3"
-							class="mr-2"
-							@click="editLesson">
-							Edit lesson
-						</SofaButton>
-						<SofaButton
-							v-if="canEditCurr"
-							bgColor="bg-primaryBlue"
-							textColor="text-white"
-							padding="px-6 py-3"
-							class="mr-2"
-							@click="editCurr">
-							Edit curriculum
-						</SofaButton>
+						<SofaButton v-if="canEditLesson" padding="px-6 py-3" class="mr-2" @click="editLesson"> Edit lesson </SofaButton>
+						<SofaButton v-if="canEditCurr" padding="px-6 py-3" class="mr-2" @click="editCurr"> Edit curriculum </SofaButton>
 						<span class="flex-1" />
 						<SofaText
 							v-for="(tab, i) in tabs"

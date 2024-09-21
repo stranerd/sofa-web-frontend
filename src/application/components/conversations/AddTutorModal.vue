@@ -80,19 +80,14 @@
 		</div>
 
 		<div class="w-full flex items-center justify-between p-4">
-			<SofaButton
-				padding="px-5 py-2"
-				bgColor="bg-white"
-				textColor="text-grayColor"
-				class="hidden md:!inline-block border border-gray-100"
-				@click="close">
+			<SofaButton padding="px-5 py-2" color="white" class="hidden md:inline-block border border-gray-100" @click="close">
 				Exit
 			</SofaButton>
 
 			<SofaButton
 				class="w-full md:w-auto"
 				:disabled="currentStep == 2 && !factory.isValid('tutorId')"
-				padding="px-5 py-3 md:!py-2"
+				padding="px-5 py-2"
 				@click="handleAddTutor">
 				{{ currentStep == 2 ? 'Send request' : 'Next' }}
 			</SofaButton>

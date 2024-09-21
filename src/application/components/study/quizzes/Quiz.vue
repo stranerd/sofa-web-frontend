@@ -42,11 +42,10 @@
 				<div class="w-full flex items-center gap-4 justify-center" :class="{ 'lg:w-[50%] mdlg:w-[70%] md:w-[80%]': !isInModal }">
 					<SofaButton
 						v-if="leftButton && !isInModal"
-						class="w-full md:w-auto mr-auto"
+						:class="`w-full md:w-auto mr-auto ${leftButton.class}`"
 						padding="py-3 md:px-6"
 						:disabled="leftButton.disabled"
-						:bgColor="leftButton.bgColor"
-						:textColor="leftButton.textColor"
+						:color="leftButton.color"
 						@click="leftButton.click">
 						{{ leftButton.label }}
 					</SofaButton>
@@ -63,11 +62,10 @@
 
 					<SofaButton
 						v-if="rightButton && !isInModal"
-						class="w-full md:w-auto ml-auto"
+						:class="`w-full md:w-auto ml-auto ${rightButton.class}`"
 						padding="py-3 md:px-6"
 						:disabled="rightButton.disabled"
-						:bgColor="rightButton.bgColor"
-						:textColor="rightButton.textColor"
+						:color="rightButton.color"
 						@click="rightButton.click()">
 						{{ rightButton.label }}
 					</SofaButton>
@@ -90,12 +88,13 @@ import QuestionDisplay from '@app/components/study/questions/QuestionDisplay.vue
 import { useCountdown } from '@app/composables/core/time'
 import { PlayTiming } from '@modules/plays'
 import { QuestionEntity, QuestionTypes } from '@modules/study'
+import { SofaButton } from 'sofa-ui-components'
 
 type ButtonConfig = (extras: ExtraTypes) =>
 	| {
 			label: string
-			bgColor: string
-			textColor: string
+			color: Required<InstanceType<typeof SofaButton>['$props']['color']>
+			class?: string
 			disabled?: boolean
 			click: () => void
 	  }

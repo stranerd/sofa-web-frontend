@@ -38,18 +38,18 @@
 
 			<div class="hidden mdlg:flex items-center gap-4">
 				<SofaButton padding="p-2 rounded-full" @click="handleShowAddMaterial">
-					<SofaIcon name="plus" class="fill-white" />
+					<SofaIcon name="plus" class="fill-current" />
 				</SofaButton>
 				<NotificationIcon v-if="user" />
 				<SofaAvatar :size="36" :photoUrl="user?.picture" as="router-link" to="/settings/profile" />
 			</div>
 
 			<SofaButton
-				bgColor="bg-primaryPurple"
+				color="purple"
 				padding="p-4"
 				class="mdlg:hidden rounded-full fixed bottom-[4rem] right-[1.5rem]"
 				@click="handleShowAddMaterial">
-				<SofaIcon name="plus" class="fill-white" />
+				<SofaIcon name="plus" class="fill-current" />
 			</SofaButton>
 		</template>
 
@@ -77,7 +77,7 @@
 						v-else-if="!('icon' in action)"
 						:disabled="action.disabled"
 						padding="px-4 py-1"
-						v-bind="action.outlined ? { bgColor: 'bg-white', textColor: 'text-grayColor' } : {}"
+						v-bind="action.outlined ? { color: 'white' } : {}"
 						class="!font-semibold"
 						:class="{ 'border border-gray-200': action.outlined }"
 						@click="action.handler">

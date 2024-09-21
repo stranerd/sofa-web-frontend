@@ -17,25 +17,11 @@
 			<template #bottom>
 				<div class="w-full grid grid-cols-2 gap-4">
 					<div class="col-span-1 flex flex-col">
-						<SofaButton
-							bgColor="bg-primaryRed"
-							textColor="text-white"
-							class="w-full rounded-custom"
-							padding="py-3"
-							@click="accept(false)">
-							Decline
-						</SofaButton>
+						<SofaButton color="red" class="w-full rounded-custom" padding="py-3" @click="accept(false)"> Decline </SofaButton>
 					</div>
 
 					<div class="col-span-1 flex flex-col">
-						<SofaButton
-							bgColor="bg-primaryGreen"
-							textColor="text-white"
-							class="w-full rounded-custom"
-							padding="py-3"
-							@click="accept(true)">
-							Accept
-						</SofaButton>
+						<SofaButton color="green" class="w-full rounded-custom" padding="py-3" @click="accept(true)"> Accept </SofaButton>
 					</div>
 				</div>
 			</template>

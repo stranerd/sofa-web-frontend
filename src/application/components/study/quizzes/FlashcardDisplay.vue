@@ -3,10 +3,10 @@
 		<a class="flip-card scrollbar-hide rounded-xl shadow-custom" @click="showAnswer = !showAnswer">
 			<div class="flip-card-inner scrollbar-hide rounded-xl" :style="showAnswer ? 'transform: rotateY(180deg);' : ''">
 				<div class="flip-card-front">
-					<SofaHeading size="mid" :content="question.content" />
+					<SofaText size="mid" :content="question.content" class="m-auto" />
 				</div>
 				<div class="flip-card-back">
-					<SofaHeading size="mid" :content="question.answer" />
+					<SofaText size="mid" :content="question.answer" class="m-auto" />
 				</div>
 			</div>
 		</a>
@@ -28,7 +28,6 @@ const showAnswer = ref(false)
 <style scoped>
 /* The flip card container - set the width and height to whatever you want. We have added the border property to demonstrate that the flip itself goes out of the box on hover (remove perspective if you don't want the 3D effect */
 .flip-card {
-	background-color: transparent;
 	width: 100%;
 	height: 100%;
 	perspective: 1000px;
@@ -52,13 +51,12 @@ const showAnswer = ref(false)
 	background-color: white;
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
-	align-items: center;
 	border-radius: 12px;
 	position: absolute;
 	width: 100%;
 	height: 100%;
 	padding: 1.5rem;
+	overflow: auto;
 	-webkit-backface-visibility: hidden;
 	/* Safari */
 	backface-visibility: hidden;

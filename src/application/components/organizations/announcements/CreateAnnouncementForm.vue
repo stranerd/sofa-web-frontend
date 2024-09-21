@@ -27,15 +27,7 @@
 					:error="factory.errors.userTypes"
 					:options="userTypesOption" />
 			</div>
-			<SofaButton
-				:disabled="!factory.valid"
-				bgColor="bg-primaryBlue"
-				type="submit"
-				textColor="text-white"
-				padding="py-3 px-6"
-				class="w-auto ml-auto !rounded-xl">
-				Post
-			</SofaButton>
+			<SofaButton :disabled="!factory.valid" type="submit" padding="py-3 px-6" class="w-auto ml-auto !rounded-xl"> Post </SofaButton>
 		</div>
 	</form>
 </template>

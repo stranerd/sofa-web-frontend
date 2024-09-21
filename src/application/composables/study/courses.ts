@@ -127,7 +127,7 @@ export const useEditCourse = (id: string) => {
 				await $utils.confirm({
 					title: 'Are you sure?',
 					sub: "This action is permanent. After publishing a course, you won't be able to remove its contents again. However, you can add new and edit existing content.",
-					right: { label: 'Yes, publish', bg: 'bg-primaryBlue' },
+					right: { label: 'Yes, publish', color: 'blue' },
 				}),
 		},
 	)

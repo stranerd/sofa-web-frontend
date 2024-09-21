@@ -35,18 +35,8 @@
 			</div>
 		</div>
 		<div class="flex items-center justify-between">
-			<SofaButton bgColor="bg-grayColor" textColor="text-white" padding="py-3 px-6" class="hidden mdlg:block" @click="cancel">
-				Cancel
-			</SofaButton>
-			<SofaButton
-				bgColor="bg-primaryBlue"
-				type="submit"
-				textColor="text-white"
-				padding="py-3 px-6"
-				:disabled="!factory.valid"
-				class="w-full mdlg:w-auto">
-				Save
-			</SofaButton>
+			<SofaButton color="gray" padding="py-3 px-6" class="hidden mdlg:block" @click="cancel"> Cancel </SofaButton>
+			<SofaButton type="submit" padding="py-3 px-6" :disabled="!factory.valid" class="w-full mdlg:w-auto"> Save </SofaButton>
 		</div>
 	</form>
 </template>

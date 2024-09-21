@@ -1,26 +1,26 @@
 <template>
 	<div class="w-full flex flex-col gap-4">
 		<SofaButton
-			bgColor="bg-transparent"
+			color="white"
 			padding="px-8 py-5"
 			:disabled="googleLoading"
 			:loading="appleLoading"
-			class="border-2 border-darkLightGray font-bold"
+			class="border-2 border-darkLightGray"
 			@click="googleSignin">
-			<div class="flex gap-2 items-center normal-case">
+			<div class="flex gap-2 items-center">
 				<SofaIcon name="google" class="text-[16px]" />
 				<SofaText :content="`${message} with Google`" />
 			</div>
 		</SofaButton>
 		<SofaButton
 			v-if="showAppleSignin"
-			bgColor="bg-transparent"
+			color="white"
 			padding="px-8 py-5"
 			:disabled="appleLoading"
 			:loading="appleLoading"
-			class="border-2 border-darkLightGray font-bold"
+			class="border-2 border-darkLightGray"
 			@click="appleSignin">
-			<span class="flex gap-2 items-center normal-case">
+			<span class="flex gap-2 items-center">
 				<SofaIcon name="apple" class="text-[16px]" />
 				<SofaText :content="`${message} with Apple`" />
 			</span>

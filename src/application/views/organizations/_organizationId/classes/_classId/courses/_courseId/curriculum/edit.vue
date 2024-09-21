@@ -2,15 +2,15 @@
 	<ClassLessonLayout v-model="lesson" v-model:classInst="classInst" title="Edit" roundedTabs>
 		<template v-if="classInst && canEditCurr" #post-tabs>
 			<div class="flex gap-2 items-center ml-auto py-1">
-				<SofaButton bgColor="bg-grayColor" textColor="text-white" padding="px-6 py-3" @click="cancel"> Cancel </SofaButton>
-				<SofaButton bgColor="bg-primaryBlue" textColor="text-white" padding="px-6 py-3" @click="save"> Save </SofaButton>
+				<SofaButton color="gray" padding="px-6 py-3" @click="cancel"> Cancel </SofaButton>
+				<SofaButton padding="px-6 py-3" @click="save"> Save </SofaButton>
 			</div>
 		</template>
 		<template v-if="canEditCurr" #default="{ classInst: cls, lesson: ls }">
 			<div class="flex flex-col px-4 pt-4 mdlg:px-0 gap-4 h-full">
 				<div v-if="!$screen.desktop" class="flex gap-2 items-center justify-end">
-					<SofaButton bgColor="bg-grayColor" textColor="text-white" padding="px-6 py-3" @click="cancel"> Cancel </SofaButton>
-					<SofaButton bgColor="bg-primaryBlue" textColor="text-white" padding="px-6 py-3" @click="save"> Save </SofaButton>
+					<SofaButton color="gray" padding="px-6 py-3" @click="cancel"> Cancel </SofaButton>
+					<SofaButton padding="px-6 py-3" @click="save"> Save </SofaButton>
 				</div>
 				<div class="grow overflow-y-auto">
 					<LessonCurriculum

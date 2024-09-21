@@ -19,12 +19,7 @@
 					}}
 				</SofaText>
 				<SofaText>{{ item.quiz.questions.length }} Questions </SofaText>
-				<SofaButton
-					bgColor="bg-white"
-					textColor="text-primaryPurple"
-					padding="py-3 px-9"
-					class="font-bold"
-					@click="startQuizPlay(item.quiz, item.quizMode)">
+				<SofaButton color="white" padding="py-3 px-9" class="!text-primaryPurple" @click="startQuizPlay(item.quiz, item.quizMode)">
 					Start
 				</SofaButton>
 			</div>

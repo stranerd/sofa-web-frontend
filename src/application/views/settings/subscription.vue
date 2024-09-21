@@ -50,9 +50,8 @@
 					<SofaButton
 						v-if="wallet.getCurrentBill(currentPlan) > 0"
 						padding="px-5 py-2"
-						class="mt-4"
-						bgColor="bg-white"
-						textColor="text-primaryPurple"
+						class="mt-4 !text-primaryPurple"
+						color="white"
 						@click="renewPlan()">
 						Pay Now
 					</SofaButton>
@@ -85,9 +84,8 @@
 
 						<SofaButton
 							padding="px-5 py-2"
-							class="mt-4"
-							bgColor="bg-white"
-							textColor="text-primaryPurple"
+							class="mt-4 !text-primaryPurple"
+							color="white"
 							@click="subscribeToPlan(myApplicablePlan)">
 							Subscribe
 						</SofaButton>

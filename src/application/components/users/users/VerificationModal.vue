@@ -46,8 +46,8 @@
 			</div>
 		</div>
 		<div v-if="currentItem.verification.pending" class="flex justify-between p-4">
-			<SofaButton bgColor="bg-primaryRed" padding="py-3 px-4" @click="handleReject(currentItem.verification)">Reject</SofaButton>
-			<SofaButton bgColor="bg-primaryGreen" padding="py-3 px-4" @click="handleAccept(currentItem.verification)">Accept</SofaButton>
+			<SofaButton color="red" padding="py-3 px-4" @click="handleReject(currentItem.verification)">Reject</SofaButton>
+			<SofaButton color="green" padding="py-3 px-4" @click="handleAccept(currentItem.verification)">Accept</SofaButton>
 		</div>
 	</div>
 </template>

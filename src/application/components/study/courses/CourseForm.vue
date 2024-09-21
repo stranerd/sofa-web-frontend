@@ -61,13 +61,7 @@
 		</div>
 
 		<div class="w-full flex items-center justify-between">
-			<SofaButton
-				type="button"
-				padding="px-5 py-2"
-				bgColor="bg-white"
-				textColor="text-grayColor"
-				class="border border-gray-100 hidden mdlg:inline-block"
-				@click.prevent="cancel">
+			<SofaButton type="button" padding="px-5 py-2" color="white" class="hidden mdlg:inline-block" @click.prevent="cancel">
 				Exit
 			</SofaButton>
 

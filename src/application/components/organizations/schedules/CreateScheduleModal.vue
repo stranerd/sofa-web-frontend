@@ -43,9 +43,7 @@
 			</div>
 		</div>
 		<div class="flex items-center justify-between">
-			<SofaButton bgColor="bg-grayColor" textColor="text-white" padding="py-3 px-6" class="hidden mdlg:block" @click="close">
-				Cancel
-			</SofaButton>
+			<SofaButton color="gray" padding="py-3 px-6" class="hidden mdlg:block" @click="close"> Cancel </SofaButton>
 			<SofaButton :disabled="!factory.valid" type="submit" padding="px-5 py-3" class="self-center w-full mdlg:w-auto">
 				Create
 			</SofaButton>

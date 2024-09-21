@@ -256,7 +256,7 @@
 				</SofaButton>
 			</template>
 			<template v-else>
-				<SofaButton v-if="canBack" padding="px-4 py-2" bgColor="bg-grayColor" class="mr-auto" @click="goBack">
+				<SofaButton v-if="canBack" padding="px-4 py-2" color="gray" class="mr-auto" @click="goBack">
 					{{ tab === 'profile' ? 'Skip' : 'Back' }}
 				</SofaButton>
 				<SofaButton :disabled="isDisabled" padding="px-4 py-2" type="submit"> Next </SofaButton>

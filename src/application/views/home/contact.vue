@@ -31,7 +31,7 @@
 						</div>
 					</div>
 					<div class="mdlg:absolute mdlg:right-0 w-full mdlg:w-1/2 flex justify-center relative" style="z-index: 999">
-						<div class="bg-white rounded-[30px] w-full md:w-[90%] mx-auto py-10" style="box-shadow: 0px 4px 16px 0px #00000066">
+						<div class="bg-white rounded-[30px] w-full md:w-[90%] mx-auto py-10" style="box-shadow: 0 4px 16px 0 #00000066">
 							<p class="text-black text-[20px] md:text-[36px] font-bold text-center">Contact Us Today</p>
 							<form class="flex flex-col w-[90%] md:w-[80%] mx-auto gap-6 pt-8" @submit.prevent="sendMessage">
 								<!-- Full name -->
@@ -42,7 +42,7 @@
 									</label>
 									<input
 										v-model="factory.name"
-										class="border border-[#5A5A5A] h-[50px] rounded-lg bg-transparent p-4 placeholder:text-[#D9D9D9] text-[14px] md:text-[16px]"
+										class="border border-[#5A5A5A] h-[50px] rounded-lg p-4 placeholder:text-[#D9D9D9] text-[14px] md:text-[16px]"
 										placeholder="Enter your full name here"
 										required />
 								</div>
@@ -55,7 +55,7 @@
 									<input
 										v-model="factory.email"
 										type="email"
-										class="border border-[#5A5A5A] h-[50px] rounded-lg bg-transparent p-4 placeholder:text-[#D9D9D9] text-[14px] md:text-[16px]"
+										class="border border-[#5A5A5A] h-[50px] rounded-lg p-4 placeholder:text-[#D9D9D9] text-[14px] md:text-[16px]"
 										placeholder="Enter Your Email Address Here"
 										required />
 								</div>
@@ -65,21 +65,20 @@
 										<SofaIcon name="phone" class="!fill-[#686969]" />
 										<p class="text-[#686969] capitalize text-[14px] md:text-[16px]">Phone Number</p>
 									</label>
-									<div
-										class="border flex items-center border-[#5A5A5A] h-[50px] rounded-lg bg-transparent text-[14px] md:text-[16px]">
+									<div class="border flex items-center border-[#5A5A5A] h-[50px] rounded-lg text-[14px] md:text-[16px]">
 										<input
 											v-model="factory.phone.code"
 											type="tel"
 											:min="1"
 											:max="4"
 											placeholder="Country code"
-											class="w-1/5 p-2 md:p-4 !h-full outline-none bg-transparent border-r border-[#5A5A5A]" />
+											class="w-1/5 p-2 md:p-4 !h-full outline-none border-r border-[#5A5A5A]" />
 										<input
 											v-model="factory.phone.number"
 											type="tel"
 											:min="7"
 											placeholder="Enter Your Phone Number Here"
-											class="w-3/5 p-2 md:p-4 !h-full bg-transparent outline-none border-none placeholder:text-[#D9D9D9]"
+											class="w-3/5 p-2 md:p-4 !h-full outline-none border-none placeholder:text-[#D9D9D9]"
 											required />
 									</div>
 								</div>
@@ -95,7 +94,7 @@
 										name=""
 										cols="30"
 										rows="10"
-										class="border border-[#5A5A5A] h-[80px] mdlg:h-[187px] rounded-lg bg-transparent text-[14px] md:text-[16px] p-4 placeholder:text-[#D9D9D9]"
+										class="border border-[#5A5A5A] h-[80px] mdlg:h-[187px] rounded-lg text-[14px] md:text-[16px] p-4 placeholder:text-[#D9D9D9]"
 										required
 										placeholder="Enter Your Message Here"></textarea>
 								</div>

@@ -9,10 +9,9 @@
 
 			<SofaButton
 				v-if="!button.hide"
-				:textColor="button.textColor ?? 'text-white'"
-				:bgColor="button.bgColor ?? 'bg-primaryBlue'"
+				:color="button.color ?? 'blue'"
 				padding="px-4 py-2"
-				class="border-transparent border-2 md:w-auto w-full"
+				class="md:w-auto w-full"
 				@click="button.action()">
 				{{ button.label }}
 			</SofaButton>
@@ -21,6 +20,8 @@
 </template>
 
 <script lang="ts" setup>
+import SofaButton from '../SofaButton'
+
 withDefaults(
 	defineProps<{
 		close: () => void
@@ -29,8 +30,7 @@ withDefaults(
 		button: {
 			label: string
 			hide?: boolean
-			bgColor?: string
-			textColor?: string
+			color?: InstanceType<typeof SofaButton>['$props']['color']
 			action: () => void
 		}
 	}>(),

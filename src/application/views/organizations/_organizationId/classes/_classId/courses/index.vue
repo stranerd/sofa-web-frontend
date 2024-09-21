@@ -19,14 +19,7 @@
 								<SofaIcon name="search" class="h-[16px]" />
 							</template>
 						</SofaInput>
-						<SofaButton
-							v-if="isAdmin || isStudent"
-							bgColor="bg-primaryBlue"
-							textColor="text-white"
-							padding="px-5 py-3"
-							@click="handlePrimary">
-							Add Course
-						</SofaButton>
+						<SofaButton v-if="isAdmin || isStudent" padding="px-5 py-3" @click="handlePrimary"> Add Course </SofaButton>
 					</div>
 					<LessonCard
 						v-for="(lesson, index) in lessons.filter((l) => l.title.toLowerCase().includes(extras.searchQuery.toLowerCase()))"

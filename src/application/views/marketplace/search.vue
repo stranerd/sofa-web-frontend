@@ -82,9 +82,7 @@
 			</div>
 
 			<div class="mdlg:hidden px-4 flex flex-col w-full">
-				<SofaButton
-					class="bg-primaryPurple text-white rounded-custom py-3 flex items-center justify-center gap-2"
-					@click="showFilter = true">
+				<SofaButton color="purple" class="rounded-custom py-3 flex items-center justify-center gap-2" @click="showFilter = true">
 					<SofaIcon class="h-[14px] fill-current" name="filter" />
 					<SofaHeading size="sub">Filter</SofaHeading>
 					<span class="px-2 bg-white rounded-full aspect-square flex justify-center items-center text-primaryPurple">

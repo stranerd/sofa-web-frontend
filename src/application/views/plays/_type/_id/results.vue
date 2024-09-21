@@ -65,28 +65,25 @@
 					<div class="flex gap-4 items-center">
 						<SofaButton
 							v-if="!play.isClosed && extras.isMine"
-							bgColor="bg-deepGray border border-white"
-							textColor="text-white"
+							color="gray"
 							padding="py-3 px-8"
-							class="w-auto"
+							class="w-auto border border-white"
 							@click="extras.end">
 							End Now
 						</SofaButton>
 						<SofaButton
 							v-if="play.isClosed && extras.isMine && play.hasLeaderboard"
-							bgColor="bg-deepGray border border-white"
-							textColor="text-white"
+							color="gray"
 							padding="py-3 px-8"
-							class="w-auto"
+							class="w-auto border border-white"
 							@click="extras.exportResult">
 							Export
 						</SofaButton>
 						<span class="grow" />
 						<SofaButton
-							bgColor="bg-white border border-white"
-							textColor="text-bodyBlack"
+							color="white"
 							padding="py-3 px-8"
-							class="w-auto"
+							class="w-auto border border-white"
 							@click="
 								() => {
 									if (tab === 'leaderboard' && extras.myScore) return (tab = 'result')

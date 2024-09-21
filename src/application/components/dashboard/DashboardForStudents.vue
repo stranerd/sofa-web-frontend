@@ -51,9 +51,7 @@
 					<SofaHeading content="Discover more" />
 					<SofaText> There are lots of quizzes and courses that you can learn from, so start searching! </SofaText>
 				</div>
-				<SofaButton bgColor="bg-white" padding="py-1 px-3" textColor="text-deepGray" @click="$router.push('/marketplace')">
-					Explore more
-				</SofaButton>
+				<SofaButton color="white" padding="py-1 px-3" @click="$router.push('/marketplace')"> Explore more </SofaButton>
 			</div>
 		</div>
 	</div>

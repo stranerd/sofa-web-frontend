@@ -104,13 +104,7 @@
 							<SofaIcon name="search" class="h-[16px]" />
 						</template>
 					</SofaInput>
-					<SofaButton
-						v-if="primary"
-						bgColor="bg-primaryBlue"
-						padding="py-3 px-6"
-						textColor="text-white"
-						class="border border-primaryBlue"
-						@click="primary.action()">
+					<SofaButton v-if="primary" padding="py-3 px-6" class="border border-primaryBlue" @click="primary.action()">
 						{{ primary.label }}
 					</SofaButton>
 				</div>

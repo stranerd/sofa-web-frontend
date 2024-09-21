@@ -48,10 +48,10 @@
 					</template>
 					<template #data-action="{ data: { tutorRequest } }">
 						<div v-if="tutorRequest.pending" class="flex items-center justify-between gap-6">
-							<SofaButton bgColor="bg-none" textColor="text-primaryRed" padding="py-1" @click="handleReject(tutorRequest)">
+							<SofaButton color="white" class="!text-primaryRed" padding="py-1" @click="handleReject(tutorRequest)">
 								Reject
 							</SofaButton>
-							<SofaButton bgColor="bg-none" textColor="text-primaryGreen" padding="py-1" @click="handleAccept(tutorRequest)">
+							<SofaButton color="white" class="!text-primaryGreen" padding="py-1" @click="handleAccept(tutorRequest)">
 								Accept
 							</SofaButton>
 						</div>

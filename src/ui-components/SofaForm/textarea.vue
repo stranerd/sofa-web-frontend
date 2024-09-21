@@ -41,7 +41,7 @@
 			:disabled="disabled"
 			:tabindex="0"
 			:data-error="error"
-			class="grow bg-transparent p-0 placeholder:text-grayColor focus:outline-none" />
+			class="grow p-0 placeholder:text-grayColor focus:outline-none" />
 		<slot name="suffix" />
 		<SofaIcon v-if="error" name="error-state" class="h-[15px]" />
 	</div>

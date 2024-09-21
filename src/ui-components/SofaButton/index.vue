@@ -5,45 +5,38 @@
 		:class="{
 			'shadow-button': shadow,
 			[padding]: true,
-			[bgColor]: true,
-			[textColor]: true,
+			'bg-primaryBlue text-white': color === 'blue' && !inverted,
+			'bg-primaryPurple text-white': color === 'purple' && !inverted,
+			'bg-primaryRed text-white': color === 'red' && !inverted,
+			'bg-primaryGreen text-white': color === 'green' && !inverted,
+			'bg-[#FBFBFB] text-bodyBlack': color === 'white' && !inverted,
+			'bg-grayColor text-white': color === 'gray' && !inverted,
+			'bg-deepGray text-white': color === 'deepGray' && !inverted,
+			'bg-transparent': color === 'transparent',
 		}">
 		<slot />
 	</button>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-
-export default defineComponent({
-	name: 'SofaButton',
-	props: {
-		bgColor: {
-			type: String,
-			default: 'bg-primaryBlue',
-		},
-		textColor: {
-			type: String,
-			default: 'text-white',
-		},
-		padding: {
-			type: String,
-			default: 'py-1 px-3',
-		},
-		loading: {
-			type: Boolean,
-			default: false,
-		},
-		shadow: {
-			type: Boolean,
-			default: false,
-		},
-		disabled: {
-			type: Boolean,
-			default: false,
-		},
+<script lang="ts" setup>
+withDefaults(
+	defineProps<{
+		color?: 'blue' | 'purple' | 'red' | 'green' | 'white' | 'gray' | 'deepGray' | 'transparent'
+		inverted?: boolean
+		padding?: string
+		loading?: boolean
+		shadow?: boolean
+		disabled?: boolean
+	}>(),
+	{
+		color: 'blue',
+		inverted: false,
+		padding: 'py-1 px-3',
+		loading: false,
+		shadow: false,
+		disabled: false,
 	},
-})
+)
 </script>
 
 <style scoped>

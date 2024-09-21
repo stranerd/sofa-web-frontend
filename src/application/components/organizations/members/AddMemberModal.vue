@@ -10,9 +10,7 @@
 		</div>
 		<div class="flex gap-2 items-center">
 			<SofaInput v-model="addMembersEmails" name="Emails" placeholder="Email, comma seperated" />
-			<SofaButton class="font-semibold" padding="py-3 px-6" bgColor="bg-primaryBlue" textColor="text-white" @click="addMembers(type)">
-				Invite
-			</SofaButton>
+			<SofaButton class="font-semibold" padding="py-3 px-6" @click="addMembers(type)"> Invite </SofaButton>
 		</div>
 		<div class="bg-darkLightGray h-[1px] w-full" />
 		<div class="flex gap-4 justify-between items-center">

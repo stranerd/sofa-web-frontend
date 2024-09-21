@@ -7,8 +7,7 @@
 			:rightButtonConfig="
 				(extras) => ({
 					label: 'Next',
-					bgColor: 'bg-primaryBlue',
-					textColor: 'text-white',
+					color: 'blue',
 					disabled: !extras.canNext,
 					click: extras.next,
 				})
@@ -16,8 +15,8 @@
 			:leftButtonConfig="
 				(extras) => ({
 					label: 'Prev',
-					bgColor: 'bg-white border border-gray-100',
-					textColor: 'text-grayColor',
+					color: 'white',
+					class: 'border border-gray-100',
 					disabled: !extras.canPrev,
 					click: extras.previous,
 				})

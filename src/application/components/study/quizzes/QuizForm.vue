@@ -77,8 +77,7 @@
 			<SofaButton
 				type="button"
 				padding="px-5 py-2"
-				bgColor="bg-white"
-				textColor="text-grayColor"
+				color="white"
 				class="border border-gray-100 hidden mdlg:inline-block"
 				@click.prevent="cancel">
 				Exit

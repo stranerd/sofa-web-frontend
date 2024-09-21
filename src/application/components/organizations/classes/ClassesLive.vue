@@ -3,8 +3,6 @@
 		<div class="col-span-3 flex flex-col gap-2 mdlg:gap-0 h-full overflow-y-auto">
 			<SofaButton
 				v-if="!$screen.desktop && user && (classInst.isAdmin(user) || classInst.isTeacher(user))"
-				bgColor="bg-primaryBlue"
-				textColor="text-white"
 				padding="px-6 py-3"
 				@click="addLive">
 				Add live
@@ -37,8 +35,6 @@
 					class="!w-[160px] ml-auto bg-white mdlg:bg-lightGray" />
 				<SofaButton
 					v-if="$screen.desktop && user && (classInst.isAdmin(user) || classInst.isTeacher(user))"
-					bgColor="bg-primaryBlue"
-					textColor="text-white"
 					class="ml-4"
 					padding="px-6 py-3"
 					@click="addLive">

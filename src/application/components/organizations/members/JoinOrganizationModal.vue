@@ -13,8 +13,7 @@
 
 		<div class="w-full flex justify-between items-center md:gap-0 gap-3 mdlg:p-0 p-4">
 			<SofaButton
-				textColor="text-grayColor"
-				bgColor="bg-white"
+				color="gray"
 				padding="px-4 py-1"
 				class="hidden md:inline-block border-2 border-gray-100 md:w-auto w-full"
 				@click="close">
@@ -22,8 +21,6 @@
 			</SofaButton>
 
 			<SofaButton
-				textColor="text-white"
-				bgColor="bg-primaryBlue"
 				padding="px-4 md:py-1 py-3"
 				class="border-2 border-transparent md:w-auto w-full"
 				@click="requestToJoinOrganization(org.id).then((succeeded) => (succeeded ? close() : null))">

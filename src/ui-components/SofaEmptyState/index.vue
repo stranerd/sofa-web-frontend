@@ -15,13 +15,7 @@
 			<SofaHeading size="title" :content="title" :class="titleStyle" />
 			<SofaText :content="subTitle" class="w-full flex !font-lighter flex-row items-center text-center justify-center" />
 		</div>
-		<SofaButton
-			v-if="action"
-			class="!whitespace-nowrap"
-			bgColor="bg-white"
-			padding="py-1 px-4"
-			textColor="text-deepGray"
-			@click="action?.()">
+		<SofaButton v-if="action" class="!whitespace-nowrap" color="white" padding="py-1 px-4" @click="action?.()">
 			{{ actionLabel }}
 		</SofaButton>
 	</div>

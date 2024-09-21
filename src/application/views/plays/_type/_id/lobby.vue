@@ -13,8 +13,8 @@
 					:rightButtonConfig="
 						() => ({
 							label: extras.isMine ? 'Start' : 'Join',
-							bgColor: 'bg-white border border-white',
-							textColor: 'text-bodyBlack',
+							color: 'white',
+							class: 'border border-white',
 							disabled: extras.isMine ? !extras.canStart : !extras.canJoin,
 							click: async () => {
 								if (extras.isMine) return await extras.start()
@@ -25,8 +25,8 @@
 					:leftButtonConfig="
 						() => ({
 							label: 'Close',
-							bgColor: 'bg-deepGray border border-white',
-							textColor: 'text-white',
+							color: 'deepGray',
+							class: 'border border-white',
 							click: () => $router.push('/library'),
 						})
 					">

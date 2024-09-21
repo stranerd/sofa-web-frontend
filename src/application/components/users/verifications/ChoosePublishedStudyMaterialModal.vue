@@ -18,12 +18,7 @@
 				@click="toggleMaterial(material)" />
 		</div>
 		<div class="flex items-center justify-between gap-4 sticky bottom-0 pb-4">
-			<SofaButton
-				padding="px-5 py-2"
-				bgColor="bg-white"
-				textColor="text-grayColor"
-				class="border border-gray-100 hidden mdlg:inline-block"
-				@click="close">
+			<SofaButton padding="px-5 py-2" color="white" class="border border-gray-100 hidden mdlg:inline-block" @click="close">
 				Exit
 			</SofaButton>
 

@@ -7,7 +7,7 @@
 
 		<div class="flex gap-4 items-center">
 			<SofaInput v-model="searchValue" name="Emails" placeholder="Email, comma seperated" />
-			<SofaButton padding="py-3 px-6" bgColor="bg-primaryBlue" textColor="text-white" @click="addUsers"> Add </SofaButton>
+			<SofaButton padding="py-3 px-6" @click="addUsers"> Add </SofaButton>
 		</div>
 
 		<template v-if="requests.length">

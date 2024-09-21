@@ -25,21 +25,11 @@
 		</div>
 
 		<div class="w-full md:flex justify-between items-center">
-			<SofaButton
-				textColor="text-grayColor"
-				bgColor="bg-white"
-				padding="px-4 py-1"
-				class="hidden md:inline w-auto border-2 border-gray-100"
-				@click="close">
+			<SofaButton color="white" padding="px-4 py-1" class="hidden md:inline w-auto border-2 border-gray-100" @click="close">
 				Cancel
 			</SofaButton>
 
-			<SofaButton
-				type="submit"
-				textColor="text-white"
-				bgColor="bg-primaryBlue"
-				padding="px-4 md:py-1 py-3"
-				class="w-full md:w-auto border-2 border-transparent md:min-w-[100px]">
+			<SofaButton type="submit" padding="px-4 md:py-1 py-3" class="w-full md:w-auto border-2 border-transparent md:min-w-[100px]">
 				Continue
 			</SofaButton>
 		</div>

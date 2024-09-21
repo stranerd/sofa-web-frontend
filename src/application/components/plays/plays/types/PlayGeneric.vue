@@ -7,8 +7,8 @@
 				extras.usesGeneralTimer
 					? {
 						label: 'Previous',
-						bgColor: 'bg-white border border-gray-100',
-						textColor: 'text-grayColor',
+						color: 'white',
+						class: 'border border-gray-100',
 						disabled: !extras.canPrev,
 						click: () => extras.submitAnswer('left'),
 					}
@@ -17,8 +17,7 @@
 		:rightButtonConfig="
 			(extras) => ({
 				label: 'Continue',
-				bgColor: 'bg-primaryBlue',
-				textColor: 'text-white',
+				color: 'blue',
 				click: () => extras.submitAnswer('right'),
 			})
 		">

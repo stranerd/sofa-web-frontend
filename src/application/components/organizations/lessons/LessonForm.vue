@@ -48,16 +48,8 @@
 		</div>
 
 		<div class="flex items-center justify-between">
-			<SofaButton bgColor="bg-grayColor" textColor="text-white" padding="py-3 px-6" class="hidden mdlg:block" @click="cancel">
-				Cancel
-			</SofaButton>
-			<SofaButton
-				bgColor="bg-primaryBlue"
-				textColor="text-white"
-				padding="py-3 px-6"
-				:disabled="isDisabled"
-				class="w-full mdlg:w-auto"
-				@click="nextHandler">
+			<SofaButton color="gray" padding="py-3 px-6" class="hidden mdlg:block" @click="cancel"> Cancel </SofaButton>
+			<SofaButton padding="py-3 px-6" :disabled="isDisabled" class="w-full mdlg:w-auto" @click="nextHandler">
 				{{ nextButtonLabel }}
 			</SofaButton>
 		</div>

@@ -8,8 +8,7 @@
 		:rightButtonConfig="
 			(extras) => ({
 				label: isDone || showSolution ? 'Continue' : 'Check',
-				bgColor: 'bg-primaryBlue',
-				textColor: 'text-white',
+				color: 'blue',
 				click: async () => {
 					if (isDone) return await $utils.goBack()
 					if (!showSolution) {
@@ -29,8 +28,8 @@
 		:leftButtonConfig="
 			(extras) => ({
 				label: isDone ? 'Restart' : showSolution ? 'Retry' : 'Previous',
-				bgColor: 'bg-white border border-gray-100',
-				textColor: 'text-grayColor',
+				color: 'white',
+				class: 'border border-gray-100',
 				click: async () => {
 					if (isDone) {
 						await extras.reset()

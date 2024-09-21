@@ -14,10 +14,7 @@
 			class="group-focus-within:flex hidden absolute top-0 left-0 w-full flex-col z-[1000] max-h-[500px] bg-white overflow-y-auto rounded-md shadow-md"
 			:style="selectRef ? `width: ${selectRef.offsetWidth}px; margin-top: ${selectRef.offsetHeight}px` : ''">
 			<div v-if="autocomplete" class="w-full p-2 gap-3 flex items-center justify-between">
-				<input
-					v-model="searchValue"
-					placeholder="Search"
-					class="bg-transparent border border-lightGray placeholder:text-grayColor p-3 w-full" />
+				<input v-model="searchValue" placeholder="Search" class="border border-lightGray placeholder:text-grayColor p-3 w-full" />
 				<SofaIcon class="h-[16px] pr-2" name="circle-close" @click="showOptions = false" />
 			</div>
 			<SofaText

@@ -12,13 +12,7 @@
 
 		<SelectPaymentMethod v-model="selectedMethod" :showWallet="showWallet" :price="price" />
 
-		<SofaButton
-			:disabled="!selectedMethod"
-			textColor="text-white"
-			bgColor="bg-primaryBlue"
-			padding="px-4 py-3"
-			class="w-full mdlg:w-auto mdlg:ml-auto"
-			type="submit">
+		<SofaButton :disabled="!selectedMethod" padding="px-4 py-3" class="w-full mdlg:w-auto mdlg:ml-auto" type="submit">
 			Continue
 		</SofaButton>
 	</form>

@@ -20,7 +20,7 @@
 			</div>
 			<form class="flex items-center border-y border-lightGray p-4 gap-4" @submit.prevent="submit">
 				<SofaInput v-model="searchValue" placeholder="Enter account email" class="flex-grow" />
-				<SofaButton bgColor="bg-primaryBlue" type="submit" class="py-3">Grant Admin Access</SofaButton>
+				<SofaButton type="submit" class="py-3">Grant Admin Access</SofaButton>
 			</form>
 			<div class="px-1 py-2 flex flex-col">
 				<SofaTable
@@ -50,11 +50,9 @@
 						</span>
 					</template>
 					<template #data-action="{ data }">
-						<div>
-							<SofaButton bgColor="bg-none" textColor="text-primaryRed" padding="py-1" @click="updateRole(data)">
-								Revoke Access
-							</SofaButton>
-						</div>
+						<SofaButton color="white" class="!text-primaryRed" padding="py-1" @click="updateRole(data)">
+							Revoke Access
+						</SofaButton>
 					</template>
 				</SofaTable>
 			</div>

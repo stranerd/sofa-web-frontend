@@ -160,7 +160,7 @@ export const useEditQuiz = (id: string) => {
 				await $utils.confirm({
 					title: 'Are you sure?',
 					sub: "This action is permanent. After publishing a quiz, you won't be able to delete its questions again. However, you can add new and edit existing questions",
-					right: { label: 'Yes, publish', bg: 'bg-primaryBlue' },
+					right: { label: 'Yes, publish', color: 'blue' },
 				}),
 		},
 	)

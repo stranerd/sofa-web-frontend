@@ -10,7 +10,7 @@
 			:min="min"
 			:max="max"
 			:type="showPassword ? 'text' : type"
-			class="grow bg-transparent text-darkBody placeholder:text-grayColor w-full focus:outline-none" />
+			class="grow text-darkBody placeholder:text-grayColor w-full focus:outline-none" />
 		<slot name="suffix" />
 		<SofaIcon
 			v-if="type === 'password'"

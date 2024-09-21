@@ -71,8 +71,8 @@
 			</div>
 		</div>
 		<div v-if="currentItem.tutorRequest.pending" class="flex justify-between p-4">
-			<SofaButton bgColor="bg-primaryRed" padding="py-3 px-4" @click="handleReject(currentItem.tutorRequest)">Reject</SofaButton>
-			<SofaButton bgColor="bg-primaryGreen" padding="py-3 px-4" @click="handleAccept(currentItem.tutorRequest)">Accept</SofaButton>
+			<SofaButton color="red" padding="py-3 px-4" @click="handleReject(currentItem.tutorRequest)">Reject</SofaButton>
+			<SofaButton color="green" padding="py-3 px-4" @click="handleAccept(currentItem.tutorRequest)">Accept</SofaButton>
 		</div>
 	</div>
 </template>

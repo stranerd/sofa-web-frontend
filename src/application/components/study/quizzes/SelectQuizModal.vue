@@ -26,14 +26,10 @@
 			<SofaHeading v-if="!filteredQuizzes.length" class="!text-center" content="No quizzes found" />
 		</div>
 		<div class="w-full flex items-center justify-between">
-			<SofaButton bgColor="bg-grayColor" textColor="text-white" padding="py-3 px-6" class="hidden mdlg:block" @click="close">
-				Cancel
-			</SofaButton>
+			<SofaButton color="gray" padding="py-3 px-6" class="hidden mdlg:block" @click="close"> Cancel </SofaButton>
 			<SofaButton
-				bgColor="bg-primaryBlue"
 				type="submit"
 				:disabled="!selectedQuiz"
-				textColor="text-white"
 				padding="py-3 px-6"
 				class="w-full mdlg:w-auto"
 				@click="select(selectedQuiz)">

@@ -6,8 +6,7 @@
 		:rightButtonConfig="
 			(extras) => ({
 				label: isDone ? 'Continue' : 'Mastered',
-				bgColor: isDone ? 'bg-primaryBlue' : 'bg-primaryGreen',
-				textColor: 'text-white',
+				color: isDone ? 'blue' : 'green',
 				click: () => {
 					if (isDone) return $utils.goBack()
 					if (extras.canNext) return extras.next()
@@ -18,8 +17,8 @@
 		:leftButtonConfig="
 			(extras) => ({
 				label: isDone ? 'Restart' : 'Show later',
-				bgColor: isDone ? 'bg-white border border-gray-100' : 'bg-primaryBlue',
-				textColor: isDone ? 'text-grayColor' : 'text-white',
+				color: isDone ? 'white' : 'blue',
+				class: isDone ? 'border border-gray-100' : undefined,
 				click: () => {
 					if (isDone) {
 						extras.reset()
@@ -66,8 +65,7 @@
 						<div class="w-full flex mdlg:flex-row flex-col mdlg:items-center justify-between mt-auto gap-4">
 							<SofaButton
 								padding="px-5 py-2"
-								bgColor="bg-white"
-								textColor="text-grayColor"
+								color="white"
 								class="hidden mdlg:inline-block border border-gray-100"
 								@click="close">
 								Exit

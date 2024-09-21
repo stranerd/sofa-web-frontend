@@ -32,13 +32,7 @@
 				<SofaText v-else as="a" class="text-primaryRed" content="Remove" size="sub" @click="removeMember(member)" />
 			</div>
 		</div>
-		<SofaButton
-			v-if="!$screen.desktop"
-			bgColor="bg-primaryBlue"
-			padding="py-3 px-6"
-			textColor="text-white"
-			class="border border-primaryBlue"
-			@click="add">
+		<SofaButton v-if="!$screen.desktop" color="blue" padding="py-3 px-6" class="border border-primaryBlue" @click="add">
 			{{ isStudent ? 'Add student' : 'Add teacher' }}
 		</SofaButton>
 		<div v-if="nonPending.length" class="flex flex-col rounded-2xl border border-lightGray bg-white text-deepGray px-1 mdlg:px-0">

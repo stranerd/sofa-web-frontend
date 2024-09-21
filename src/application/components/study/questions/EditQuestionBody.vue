@@ -41,7 +41,7 @@
 		<div class="w-full hidden md:flex items-center justify-center gap-3 bg-primaryPurple text-white rounded-custom p-5">
 			<SofaText content="Choose image to add to this question (optional)" />
 			<SofaFileInput v-model="factory.questionMedia" accept="image/*" class="w-auto">
-				<SofaButton bgColor="bg-white" textColor="text-bodyBlack">Add Image</SofaButton>
+				<SofaButton color="white">Add Image</SofaButton>
 			</SofaFileInput>
 		</div>
 

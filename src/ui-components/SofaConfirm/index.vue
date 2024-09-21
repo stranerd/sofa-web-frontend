@@ -8,10 +8,9 @@
 				<div v-for="button in [left, right]" :key="button.label" class="md:w-auto col-span-1 flex flex-col">
 					<SofaButton
 						v-if="!button.hide"
-						:textColor="button.textColor ?? (!button.isClose ? 'text-white' : 'text-grayColor')"
-						:bgColor="button.bgColor ?? (!button.isClose ? 'bg-primaryRed' : 'bg-white')"
+						:color="button.color ?? (!button.isClose ? 'red' : 'white')"
 						padding="px-4 py-2"
-						:class="`${button.isClose ? 'border-gray-100 md:!min-w-[100px]' : 'border-transparent'} border-2  md:w-auto w-full`"
+						:class="['border-2  md:w-auto w-full', button.isClose ? 'border-gray-100 md:!min-w-[100px]' : 'border-transparent']"
 						@click="button.action()">
 						{{ button.label }}
 					</SofaButton>
@@ -22,11 +21,12 @@
 </template>
 
 <script lang="ts" setup>
+import SofaButton from '../SofaButton'
+
 type ButtonConfig = {
 	label: string
 	hide?: boolean
-	bgColor?: string
-	textColor?: string
+	color?: InstanceType<typeof SofaButton>['$props']['color']
 	isClose?: boolean
 	action: () => void
 }

@@ -1,10 +1,10 @@
 import '@total-typescript/ts-reset'
+import { SofaButton } from 'sofa-ui-components'
 
 type ConfirmButton = {
 	label: string
-	color: string
+	color: InstanceType<typeof SofaButton>['$props']['color']
 	hide: boolean
-	bg: string
 }
 
 declare global {
@@ -42,11 +42,11 @@ declare global {
 
 	type PromptConfirmationSetup = PromptConfirmation & ConfirmationSetupBase<string | undefined>
 
-	type SuccessConfirmation = ConfirmationBase<boolean> & {
+	type SuccessConfirmation = ConfirmationBase & {
 		button?: Partial<ConfirmButton>
 	}
 
-	type SuccessConfirmationSetup = SuccessConfirmation & ConfirmationSetupBase
+	type SuccessConfirmationSetup = SuccessConfirmation & ConfirmationSetupBase<boolean>
 
 	type InferConfirmationReturn<T> = T extends ConfirmationSetupBase<infer R> ? R : never
 

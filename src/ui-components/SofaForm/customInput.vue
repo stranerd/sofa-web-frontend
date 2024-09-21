@@ -3,7 +3,7 @@
 		<slot name="prefix" />
 		<input
 			v-model="text"
-			class="grow bg-transparent focus:outline-none placeholder:text-grayColor p-0 cursor-text"
+			class="grow focus:outline-none placeholder:text-grayColor p-0 cursor-text"
 			:placeholder="placeholder"
 			:autofocus="autoFocus"
 			@blur="emit('onBlur', true)"

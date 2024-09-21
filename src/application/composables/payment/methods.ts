@@ -104,7 +104,7 @@ export const useMethod = (method: MethodEntity) => {
 				return await $utils.confirm({
 					title: `Set Primary Method`,
 					sub: 'Are you sure you want to set this payment method as primary?',
-					right: { label: 'Yes', bg: 'bg-primaryBlue' },
+					right: { label: 'Yes', color: 'blue' },
 				})
 			},
 		},

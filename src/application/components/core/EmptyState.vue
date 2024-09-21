@@ -6,21 +6,14 @@
 			<SofaText v-for="text in Array.isArray(sub) ? sub : [sub]" :key="text" :content="text" size="sub" class="text-grayColor" />
 		</div>
 		<div class="flex gap-3 justify-center items-center font-semibold">
-			<SofaButton
-				v-if="primary"
-				bgColor="bg-primaryBlue"
-				padding="py-3 px-6"
-				textColor="text-white"
-				class="border border-primaryBlue"
-				@click="primary.action()">
+			<SofaButton v-if="primary" color="blue" padding="py-3 px-6" class="border border-primaryBlue" @click="primary.action()">
 				{{ primary.label }}
 			</SofaButton>
 			<SofaButton
 				v-if="secondary"
-				bgColor="bg-transparent"
-				padding="py-3 px-6"
-				textColor="text-primaryBlue"
-				class="border border-primaryBlue"
+				color="white"
+				padding="py-4 px-6"
+				class="border border-primaryBlue !text-primaryBlue"
 				@click="secondary.action()">
 				{{ secondary.label }}
 			</SofaButton>

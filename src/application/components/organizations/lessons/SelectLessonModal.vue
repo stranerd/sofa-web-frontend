@@ -16,12 +16,8 @@
 				@click="toggleSelected(lesson.id)" />
 		</div>
 		<div class="flex items-center justify-between mt-auto">
-			<SofaButton bgColor="bg-grayColor" textColor="text-white" padding="py-3 px-6" class="hidden mdlg:block" @click="close">
-				Cancel
-			</SofaButton>
-			<SofaButton bgColor="bg-primaryBlue" textColor="text-white" padding="py-3 px-6" class="w-full mdlg:w-auto" @click="submit">
-				Add
-			</SofaButton>
+			<SofaButton color="gray" padding="py-3 px-6" class="hidden mdlg:block" @click="close"> Cancel </SofaButton>
+			<SofaButton padding="py-3 px-6" class="w-full mdlg:w-auto" @click="submit"> Add </SofaButton>
 		</div>
 	</div>
 </template>

@@ -14,7 +14,7 @@
 					<SofaIcon :name="action.icon" class="h-[16px] fill-current" />
 					<span>{{ action.label }}</span>
 				</a>
-				<SofaButton v-else :bgColor="action.bg" :textColor="action.color" padding="py-3 px-5" @click="action.handler">
+				<SofaButton v-else :color="action.color" padding="py-3 px-5" @click="action.handler">
 					{{ action.label }}
 				</SofaButton>
 			</template>
@@ -35,12 +35,12 @@ import { useAuth } from '@app/composables/auth/auth'
 import { useTimeDifference } from '@app/composables/core/time'
 import { useStartSchedule } from '@app/composables/organizations/schedules'
 import { ClassEntity, ScheduleEntity } from '@modules/organizations'
+import { SofaButton } from 'sofa-ui-components'
 
 type Action = {
 	label: string
 	handler: () => void
-	color: string
-} & ({ bg: string } | { icon: IconName })
+} & ({ color: Required<InstanceType<typeof SofaButton>['$props']['color']> } | { icon: IconName; color: string })
 
 const props = defineProps<{
 	classInst: ClassEntity
@@ -54,10 +54,8 @@ const { copyKey, join, rewatch, start, end } = useStartSchedule(props.classInst,
 const lesson = computed(() => props.classInst.getLesson(props.schedule.lessonId))
 const actions = computed(() => {
 	const b: Action[] = []
-	if (props.schedule.canStart(props.classInst, id.value))
-		b.push({ label: 'Start', bg: 'bg-primaryBlue', color: 'text-white', handler: () => start() })
-	if (props.schedule.canJoin(props.classInst, id.value))
-		b.push({ label: 'Enter', bg: 'bg-primaryBlue', color: 'text-white', handler: () => join() })
+	if (props.schedule.canStart(props.classInst, id.value)) b.push({ label: 'Start', color: 'blue', handler: () => start() })
+	if (props.schedule.canJoin(props.classInst, id.value)) b.push({ label: 'Enter', color: 'blue', handler: () => join() })
 	if (lesson.value?.users.teachers.includes(id.value) && props.schedule.canJoin(props.classInst, id.value))
 		b.push({ label: 'Copy stream key', icon: 'copy', color: 'text-primaryBlue', handler: () => copyKey() })
 	if (props.schedule.canEnd(props.classInst, id.value))

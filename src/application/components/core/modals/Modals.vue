@@ -25,16 +25,14 @@
 		:left="{
 			label: confirmation.left?.label ?? 'No',
 			hide: confirmation.left?.hide,
-			bgColor: confirmation.left?.bg,
-			textColor: confirmation.left?.color,
+			color: confirmation.right?.color,
 			isClose: true,
 			action: () => confirmation.close(false),
 		}"
 		:right="{
 			label: confirmation.right?.label ?? 'Yes',
 			hide: confirmation.right?.hide,
-			bgColor: confirmation.right?.bg,
-			textColor: confirmation.right?.color,
+			color: confirmation.right?.color,
 			isClose: false,
 			action: () => confirmation.close(true),
 		}" />
@@ -46,16 +44,14 @@
 		:left="{
 			label: prompt.left?.label ?? 'No',
 			hide: prompt.left?.hide,
-			bgColor: prompt.left?.bg,
-			textColor: prompt.left?.color,
+			color: prompt.right?.color,
 			isClose: true,
 			action: () => prompt.close(undefined),
 		}"
 		:right="{
 			label: prompt.right?.label ?? 'Yes',
 			hide: prompt.right?.hide,
-			bgColor: prompt.right?.bg,
-			textColor: prompt.right?.color,
+			color: prompt.right?.color,
 			isClose: false,
 			action: (message) => prompt.close(message),
 		}" />
@@ -67,8 +63,7 @@
 		:button="{
 			label: success.button?.label ?? 'Ok',
 			hide: success.button?.hide,
-			bgColor: success.button?.bg,
-			textColor: success.button?.color,
+			color: success.button?.color,
 			action: () => success.close(true),
 		}" />
 	<SofaAlert

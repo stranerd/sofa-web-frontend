@@ -14,9 +14,8 @@
 				<SofaButton
 					v-for="tab in enrollmentTabs"
 					:key="tab.value"
-					:bgColor="selectedEnrollmentTab === tab.value ? 'bg-primaryBlue border-primaryBlue' : 'bg-white border-darkLightGray'"
-					:textColor="selectedEnrollmentTab === tab.value ? 'text-white' : 'text-grayColor'"
-					class="border"
+					:color="selectedEnrollmentTab === tab.value ? 'blue' : 'white'"
+					:class="['border', selectedEnrollmentTab === tab.value ? 'border-primaryBlue' : 'border-darkLightGray']"
 					padding="px-4 py-3 mdlg:px-6"
 					@click="selectedEnrollmentTab = tab.value">
 					{{ tab.label }}

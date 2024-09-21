@@ -27,7 +27,7 @@
 					<input
 						v-model="factory.body"
 						:disabled="!conversation.accepted?.is"
-						class="w-full text-bodyBlack focus:outline-none !max-h-[80px] overflow-hidden bg-transparent rounded-lg p-3 items-start text-left overflow-y-auto"
+						class="w-full text-bodyBlack focus:outline-none !max-h-[80px] overflow-hidden rounded-lg p-3 items-start text-left overflow-y-auto"
 						placeholder="Enter message" />
 					<button type="submit" class="min-w-[45px] h-[40px] flex items-center justify-center pr-[5px]">
 						<SofaIcon name="send" class="h-[19px]" />
@@ -64,7 +64,7 @@
 					<SofaHeading content="Tutor help" />
 				</div>
 				<SofaText> Need extra help with your work? </SofaText>
-				<SofaButton bgColor="bg-white" textColor="text-primaryPurple" padding="px-5 py-1" @click="onClickAddTutor">
+				<SofaButton color="white" class="!text-primaryPurple" padding="px-5 py-1" @click="onClickAddTutor">
 					Message a tutor
 				</SofaButton>
 			</div>
@@ -169,13 +169,13 @@ export default defineComponent({
 				return await $utils.confirm({
 					title: 'You have run out of tutor aided conversations',
 					sub: 'This feature will become available on your next subscription renewal',
-					right: { label: 'Close', bg: 'bg-primaryBlue' },
+					right: { label: 'Close', color: 'blue' },
 					left: { hide: true },
 				})
 			const confirmed = await $utils.confirm({
 				title: 'You have no subscription',
 				sub: 'You need to be subscribed to Stranerd Plus to access this feature',
-				right: { label: 'Subscribe', bg: 'bg-primaryBlue' },
+				right: { label: 'Subscribe', color: 'blue' },
 				left: { label: 'Cancel' },
 			})
 			if (!confirmed) return

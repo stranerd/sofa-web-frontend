@@ -63,7 +63,7 @@
 						<input
 							v-model="answer.value[index - 1]"
 							placeholder="answer here"
-							class="w-full focus:outline-none text-inherit bg-transparent placeholder:text-inherit" />
+							class="w-full focus:outline-none text-inherit placeholder:text-inherit" />
 					</div>
 					<SofaText :content="content" />
 				</template>

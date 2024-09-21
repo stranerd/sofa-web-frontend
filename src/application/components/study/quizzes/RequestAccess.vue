@@ -8,31 +8,16 @@
 			" />
 
 		<div class="w-full flex mt-2 items-center justify-center gap-4">
-			<SofaButton
-				v-if="hasRequested"
-				class="w-full md:w-auto"
-				padding="py-3 md:px-6"
-				bgColor="bg-primaryBlue"
-				textColor="text-white"
-				@click="$utils.goBack">
-				Done
-			</SofaButton>
+			<SofaButton v-if="hasRequested" class="w-full md:w-auto" padding="py-3 md:px-6" @click="$utils.goBack"> Done </SofaButton>
 			<SofaButton
 				v-if="!hasRequested"
-				class="w-full md:w-auto mr-auto"
+				class="w-full md:w-auto mr-auto border border-gray-100"
 				padding="py-3 md:px-6"
-				bgColor="bg-white border border-gray-100"
-				textColor="text-grayColor"
+				color="white"
 				@click="$utils.goBack">
 				Cancel
 			</SofaButton>
-			<SofaButton
-				v-if="!hasRequested"
-				class="w-full md:w-auto ml-auto"
-				padding="py-3 md:px-6"
-				bgColor="bg-primaryBlue"
-				textColor="text-white"
-				@click="requestAccess(true)">
+			<SofaButton v-if="!hasRequested" class="w-full md:w-auto ml-auto" padding="py-3 md:px-6" @click="requestAccess(true)">
 				Request
 			</SofaButton>
 		</div>

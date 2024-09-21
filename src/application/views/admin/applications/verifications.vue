@@ -58,10 +58,10 @@
 					</template>
 					<template #data-action="{ data: { verification } }">
 						<div v-if="verification.pending" class="flex items-center justify-between">
-							<SofaButton bgColor="bg-none" textColor="text-primaryRed" padding="py-1" @click="handleReject(verification)">
+							<SofaButton color="white" class="!text-primaryRed" padding="py-1" @click="handleReject(verification)">
 								Reject
 							</SofaButton>
-							<SofaButton bgColor="bg-none" textColor="text-primaryGreen" padding="py-1" @click="handleAccept(verification)">
+							<SofaButton color="white" class="!text-primaryGreen" padding="py-1" @click="handleAccept(verification)">
 								Accept
 							</SofaButton>
 						</div>
