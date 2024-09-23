@@ -2,13 +2,15 @@
 	<ExpandedLayout v-if="!$screen.desktop" :hide="{ top: true }">
 		<div class="w-full flex items-center gap-3 justify-between p-4" :class="{ 'bg-white': light }">
 			<SofaIcon v-if="$route.path !== '/dashboard'" class="h-[15px]" name="arrow-left" @click="$utils.goBack()" />
-			<Logo v-else withoutText class="h-[24px]" />
+			<SofaAvatar v-else :size="32" :photoUrl="user?.picture" @click="openSideBar" />
 			<SofaHeading :content="title" />
-			<span class="w-4" />
+			<NotificationIcon v-if="user" />
+			<span v-else class="w-8" />
 		</div>
 
 		<div class="w-full flex flex-col flex-1 overflow-y-auto">
 			<slot :extras="extras" />
+			<SofaFab />
 		</div>
 	</ExpandedLayout>
 	<FullLayout v-else :topbarOptions="{ title }" :hide="{ right: true }">
@@ -118,6 +120,7 @@
 import { useHead } from '@unhead/vue'
 import { computed, ref } from 'vue'
 import { useAuth } from '@app/composables/auth/auth'
+import { useModals } from '@app/composables/core/modals'
 import { useMyClasses } from '@app/composables/organizations/classes-list'
 
 type ButtonConfig = {
@@ -174,4 +177,6 @@ const extras = computed(() => ({
 		searchQuery.value = value
 	},
 }))
+
+const openSideBar = () => useModals().users.sideBar.open({})
 </script>

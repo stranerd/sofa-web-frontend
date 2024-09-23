@@ -7,7 +7,6 @@
 
 				<div class="py-4 flex items-center justify-center">
 					<SofaHeading v-if="title" :content="title" />
-					<Logo withoutText class="h-[24px]" />
 				</div>
 
 				<NotificationIcon v-if="user" />
@@ -44,13 +43,7 @@
 				<SofaAvatar :size="36" :photoUrl="user?.picture" as="router-link" to="/settings/profile" />
 			</div>
 
-			<SofaButton
-				color="purple"
-				padding="p-4"
-				class="mdlg:hidden rounded-full fixed bottom-[4rem] right-[1.5rem]"
-				@click="handleShowAddMaterial">
-				<SofaIcon name="plus" class="fill-current" />
-			</SofaButton>
+			<SofaFab class="mdlg:hidden" />
 		</template>
 
 		<template v-if="type == 'sub'">
@@ -93,6 +86,7 @@
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import SofaBadge from '../SofaBadge'
+import SofaFab from './fab.vue'
 import { useAuth } from '@app/composables/auth/auth'
 import { useModals } from '@app/composables/core/modals'
 import { handleShowAddMaterial } from '@app/composables/study'

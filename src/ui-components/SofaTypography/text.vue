@@ -1,7 +1,9 @@
 <template>
-	<component :is="as" v-if="content" :class="cls" v-html="content" />
-	<component :is="as" v-else :class="cls">
-		<slot />
+	<component :is="as">
+		<span v-if="content" :class="cls" v-html="content" />
+		<span v-else :class="cls">
+			<slot />
+		</span>
 	</component>
 </template>
 
@@ -29,8 +31,8 @@ const cls = computed(() =>
 	[
 		props.content ? 'body flex flex-col items-start' : '',
 		`font-size-${props.size}`,
-		props.bold ? (props.as?.startsWith('h') ? 'font-bold' : 'font-semibold') : '',
-		props.clamp ? 'truncate' : '',
+		props.bold ? (props.as?.startsWith?.('h') ? 'font-bold' : 'font-semibold') : '',
+		props.clamp ? 'line-clamp-1' : '',
 	]
 		.filter(Boolean)
 		.join(' '),

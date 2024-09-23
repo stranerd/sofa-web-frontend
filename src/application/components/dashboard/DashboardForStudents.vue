@@ -10,11 +10,12 @@
 
 				<div
 					class="mdlg:flex-col mdlg:gap-4 flex gap-3 mdlg:p-0 py-2 pr-4 flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
-					<SofaIconCard v-for="item in task.list" :key="item.title" :data="item" class="shrink-0" @click="item.action?.()">
-						<template #title>
-							<SofaHeading :content="item.title" />
-						</template>
-					</SofaIconCard>
+					<SofaIconCard
+						v-for="item in task.list"
+						:key="item.title"
+						:data="item"
+						class="shrink-0 w-[280px] mdlg:w-full"
+						@click="item.action?.()" />
 				</div>
 			</div>
 		</template>

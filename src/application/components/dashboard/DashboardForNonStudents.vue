@@ -66,7 +66,7 @@
 			</div>
 		</div>
 
-		<div class="grid grid-cols-1 mdlg:grid-cols-2 gap-4 grow">
+		<div class="grid auto-rows-min grid-cols-1 mdlg:grid-cols-2 gap-4 grow">
 			<div
 				class="h-fit w-full overflow-y-auto mdlg:shadow-custom px-4 mdlg:p-6 mdlg:bg-white rounded-2xl flex flex-col gap-4"
 				:class="{ 'h-full': $screen.desktop && !materials.length }">

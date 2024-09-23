@@ -15,14 +15,8 @@
 				v-for="item in studyMaterialItems"
 				:key="item.title"
 				:data="{ ...item, iconSize: 'h-[46px]' }"
-				class="!bg-lightGray !w-full !shadow-none"
-				@click="$router.push(item.route)">
-				<template #title>
-					<SofaHeading>
-						{{ item.title }}
-					</SofaHeading>
-				</template>
-			</SofaIconCard>
+				class="!bg-lightGray !shadow-none"
+				@click="$router.push(item.route)" />
 		</div>
 	</div>
 </template>

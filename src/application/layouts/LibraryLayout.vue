@@ -11,11 +11,13 @@
 					v-for="(item, i) in tabs.filter((t) => !t.hide)"
 					:key="item.id"
 					class="px-6 py-2 rounded-custom flex items-center justify-center"
-					:class="(currentTab && item.id === currentTab) || (!currentTab && i === 0) ? 'bg-primaryPurple' : 'bg-white'"
+					:class="
+						(currentTab && item.id === currentTab) || (!currentTab && i === 0)
+							? 'bg-primaryPurple text-white'
+							: 'bg-white text-deepGray'
+					"
 					:to="`${$route.path}?tab=${item.id}`">
-					<SofaHeading
-						:color="(currentTab && item.id === currentTab) || (!currentTab && i === 0) ? 'text-white' : 'text-deepGray'"
-						:content="item.name" />
+					<SofaHeading :content="item.name" />
 				</router-link>
 			</div>
 		</div>
@@ -143,7 +145,7 @@
 						:to="`/library/organizations/${item.id}`"
 						exactActiveClass="bg-lightBlue font-semibold">
 						<SofaIcon name="organization" class="h-[20px]" />
-						<SofaHeading clamp>{{ item.name }}</SofaHeading>
+						<SofaText clamp>{{ item.name }}</SofaText>
 					</router-link>
 				</template>
 			</div>
@@ -154,11 +156,13 @@
 							v-for="(item, i) in tabs.filter((t) => !t.hide)"
 							:key="item.id"
 							class="px-6 py-2 rounded-custom flex items-center justify-center"
-							:class="(currentTab && item.id === currentTab) || (!currentTab && i === 0) ? 'bg-primaryPurple' : 'bg-white'"
+							:class="
+								(currentTab && item.id === currentTab) || (!currentTab && i === 0)
+									? 'bg-primaryPurple text-white'
+									: 'bg-white text-deepGray'
+							"
 							:to="`${$route.path}?tab=${item.id}`">
-							<SofaHeading
-								:class="(currentTab && item.id === currentTab) || (!currentTab && i === 0) ? 'text-white' : 'text-deepGray'"
-								:content="item.name" />
+							<SofaHeading :content="item.name" />
 						</router-link>
 					</div>
 				</div>

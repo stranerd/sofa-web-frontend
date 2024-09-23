@@ -3,7 +3,7 @@
 		v-if="hasAccess(quiz)"
 		class="w-full flex flex-col mdlg:gap-6 gap-4 mdlg:p-6 p-4 items-center justify-center"
 		@submit.prevent="submit">
-		<div class="w-full flex justify-between items-center sticky top-0 left-0 md:hidden border-lightGray border-b">
+		<div class="w-full flex justify-between items-center sticky top-0 left-0 md:hidden border-lightGray border-b pb-2">
 			<SofaHeading>
 				{{ factory.isGames ? 'Start quiz game' : 'Choose Study Mode' }}
 			</SofaHeading>
@@ -32,16 +32,18 @@
 			<SofaButton :disabled="!factory.valid" padding="py-3" class="w-full" type="submit">Start</SofaButton>
 		</template>
 
-		<div v-else class="w-full flex flex-col gap-3">
+		<div v-else class="w-full flex flex-col gap-6">
 			<a
 				v-for="item in filteredModes"
 				:key="item.title"
-				class="w-full mdlg:p-4 p-3 flex items-center mdlg:bg-lightGray bg-white gap-3 rounded-custom"
+				class="w-full mdlg:p-4 flex items-center mdlg:bg-lightGray bg-white gap-3 rounded-custom"
 				@click="chooseMode(item.value)">
-				<div class="flex size-[46px] items-center justify-center rounded-custom" :style="`background-color: ${item.color};`">
+				<div
+					class="flex size-[46px] shrink-0 items-center justify-center rounded-custom"
+					:style="`background-color: ${item.color};`">
 					<SofaIcon class="w-[20px] fill-white" :name="item.icon" />
 				</div>
-				<div class="w-full flex flex-col">
+				<div class="flex-1 flex flex-col">
 					<SofaHeading :content="item.title" />
 					<SofaText clamp :content="item.subTitle" />
 				</div>

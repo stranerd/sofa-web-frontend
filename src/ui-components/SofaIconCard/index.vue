@@ -1,22 +1,18 @@
 <template>
 	<div
-		class="w-[280px] mdlg:!w-full cursor-pointer mdlg:!px-4 mdlg:!py-4 px-3 py-3 flex flex-row justify-between items-center mdlg:!bg-lightGray bg-white shadow-custom mdlg:!shadow-none gap-3 rounded-custom">
-		<div :class="`flex flex-row items-center gap-3 grow  ${data.isDone ? 'opacity-50' : ''}`">
-			<div>
-				<SofaIcon :class="data.iconSize" :name="data.icon" />
-			</div>
-			<div class="w-full flex flex-col">
+		class="w-full cursor-pointer mdlg:p-4 p-3 flex justify-between items-center mdlg:bg-lightGray bg-white shadow-custom mdlg:shadow-none gap-3 rounded-custom">
+		<div :class="`flex items-center gap-3 grow ${data.isDone ? 'opacity-50' : ''}`">
+			<SofaIcon :class="data.iconSize" :name="data.icon" />
+			<div class="flex-1 flex flex-col">
 				<div class="flex items-center gap-2">
-					<slot name="title" />
+					<SofaHeading :content="data.title" />
 					<SofaIcon v-if="showArrow" class="h-[12px] fill-black" name="arrow-right" />
 				</div>
 				<SofaText clamp>{{ data.subTitle }}</SofaText>
 			</div>
 		</div>
 
-		<div class="w-[45px] text-right">
-			<SofaIcon v-if="data.isDone" class="h-[22px] inline-block" name="selected" />
-		</div>
+		<SofaIcon v-if="data.isDone" class="h-[22px]" name="selected" />
 	</div>
 </template>
 <script lang="ts">
