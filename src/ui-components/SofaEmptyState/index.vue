@@ -13,7 +13,7 @@
 		</svg>
 		<div class="w-full flex flex-col gap-2 justify-center items-center py-2">
 			<SofaHeading size="title" :content="title" :class="titleStyle" />
-			<SofaText :content="subTitle" class="w-full flex !font-lighter flex-row items-center text-center justify-center" />
+			<SofaText :content="subTitle" class="w-full font-lighter text-center" />
 		</div>
 		<SofaButton v-if="action" class="!whitespace-nowrap" color="white" padding="py-1 px-4" @click="action?.()">
 			{{ actionLabel }}

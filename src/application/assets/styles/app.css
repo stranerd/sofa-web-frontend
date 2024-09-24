@@ -21,7 +21,7 @@ body {
 }
 
 .has-error[data-error]:not([data-error='']) {
-	@apply !border-primaryRed;
+	@apply !border-primaryRed mb-2;
 }
 
 .font-size-sub {

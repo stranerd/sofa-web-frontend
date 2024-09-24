@@ -3,7 +3,7 @@
 		<div class="w-full mdlg:flex hidden flex-col py-12 bg-primaryPurple text-white justify-center items-center">
 			<SofaHeading size="title" content="All classes are created by verified organizations" />
 
-			<SofaText class="w-[48%] text-center flex items-center justify-center">
+			<SofaText class="w-[48%] text-center">
 				Enroll in a class to experience consistent learning from the comfort of your home
 			</SofaText>
 

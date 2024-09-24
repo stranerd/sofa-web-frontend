@@ -38,7 +38,7 @@
 				:class="{ 'border border-primaryPurple': index === selectedAccountIndex }"
 				class="w-full flex items-center gap-3 p-4 rounded-custom bg-lightGray text-grayColor">
 				<SofaIcon class="h-[18px]" name="bank" />
-				<SofaText class="capitalize flex-1 truncate">
+				<SofaText clamp class="capitalize flex-1">
 					{{ account.bankName }}({{ account.bankNumber.slice(account.bankNumber.length - 4) }})
 				</SofaText>
 				<SofaRadio :id="`account-${index}`" v-model="selectedAccountIndex" :value="index" name="account" />

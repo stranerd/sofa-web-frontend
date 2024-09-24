@@ -22,8 +22,9 @@
 				:class="{ 'bg-lightGray': index % 2 === 0 }">
 				<SofaAvatar :photoUrl="member.user?.bio.photo?.link" :size="$screen.desktop ? 48 : 32" />
 				<SofaText
+					clamp
 					:content="`${member.user?.bio.publicName ?? member.email}${member.pending ? ' sent a request' : ''}`"
-					class="truncate grow" />
+					class="grow" />
 				<template v-if="member.pending">
 					<SofaText as="a" class="text-primaryRed" content="Decline" size="sub" @click="acceptMember(member, false)" />
 					<div class="h-full bg-darkLightGray w-[1px]" />
@@ -44,8 +45,9 @@
 				:class="{ 'bg-lightGray': index % 2 === 0 }">
 				<SofaAvatar :photoUrl="member.user?.bio.photo?.link" :size="$screen.desktop ? 48 : 32" />
 				<SofaText
+					clamp
 					:content="`${member.user?.bio.publicName ?? member.email}${member.pending ? ' sent a request' : ''}`"
-					class="truncate grow" />
+					class="grow" />
 				<template v-if="member.pending">
 					<SofaText as="a" class="text-primaryRed" content="Decline" size="sub" @click="acceptMember(member, false)" />
 					<div class="h-full bg-darkLightGray w-[1px]" />

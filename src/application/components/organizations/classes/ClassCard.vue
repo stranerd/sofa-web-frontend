@@ -1,24 +1,26 @@
 <template>
 	<Card :wrapped="wrapped" :image="classInst.picture" as="router-link" :to="classInst.pageLink">
-		<div class="w-full flex items-center gap-2 truncate">
+		<div class="w-full flex items-center gap-2">
 			<SofaHeading :content="classInst.title" class="grow" />
 			<SofaIcon v-if="hasShowMore" name="more-options-horizontal" class="w-[20px] h-3" @click.stop.prevent="moreOptionsHandler" />
 			<slot name="side-icons" />
 		</div>
-		<div class="w-full flex gap-2 items-center text-grayColor truncate line-clamp-1">
+		<SofaText clamp class="w-full flex items-center gap-2 text-grayColor">
 			<template v-if="lessonsIn.length">
 				<SofaIcon name="lessons" class="fill-current w-[16px]" />
-				<SofaText :content="lessonsIn.map((lesson) => lesson.title).join(' | ')" />
+				<span>
+					{{ lessonsIn.map((lesson) => lesson.title).join(' | ') }}
+				</span>
 			</template>
 			<template v-else>
-				<SofaText> {{ classInst.lessons.length }} {{ $utils.pluralize(classInst.lessons.length, 'course', 'courses') }} </SofaText>
+				<span> {{ classInst.lessons.length }} {{ $utils.pluralize(classInst.lessons.length, 'course', 'courses') }} </span>
 				<span class="size-[5px] rounded-full bg-current" />
-				<SofaText>
+				<span>
 					{{ classInst.members.students.length }}
 					{{ $utils.pluralize(classInst.members.students.length, 'student', 'students') }}
-				</SofaText>
+				</span>
 			</template>
-		</div>
+		</SofaText>
 
 		<SofaHeading class="text-grayColor"> {{ $utils.formatPrice(classInst.price.amount, classInst.price.currency) }}/month </SofaHeading>
 

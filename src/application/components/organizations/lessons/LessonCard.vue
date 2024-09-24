@@ -3,18 +3,18 @@
 		<div class="flex flex-col gap-2 grow">
 			<SofaHeading :content="lesson.title" size="mid" class="leading-none" />
 			<div class="text-grayColor flex flex-col mdlg:flex-row gap-2 mdlg:gap-4 mdlg:items-center">
-				<SofaText class="gap-2 flex items-center truncate">
+				<SofaText clamp class="gap-2 flex items-center">
 					<SofaIcon name="course-material" class="fill-current h-[20px]" />
 					<span>
 						{{ $utils.formatNumber(lesson.curriculum.length) }}
 						{{ $utils.pluralize(lesson.curriculum.length, 'material', 'materials') }}
 					</span>
 				</SofaText>
-				<SofaText class="gap-2 flex items-center truncate">
+				<SofaText clamp class="gap-2 flex items-center">
 					<SofaIcon name="tutor" class="fill-current h-[20px]" />
 					<span>{{ teachers.map((teacher) => teacher.publicName).join(', ') }}</span>
 				</SofaText>
-				<SofaText class="gap-2 flex items-center truncate">
+				<SofaText clamp class="gap-2 flex items-center">
 					<SofaIcon name="users" class="fill-current h-[20px]" />
 					<span>
 						{{ $utils.formatNumber(lesson.users.students.length) }}

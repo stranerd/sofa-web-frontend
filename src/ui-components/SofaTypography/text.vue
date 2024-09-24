@@ -1,4 +1,8 @@
 <template>
+	<!-- <component :is="as" v-if="content" :class="cls" v-html="content" />
+	<component :is="as" v-else :class="cls">
+		<slot />
+	</component> -->
 	<component :is="as">
 		<span v-if="content" :class="cls" v-html="content" />
 		<span v-else :class="cls">

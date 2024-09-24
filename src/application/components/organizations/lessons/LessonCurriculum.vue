@@ -15,7 +15,7 @@
 					placeholder="Section label"
 					@onBlur="closeLabelSection(sectionIndex)"
 					@onEnter="closeLabelSection(sectionIndex)" />
-				<SofaHeading v-else class="grow truncate" :content="section.label" />
+				<SofaHeading v-else class="grow" :content="section.label" />
 				<SofaIcon v-if="edit" class="h-[16px] fill-grayColor" name="edit" @click.stop.prevent="toggleLabelSection(sectionIndex)" />
 				<SofaIcon v-if="edit" class="h-[20px] sectionHandle fill-grayColor" name="reorder" />
 				<SofaIcon v-if="edit" class="h-[16px] fill-grayColor" name="trash" @click.stop.prevent="factory.delete(sectionIndex)" />

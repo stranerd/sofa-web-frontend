@@ -73,7 +73,7 @@
 							:class="{ 'bg-lightBlue font-bold': $route.path.startsWith(classInst.pageLink) }"
 							:to="classInst.pageLink">
 							<SofaAvatar :size="44" :photoUrl="classInst.picture" />
-							<div class="flex flex-col truncate grow">
+							<div class="flex flex-col grow">
 								<SofaText :content="classInst.title" clamp />
 								<UserName :user="classInst.user" :avatar="false" size="sub" class="text-grayColor" />
 							</div>

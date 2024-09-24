@@ -3,7 +3,7 @@
 		<div class="w-full mdlg:flex hidden flex-col gap-5 pt-8 pb-14 bg-primaryPurple text-white justify-center items-center">
 			<SofaHeading size="title" content="All contents made by verified creators" />
 
-			<SofaText class="w-[48%] text-center flex items-center justify-center">
+			<SofaText class="w-[48%] text-center">
 				Everything here is carefully reviewed to ensure the highest quality and accuracy. By purchasing from our marketplace, you
 				can have confidence in the credibility of the creators and the value of the materials.
 			</SofaText>

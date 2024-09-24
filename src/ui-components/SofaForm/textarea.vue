@@ -1,7 +1,7 @@
 <template>
 	<div
 		:data-error="error"
-		class="w-full gap-2 p-3 mdlg:p-4 flex items-start font-size-sub rounded-xl bg-lightGray border border-darkLightGray group-focus-within:!border-primaryBlue has-error overflow-y-auto">
+		class="w-full gap-2 p-3 mdlg:p-4 flex items-start font-size-sub rounded-lg bg-lightGray border border-darkLightGray group-focus-within:!border-primaryBlue has-error">
 		<slot name="prefix" />
 		<VueEditor
 			v-if="richEditor"
@@ -9,7 +9,7 @@
 			:editorOptions="editorOptions"
 			:disabled="disabled"
 			:style="`min-height: ${rows}em`"
-			class="grow"
+			class="grow overflow-y-auto h-full"
 			:placeholder="placeholder"
 			:tabindex="0"
 			@ready="(v: any) => (quill = v)">
@@ -40,8 +40,7 @@
 			:rows="rows"
 			:disabled="disabled"
 			:tabindex="0"
-			:data-error="error"
-			class="grow p-0 placeholder:text-grayColor focus:outline-none" />
+			class="grow p-0 placeholder:text-grayColor focus:outline-none h-full overflow-y-auto" />
 		<slot name="suffix" />
 		<SofaIcon v-if="error" name="error-state" class="h-[15px]" />
 	</div>
