@@ -3,7 +3,7 @@
 		<div class="w-full flex flex-col h-full gap-3 md:gap-4 mdlg:px-6 md:px-4 overflow-y-auto">
 			<div
 				class="w-full flex flex-col justify-between items-center sticky top-0 left-0 bg-white z-[1] border-lightGray border-b md:border-0 p-4 md:gap-2">
-				<SofaHeading size="title" class="hidden md:inline-block" content="Message a tutor" />
+				<SofaHeading v-if="$screen.desktop" size="title" content="Message a tutor" />
 
 				<div class="flex w-full md:hidden items-center gap-2 justify-between">
 					<SofaHeading content="Message a tutor" />

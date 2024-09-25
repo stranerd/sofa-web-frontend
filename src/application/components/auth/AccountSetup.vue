@@ -15,7 +15,7 @@
 						<SofaIcon v-if="option.done" class="h-[14px] fill-white" name="done" />
 						<span v-else class="text-white">{{ index + 1 }}</span>
 					</span>
-					<SofaText :content="option.name" class="hidden mdlg:block whitespace-nowrap'" />
+					<SofaText v-if="$screen.desktop" :content="option.name" />
 				</a>
 				<span
 					v-if="index < accountSetupOptions.length - 1 && !accountSetupOptions[index + 1].hide"

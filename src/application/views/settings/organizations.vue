@@ -4,7 +4,7 @@
 			<div
 				class="w-full flex flex-col gap-4 mdlg:bg-white mdlg:rounded-2xl mdlg:p-4 mdlg:shadow-custom"
 				:class="{ 'bg-white rounded-[8px] p-3': organizations.length > 0 }">
-				<SofaHeading size="title" cass="mx-auto hidden mdlg:flex" content="Organizations" />
+				<SofaHeading v-if="$screen.desktop" size="title" cass="mx-auto" content="Organizations" />
 
 				<div v-if="organizations.length" class="w-full flex flex-col gap-4">
 					<div v-for="org in organizations" :key="org.id" class="w-full flex gap-2 items-center">

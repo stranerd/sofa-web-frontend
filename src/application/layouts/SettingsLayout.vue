@@ -17,7 +17,7 @@
 						v-for="option in settingOptions"
 						:key="option.title"
 						class="flex flex-col gap-1 mdlg:gap-0 items-start bg-white p-2 mdlg:p-0 rounded-custom shadow-custom mdlg:shadow-none mdlg:border-none">
-						<SofaHeading size="title" class="px-2 hidden mdlg:block mb-2" :content="option.title" />
+						<SofaHeading v-if="$screen.desktop" size="title" class="px-2 mb-2" :content="option.title" />
 						<template v-for="(optionItem, i) in option.subPages" :key="optionItem.title">
 							<SofaText
 								v-if="optionItem.show()"

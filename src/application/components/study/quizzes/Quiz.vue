@@ -9,8 +9,8 @@
 				<div class="lg:w-[50%] mdlg:w-[70%] md:w-[80%] w-full flex items-center gap-4 justify-between">
 					<SofaIcon class="md:hidden h-[19px]" name="circle-close" @click="$utils.goBack()" />
 					<SofaHeading size="title" color="text-inherit" :content="title" />
-					<SofaText class="md:hidden whitespace-nowrap" :content="`${index + 1}/${questions.length}`" />
-					<SofaText as="a" class="hidden md:inline whitespace-nowrap" content="Exit" @click="$utils.goBack()" />
+					<SofaText v-if="$screen.mobile" :content="`${index + 1}/${questions.length}`" />
+					<SofaText v-else as="a" content="Exit" @click="$utils.goBack()" />
 				</div>
 			</div>
 			<div v-else />

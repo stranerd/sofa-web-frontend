@@ -1,14 +1,14 @@
 <template>
-	<!-- <component :is="as" v-if="content" :class="cls" v-html="content" />
+	<component :is="as" v-if="content" :class="cls" v-html="content" />
 	<component :is="as" v-else :class="cls">
 		<slot />
-	</component> -->
-	<component :is="as">
+	</component>
+	<!-- <component :is="as" class="!line-clamp-1">
 		<span v-if="content" :class="cls" v-html="content" />
 		<span v-else :class="cls">
 			<slot />
 		</span>
-	</component>
+	</component> -->
 </template>
 
 <script lang="ts" setup>

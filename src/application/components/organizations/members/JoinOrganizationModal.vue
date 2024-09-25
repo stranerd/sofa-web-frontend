@@ -1,6 +1,6 @@
 <template>
 	<div class="flex flex-col md:gap-5 gap-3 relative mdlg:p-6 items-center">
-		<SofaHeading class="hidden mdlg:inline-block" size="mid" :content="`Join ${org.publicName}`" />
+		<SofaHeading v-if="$screen.desktop" size="mid" :content="`Join ${org.publicName}`" />
 
 		<div class="w-full flex justify-between items-center mdlg:hidden py-2 border-lightGray border-b px-4">
 			<SofaHeading :content="`Join ${org.publicName}`" size="mid" />

@@ -39,7 +39,12 @@
 				<div class="w-full flex flex-col mdlg:gap-4 gap-3">
 					<div class="w-full flex gap-2 pr-4 mdlg:pr-0 items-center justify-between">
 						<SofaHeading :content="material.title" />
-						<SofaText as="router-link" to="/marketplace/search" class="text-primaryPink mdlg:hidden" content="View all" />
+						<SofaText
+							v-if="!$screen.desktop"
+							as="router-link"
+							to="/marketplace/search"
+							class="text-primaryPink"
+							content="View all" />
 					</div>
 
 					<div
