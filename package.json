@@ -31,6 +31,8 @@
     "chart.js": "^4.4.4",
     "gsap": "^3.12.5",
     "mathlive": "^0.101.0",
+    "openai": "^4.65.0",
+    "pdfjs-dist": "4.6.82",
     "qrcode.vue": "^3.4.1",
     "socket.io-client": "^4.7.5",
     "string-similarity": "^4.0.4",
