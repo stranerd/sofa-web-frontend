@@ -1,5 +1,8 @@
 <template>
-	<SofaTopBar v-bind="topbarOptions" :class="{ 'hidden mdlg:flex': hide.top }" />
+	<SofaTopBar v-if="!hideTopBar" v-bind="topbarOptions" :class="{ 'hidden mdlg:flex': hide.top }" />
+	<template v-else>
+		<slot name="top-bar" />
+	</template>
 	<div class="grow overflow-y-auto flex flex-col mdlg:flex-row gap-5 mdlg:gap-0">
 		<div
 			v-if="!hide.left"
@@ -41,6 +44,7 @@ withDefaults(
 		bgColor?: string
 		wrap?: boolean
 		noBottomPadding?: boolean
+		hideTopBar?: boolean
 	}>(),
 	{
 		topbarOptions: undefined,
@@ -48,6 +52,7 @@ withDefaults(
 		bgColor: '',
 		wrap: false,
 		noBottomPadding: false,
+		hideTopBar: false,
 	},
 )
 </script>
