@@ -31,7 +31,7 @@
 						:class="{ 'border-2 border-dashed border-primaryBlue bg-opacity-50': isDragging }"
 						@dragenter.prevent="isDragging = true"
 						@dragleave.prevent="isDragging = false"
-						@dragover.prevent
+						@dragover.prevent="isDragging = true"
 						@drop.prevent="handleDrop">
 						<SofaIcon name="upload" class="bg-white rounded-full p-3 w-[50px] h-[50px] fill-black" />
 						<SofaHeading size="title">{{ $screen.desktop ? 'Upload or Drag & Drop' : 'Upload' }}</SofaHeading>
@@ -116,7 +116,7 @@
 						<!-- questions -->
 						<div class="grid gap-6">
 							<div v-for="question in questions" :key="question.id" class="bg-lightGray rounded-lg px-2 py-4">
-								<div class="flex items-center justify-between cursor-pointer" @click="toggleOptions(question.id)">
+								<div class="flex items-center justify-between cursor-pointer gap-4" @click="toggleOptions(question.id)">
 									<SofaText :content="question.question" size="sub" />
 									<SofaIcon
 										name="angle-small-down"
@@ -153,8 +153,6 @@
 import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { Media } from '@modules/core'
-// import { VueDraggable, DraggableEvent } from 'vue-draggable-plus'
-// import * as pdfjs from 'pdfjs-dist/legacy/build/pdf.mjs'
 const route = useRoute()
 const type = computed(() => route.query.type)
 const file = ref<Media | null>(null)
@@ -182,7 +180,6 @@ const createQuizTypes = ref([
 ])
 
 const scrapPdf = async (media: Media) => {
-	console.log('media', media) // Log media to check its type
 	isLoading.value = true
 
 	if (media.size > 50 * 1024 * 1024) {
@@ -190,16 +187,22 @@ const scrapPdf = async (media: Media) => {
 		isLoading.value = false
 		return
 	}
-
-	// const doc = await pdfjs.getDocument(media.data).promise
-	// const pages = doc.numPages
-	// console.log('pages', pages)
 	file.value = media
 	isLoading.value = false
 }
 
-const handleDrop = () => {
+const handleDrop = async (e: DragEvent) => {
 	isDragging.value = false
+	const files = e.dataTransfer?.files
+
+	if (files && files.length > 0) {
+		const file = files[0]
+		if (file.type !== 'application/pdf') {
+			alert('Please upload a PDF file')
+			return
+		}
+		scrapPdf(file as unknown as Media)
+	}
 }
 
 const questions = ref([
