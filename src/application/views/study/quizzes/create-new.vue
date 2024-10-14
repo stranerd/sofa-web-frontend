@@ -26,13 +26,7 @@
 						<SofaHeading size="title">Add a document</SofaHeading>
 						<SofaIcon name="circle-close" class="h-[20px] w-[20px] fill-grayColor" />
 					</div>
-					<div
-						class="w-4/5 mx-auto rounded-lg flex flex-col justify-center items-center gap-6 p-6 bg-lightGray h-[400px]"
-						:class="{ 'border-2 border-dashed border-primaryBlue bg-opacity-50': isDragging }"
-						@dragenter.prevent="isDragging = true"
-						@dragleave.prevent="isDragging = false"
-						@dragover.prevent="isDragging = true"
-						@drop.prevent="handleDrop">
+					<div class="w-4/5 mx-auto rounded-lg flex flex-col justify-center items-center gap-6 p-6 bg-lightGray h-[400px]">
 						<SofaIcon name="upload" class="bg-white rounded-full p-3 w-[50px] h-[50px] fill-black" />
 						<SofaHeading size="title">{{ $screen.desktop ? 'Upload or Drag & Drop' : 'Upload' }}</SofaHeading>
 						<SofaText
@@ -55,7 +49,7 @@
 						<SofaIcon name="circle-close" class="h-[20px] w-[20px] fill-grayColor" />
 					</div>
 					<div class="w-4/5 mx-auto">
-						<SofaInput placeholder="Write your topic in short detail" />
+						<SofaInput v-model="topicTitle" placeholder="Write your topic in short detail" />
 					</div>
 				</template>
 				<!-- PDF CONTENT -->
@@ -87,55 +81,66 @@
 							<div class="border-2 border-lightGray flex justify-center items-center w-[100px] h-[122px] rounded-lg">
 								<SofaIcon name="file-document" class="fill-grayColor h-[25px]" />
 							</div>
-							<div class="flex mdlg:justify-center items-center w-[100px] h-[30px]">
+							<div class="flex items-center h-[30px]">
 								<SofaCheckbox class="!w-auto" activeCheckBoxColor="fill-primaryPurple" />
 								<SofaText :content="`Page ${i}`" class="text-grayColor" size="sub" />
 							</div>
 						</div>
 					</div>
 				</template>
-				<!-- ADDING QUESTIONS GENERATED -->
-				<template v-if="(type === 'document' && file) || type === 'topic'">
-					<div class="w-full flex gap-4 justify-between items-center p-4 mdlg:p-6 border-b-2 border-lightGray">
-						<SofaIcon name="arrow-left" class="h-[20px] w-[20px] fill-grayColor" />
-						<SofaHeading size="title">Add questions</SofaHeading>
-						<SofaIcon name="circle-close" class="h-[20px] w-[20px] fill-grayColor" />
-					</div>
-					<div class="mx-auto w-4/5 mdlg:w-11/12 flex flex-col gap-6 py-6">
-						<div class="flex items-center gap-3">
-							<SofaFileInput
-								v-if="type === 'document'"
-								accept="application/pdf"
-								class="rounded-lg bg-lightGray flex items-center gap-2 flex-1 flex-grow p-3">
-								<SofaIcon name="file-document" class="fill-black h-[20px]" />
-								<SofaText v-if="file" :content="file.name" class="text-black" />
-							</SofaFileInput>
-							<SofaInput v-else placeholder="Write your topic in short detail" />
-							<SofaButton padding="p-4">Refresh</SofaButton>
+				<!-- ADDING QUESTIONS GENERATED / LOADING THEM -->
+				<template>
+					<template v-if="(type === 'document' && file) || (type === 'topic' && topicTitle)">
+						<div class="w-full flex gap-4 justify-between items-center p-4 mdlg:p-6 border-b-2 border-lightGray">
+							<SofaIcon name="arrow-left" class="h-[20px] w-[20px] fill-grayColor" />
+							<SofaHeading size="title">Add questions</SofaHeading>
+							<SofaIcon name="circle-close" class="h-[20px] w-[20px] fill-grayColor" />
 						</div>
-						<!-- questions -->
-						<div class="grid gap-6">
-							<div v-for="question in questions" :key="question.id" class="bg-lightGray rounded-lg px-2 py-4">
-								<div class="flex items-center justify-between cursor-pointer gap-4" @click="toggleOptions(question.id)">
-									<SofaText :content="question.question" size="sub" />
-									<SofaIcon
-										name="angle-small-down"
-										class="h-[7px] transition"
-										:class="question.isVisible ? 'rotate-180' : 'rotate-0'" />
-									<SofaButton padding="py-2 px-3">Add</SofaButton>
-								</div>
-								<div v-if="question.isVisible">
-									<div
-										v-for="(option, index) in question.options"
-										:key="option"
-										class="bg-white p-2 rounded-lg mt-2 flex items-center gap-2">
-										<SofaIcon :name="optionIcons[index]" class="h-[15px]" />
-										<SofaText :content="option" size="sub" />
+						<div class="mx-auto w-4/5 mdlg:w-11/12 flex flex-col gap-6 py-6">
+							<div class="flex items-center gap-3">
+								<SofaFileInput
+									v-if="type === 'document'"
+									accept="application/pdf"
+									class="rounded-lg bg-lightGray flex items-center gap-2 flex-1 flex-grow p-3">
+									<SofaIcon name="file-document" class="fill-black h-[20px]" />
+									<SofaText v-if="file" :content="file.name" class="text-black" />
+								</SofaFileInput>
+								<SofaInput v-else placeholder="Write your topic in short detail" />
+								<SofaButton padding="p-4">Refresh</SofaButton>
+							</div>
+							<!-- questions -->
+							<div class="grid gap-6">
+								<div v-for="question in questions" :key="question.id" class="bg-lightGray rounded-lg px-2 py-4">
+									<div class="flex items-center justify-between cursor-pointer gap-4" @click="toggleOptions(question.id)">
+										<SofaText :content="question.question" size="sub" />
+										<SofaIcon
+											name="angle-small-down"
+											class="h-[7px] transition"
+											:class="question.isVisible ? 'rotate-180' : 'rotate-0'" />
+										<SofaButton padding="py-2 px-3">Add</SofaButton>
+									</div>
+									<div v-if="question.isVisible">
+										<div
+											v-for="(option, index) in question.options"
+											:key="option"
+											class="bg-white p-2 rounded-lg mt-2 flex items-center gap-2">
+											<SofaIcon :name="optionIcons[index]" class="h-[15px]" />
+											<SofaText :content="option" size="sub" />
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-					</div>
+					</template>
+					<template v-else>
+						<div class="flex flex-col justify-center items-center gap-6">
+							<SofaIcon name="pen" class="fill-primaryPurple" />
+							<div class="w-4/5 bg-lightGray rounded-full h-2.5">
+								<div class="bg-primaryPurple h-2.5 rounded-full" style="width: 40%"></div>
+							</div>
+							<SofaText content="Generating questions, this could take a minute..." size="sub" />
+						</div>
+					</template>
 				</template>
 				<!-- BUTTONS FOR WATCHING DOCUMENT STATE -->
 				<div
@@ -156,8 +161,8 @@ import { Media } from '@modules/core'
 const route = useRoute()
 const type = computed(() => route.query.type)
 const file = ref<Media | null>(null)
+const topicTitle = ref('')
 const isLoading = ref(false)
-const isDragging = ref(false)
 const createQuizTypes = ref([
 	{
 		value: 'document',
@@ -189,20 +194,6 @@ const scrapPdf = async (media: Media) => {
 	}
 	file.value = media
 	isLoading.value = false
-}
-
-const handleDrop = async (e: DragEvent) => {
-	isDragging.value = false
-	const files = e.dataTransfer?.files
-
-	if (files && files.length > 0) {
-		const file = files[0]
-		if (file.type !== 'application/pdf') {
-			alert('Please upload a PDF file')
-			return
-		}
-		scrapPdf(file as unknown as Media)
-	}
 }
 
 const questions = ref([

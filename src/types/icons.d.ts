@@ -87,6 +87,7 @@ declare global {
 		| 'orange-list'
 		| 'organization'
 		| 'participant'
+		| 'pen'
 		| 'personal-learning'
 		| 'phone'
 		| 'pink-question'
