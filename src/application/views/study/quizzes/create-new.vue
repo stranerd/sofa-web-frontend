@@ -2,7 +2,7 @@
 	<FullLayout :hide="{ left: true, right: true }">
 		<template #middle-session>
 			<SofaModal>
-				<!-- first content -->
+				<!-- First Content -->
 				<template v-if="!type">
 					<div class="w-full flex gap-4 justify-between items-center p-4 mdlg:p-6">
 						<SofaHeading size="title">New Quiz</SofaHeading>
@@ -20,6 +20,8 @@
 						</router-link>
 					</div>
 				</template>
+
+				<!-- Creating Through Document -->
 				<template v-if="type === 'document' && !file">
 					<div class="w-full flex gap-4 justify-between items-center p-4 mdlg:p-6">
 						<SofaIcon name="arrow-left" class="h-[20px] w-[20px] fill-grayColor" />
@@ -35,13 +37,15 @@
 							size="sub" />
 						<SofaText content="Max file size - 50MB | Max page limit - 50" class="text-grayColor" size="sub" />
 						<SofaFileInput
-							accept="application/pdf"
+							accept="application/pdf, .txt"
 							class="rounded-lg bg-primaryBlue text-white py-4 px-3 font-bold shadow-customInverted"
 							@update:modelValue="(media) => media && scrapPdf(media as Media)">
-							{{ isLoading ? 'Processing...' : 'Choose from device' }}</SofaFileInput
-						>
+							{{ isLoading ? 'Processing...' : 'Choose from device' }}
+						</SofaFileInput>
 					</div>
 				</template>
+
+				<!-- Creating Through Topic -->
 				<template v-if="type === 'topic'">
 					<div class="w-full flex gap-4 justify-between items-center p-4 mdlg:p-6">
 						<SofaIcon name="arrow-left" class="h-[20px] w-[20px] fill-grayColor" />
@@ -52,7 +56,8 @@
 						<SofaInput v-model="topicTitle" placeholder="Write your topic in short detail" />
 					</div>
 				</template>
-				<!-- PDF CONTENT -->
+
+				<!-- PDF Content -->
 				<template v-if="type === 'document' && file">
 					<div class="w-full flex gap-4 justify-between items-center p-4 mdlg:p-6">
 						<SofaIcon name="arrow-left" class="h-[20px] w-[20px] fill-grayColor" />
@@ -76,7 +81,7 @@
 					</div>
 					<div
 						class="w-full grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 place-items-center mx-auto px-6 h-[400px] overflow-y-auto">
-						<!-- empty page state -->
+						<!-- Empty page state -->
 						<div v-for="i in 50" :key="i">
 							<div class="border-2 border-lightGray flex justify-center items-center w-[100px] h-[122px] rounded-lg">
 								<SofaIcon name="file-document" class="fill-grayColor h-[25px]" />
@@ -88,7 +93,8 @@
 						</div>
 					</div>
 				</template>
-				<!-- ADDING QUESTIONS GENERATED / LOADING THEM -->
+
+				<!-- Adding Questions Generated / Loading Them -->
 				<template>
 					<template v-if="(type === 'document' && file) || (type === 'topic' && topicTitle)">
 						<div class="w-full flex gap-4 justify-between items-center p-4 mdlg:p-6 border-b-2 border-lightGray">
@@ -108,7 +114,7 @@
 								<SofaInput v-else placeholder="Write your topic in short detail" />
 								<SofaButton padding="p-4">Refresh</SofaButton>
 							</div>
-							<!-- questions -->
+							<!-- Questions -->
 							<div class="grid gap-6">
 								<div v-for="question in questions" :key="question.id" class="bg-lightGray rounded-lg px-2 py-4">
 									<div class="flex items-center justify-between cursor-pointer gap-4" @click="toggleOptions(question.id)">
@@ -142,7 +148,16 @@
 						</div>
 					</template>
 				</template>
-				<!-- BUTTONS FOR WATCHING DOCUMENT STATE -->
+
+				<!-- Creating From Scratch -->
+				<template v-if="type === 'scratch'">
+					<div class="w-full h-full flex flex-col gap-4 p-4 mdlg:p-6">
+						<SofaHeading size="title">Create Quiz</SofaHeading>
+						<QuizForm :factory="factory" :submit="createQuiz" :cancel="() => $router.replace('/library')" />
+					</div>
+				</template>
+
+				<!-- Buttons for Watching Document State -->
 				<div
 					v-if="type === 'document' || type === 'topic'"
 					class="w-full flex gap-4 justify-center mdlg:justify-between items-center p-4 mdlg:p-6">
@@ -158,6 +173,9 @@
 import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { Media } from '@modules/core'
+import { useCreateQuiz } from '@app/composables/study/quizzes'
+
+const { factory, createQuiz } = useCreateQuiz()
 const route = useRoute()
 const type = computed(() => route.query.type)
 const file = ref<Media | null>(null)
