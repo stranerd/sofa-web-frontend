@@ -9,10 +9,7 @@
 		<SofaIcon
 			:name="isSelected ? 'checkbox-active' : 'checkbox'"
 			class="md:!h-[18px] h-[20px] w-[25px]"
-			:class="{
-				'fill-primaryGreen': isSelected && !activeCheckBoxColor,
-				[activeCheckBoxColor]: isSelected && activeCheckBoxColor,
-			}"
+			:class="{ [activeColor]: isSelected }"
 			@click="toggle" />
 		<span class="flex gap-2 items-center font-size-sub" @click="toggle">
 			<slot />
@@ -27,13 +24,13 @@ const props = withDefaults(
 		type?: 'checkbox' | 'switch'
 		value?: T
 		rotate?: boolean
-		activeCheckBoxColor?: string
+		activeColor?: string
 	}>(),
 	{
 		type: 'checkbox',
 		value: undefined,
 		rotate: false,
-		activeCheckBoxColor: undefined,
+		activeColor: 'fill-primaryGreen',
 	},
 )
 

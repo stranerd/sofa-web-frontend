@@ -40,8 +40,7 @@
 			:rows="rows"
 			:disabled="disabled"
 			:tabindex="0"
-			class="grow p-0 placeholder:text-grayColor focus:outline-none h-full overflow-y-auto"
-			:class="{ 'resize-none': !resize }" />
+			class="grow p-0 placeholder:text-grayColor focus:outline-none h-full overflow-y-auto" />
 		<slot name="suffix" />
 		<SofaIcon v-if="error" name="error-state" class="h-[15px]" />
 	</div>
@@ -61,7 +60,6 @@ withDefaults(
 		placeholder?: string
 		richEditor?: boolean
 		error?: string
-		resize?: boolean
 	}>(),
 	{
 		rows: 8,
@@ -69,7 +67,6 @@ withDefaults(
 		placeholder: '',
 		richEditor: false,
 		error: undefined,
-		resize: true,
 	},
 )
 

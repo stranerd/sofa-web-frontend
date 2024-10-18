@@ -87,7 +87,7 @@
 								<SofaIcon name="file-document" class="fill-grayColor h-[25px]" />
 							</div>
 							<div class="flex items-center h-[30px]">
-								<SofaCheckbox class="!w-auto" activeCheckBoxColor="fill-primaryPurple" />
+								<SofaCheckbox class="!w-auto" activeColor="fill-primaryPurple" />
 								<SofaText :content="`Page ${i}`" class="text-grayColor" size="sub" />
 							</div>
 						</div>
