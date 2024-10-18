@@ -19,7 +19,7 @@
 				<router-link
 					v-for="tab in tabs"
 					:key="tab.name"
-					class="py-4 flex items-center justify-center gap-2 border-b-2 border-transparent"
+					class="py-4 flex items-center justify-center gap-2 border-b-2 border-transparent whitespace-nowrap"
 					:class="{ 'text-primaryPurple !border-current': $utils.tabIsActive(tab.path) }"
 					:to="tab.path">
 					<SofaIcon :name="tab.icon" class="h-[18px] fill-current" />
