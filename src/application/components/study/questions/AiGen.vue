@@ -27,7 +27,7 @@
 			</div>
 		</div>
 
-		<SofaButton padding="p-3" class="w-full mt-auto">Continue</SofaButton>
+		<SofaButton padding="p-3" class="mt-auto" :class="$screen.desktop ? 'w-auto ml-auto' : 'w-full'">Continue</SofaButton>
 	</div>
 </template>
 

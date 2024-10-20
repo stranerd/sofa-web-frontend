@@ -34,7 +34,6 @@ export abstract class BaseFactory<E, T, K extends Record<string, any>> extends C
 			get: (key: keyof K) => this.values[key] as any,
 			set: (key: keyof K, value: any) => {
 				this.set(key, value)
-				this.onSet[key]?.(value)
 			},
 		})
 		this.defaults = reactive(copy(keys)) as K
@@ -72,6 +71,8 @@ export abstract class BaseFactory<E, T, K extends Record<string, any>> extends C
 		this.values[key] = check.value as any
 		this.validValues[key] = check.valid || ignoreRules ? (check.value as any) : this.defaults[key]
 		this.errors[key] = /* Differ.equal(this.defaults[property], value) ? '' : */ check.errors.at(0) ?? ''
+
+		this.onSet[key]?.(value)
 
 		return check.valid
 	}

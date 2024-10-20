@@ -15,11 +15,41 @@
 				</SofaFileInput>
 				<SofaText v-if="factory.document" :content="factory.document.name" clamp />
 			</div>
-			<SofaButton padding="p-3" class="w-full mt-auto" :disabled="!factory.isValid('document')" @click="loadPreviews"
-			>Continue</SofaButton
-			>
+			<SofaButton
+				padding="p-3"
+				class="mt-auto"
+				:class="$screen.desktop ? 'w-auto ml-auto' : 'w-full'"
+				:disabled="!factory.isValid('document')"
+				@click="loadPreviews">
+				Continue
+			</SofaButton>
 		</template>
-		<template v-if="state === 'preview'"> </template>
+		<template v-if="state === 'preview'">
+			<div class="w-full flex flex-col items-end gap-4 mdlg:flex-row-reverse mdlg:justify-between mdlg:items-center">
+				<SofaCheckbox v-model="factory.selectAll" color="purple" rotate>Select all</SofaCheckbox>
+				<div class="flex items-center justify-between gap-2">
+					<SofaText content="Select page" size="sub" />
+					<SofaInput v-model="factory.selectFrom" type="number" :min="1" class="!size-[40px] !p-2" />
+					<SofaText content="to" size="sub" />
+					<SofaInput v-model="factory.selectTo" type="number" :min="1" class="!size-[40px] !p-2" />
+				</div>
+			</div>
+			<div class="w-full grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 place-items-center overflow-y-auto">
+				<div v-for="(preview, i) in factory.previews" :key="i" class="flex flex-col gap-2">
+					<SofaImageLoader :photoUrl="preview.image" class="w-full border border-lightGray" />
+					<SofaCheckbox v-model="factory.getPreviewFor(i).selected" color="purple" class="text-grayColor">
+						Page {{ i + 1 }}
+					</SofaCheckbox>
+				</div>
+			</div>
+			<SofaButton
+				padding="p-3"
+				class="mt-auto"
+				:class="$screen.desktop ? 'w-auto ml-auto' : 'w-full'"
+				:disabled="!factory.isValid('selectedPreviews')">
+				Continue
+			</SofaButton>
+		</template>
 		<template v-if="state === 'questions'">
 			<AiGen :factory="factory" />
 		</template>
@@ -45,7 +75,7 @@ export default defineComponent({
 		const { asyncFn: loadPreviews } = useAsyncFn(async () => {
 			const document = factory.document
 			if (!document) return
-			factory.previews.value = await generatePreview(document)
+			factory.previews = await generatePreview(document)
 			state.value = 'preview'
 		})
 

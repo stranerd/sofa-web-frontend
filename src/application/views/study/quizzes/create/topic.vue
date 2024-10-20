@@ -4,7 +4,12 @@
 		:onBack="state === 'questions' ? () => (state = 'select') : undefined">
 		<template v-if="state === 'select'">
 			<SofaInput v-model="factory.topic" placeholder="Write your topic in short detail" />
-			<SofaButton padding="py-3 px-3" class="w-full mt-auto" :disabled="!factory.isValid('topic')" @click="state = 'questions'">
+			<SofaButton
+				padding="py-3 px-3"
+				class="mt-auto"
+				:class="$screen.desktop ? 'w-auto ml-auto' : 'w-full'"
+				:disabled="!factory.isValid('topic')"
+				@click="state = 'questions'">
 				Continue
 			</SofaButton>
 		</template>

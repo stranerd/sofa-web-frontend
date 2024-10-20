@@ -87,7 +87,7 @@
 								<SofaIcon name="file-document" class="fill-grayColor h-[25px]" />
 							</div>
 							<div class="flex items-center h-[30px]">
-								<SofaCheckbox class="!w-auto" activeColor="fill-primaryPurple" />
+								<SofaCheckbox class="!w-auto" color="purple" />
 								<SofaText :content="`Page ${i}`" class="text-grayColor" size="sub" />
 							</div>
 						</div>
@@ -137,7 +137,7 @@
 						</div>
 					</div>
 				</template>
-				<template v-else>
+				<template v-else-if="0">
 					<div class="flex flex-col justify-center items-center gap-6">
 						<SofaIcon name="pen" class="fill-primaryPurple" />
 						<div class="w-4/5 bg-lightGray rounded-full h-2.5">

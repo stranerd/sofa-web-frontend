@@ -9,7 +9,7 @@
 		<SofaIcon
 			:name="isSelected ? 'checkbox-active' : 'checkbox'"
 			class="md:!h-[18px] h-[20px] w-[25px]"
-			:class="{ [activeColor]: isSelected }"
+			:class="{ [activColor]: isSelected }"
 			@click="toggle" />
 		<span class="flex gap-2 items-center font-size-sub" @click="toggle">
 			<slot />
@@ -24,15 +24,21 @@ const props = withDefaults(
 		type?: 'checkbox' | 'switch'
 		value?: T
 		rotate?: boolean
-		activeColor?: string
+		color?: 'green' | 'purple'
 	}>(),
 	{
 		type: 'checkbox',
 		value: undefined,
 		rotate: false,
-		activeColor: 'fill-primaryGreen',
+		color: 'green',
 	},
 )
+
+const activColor = computed(() => {
+	if (props.color === 'green') return 'fill-primaryGreen'
+	if (props.color === 'purple') return 'fill-primaryPurple'
+	return ''
+})
 
 const selected = defineModel<T[] | boolean>()
 
