@@ -207,12 +207,14 @@ export class QuestionFactory extends BaseFactory<QuestionEntity, QuestionToModel
 		else this.multipleAnswers.push(index)
 	}
 
-	load = (entity: QuestionEntity) => {
-		this.entityId = entity.id
-		this.question = entity.question
-		this.questionMedia = entity.questionMedia
+	load = (entity: QuestionEntity | Pick<QuestionEntity, 'question' | 'explanation' | 'data'>) => {
+		if ('id' in entity) {
+			this.entityId = entity.id
+			this.question = entity.question
+			this.questionMedia = entity.questionMedia
+			this.timeLimit = entity.timeLimit
+		}
 		this.explanation = entity.explanation
-		this.timeLimit = entity.timeLimit
 		this.type = entity.data.type
 		if (entity.data.type === QuestionTypes.multipleChoice) {
 			this.multipleOptions = entity.data.options

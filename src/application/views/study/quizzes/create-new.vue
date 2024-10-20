@@ -168,7 +168,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
+import { useRoute } from 'vue-router'
+import { Media } from '@modules/core'
 import { useCreateQuiz } from '@app/composables/study/quizzes'
 
 const createQuizTypes = [
@@ -199,20 +201,15 @@ export default defineComponent({
 		middlewares: [
 			'isAuthenticated',
 			({ to }) => {
-				const type = to.query.type.toString()
+				const type = to.query.type?.toString()
 				if (!type || createQuizTypes.map((t) => t.value).includes(type)) return
-			}
+			},
 		],
 	},
 })
 </script>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { useRoute } from 'vue-router'
-import { Media } from '@modules/core'
-import { useCreateQuiz } from '@app/composables/study/quizzes'
-
 const route = useRoute()
 const type = computed(() => route.query.type)
 

@@ -1,5 +1,6 @@
 import { QuizEntity } from '../../domain/entities/quizzes'
 import { IQuizRepository } from '../../domain/irepositories/iquizzes'
+import { AiGenRequest, AiGenResult } from '../../domain/types'
 import { QuizFromModel, QuizToModel } from '../models/quizzes'
 import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 
@@ -20,6 +21,10 @@ export class QuizRepository implements IQuizRepository {
 	async add(data: QuizToModel) {
 		const d = await this.client.post<QuizToModel, QuizFromModel>('/', data)
 		return this.mapper(d)
+	}
+
+	async aiGen(data: AiGenRequest) {
+		return await this.client.post<AiGenRequest, AiGenResult>('/ai', data)
 	}
 
 	async find(id: string) {
