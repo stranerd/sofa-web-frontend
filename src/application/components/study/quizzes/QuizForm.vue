@@ -73,7 +73,7 @@
 			<SofaText content="Is for tutor assessments?" />
 		</SofaCheckbox>
 
-		<div class="w-full flex items-center justify-between">
+		<div class="w-full flex items-center justify-between mt-auto">
 			<SofaButton
 				type="button"
 				padding="px-5 py-2"
