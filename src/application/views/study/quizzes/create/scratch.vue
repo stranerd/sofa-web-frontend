@@ -1,6 +1,6 @@
 <template>
 	<QuizCreateLayout title="Create quiz">
-		<QuizForm :factory="factory" :submit="createQuiz" :cancel="() => $utils.goBack()" class="h-full" />
+		<QuizForm :factory="factory" :submit="createQuiz" :cancel="() => $utils.goBack()" />
 	</QuizCreateLayout>
 </template>
 

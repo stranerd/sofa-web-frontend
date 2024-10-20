@@ -11,7 +11,7 @@
 			</SofaModal>
 			<template v-else>
 				<div class="w-full flex items-center gap-3 justify-between p-4">
-					<SofaIcon class="h-[15px]" name="arrow-left" @click="$utils.goBack()" />
+					<SofaIcon class="h-[15px]" name="arrow-left" @click="onBack" />
 					<SofaHeading :content="title" />
 					<span class="w-8" />
 				</div>
@@ -24,7 +24,13 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
-	title: string
-}>()
+withDefaults(
+	defineProps<{
+		title: string
+		onBack?: () => void
+	}>(),
+	{
+		onBack: () => $utils.goBack(),
+	},
+)
 </script>
