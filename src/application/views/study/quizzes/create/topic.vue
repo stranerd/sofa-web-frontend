@@ -1,14 +1,14 @@
 <template>
 	<QuizCreateLayout
-		:title="showPreview ? 'Add questions' : 'Enter topic'"
-		:onBack="showPreview ? () => (showPreview = false) : undefined">
-		<template v-if="!showPreview">
+		:title="state === 'questions' ? 'Add questions' : 'Enter topic'"
+		:onBack="state === 'questions' ? () => (state = 'select') : undefined">
+		<template v-if="state === 'select'">
 			<SofaInput v-model="factory.topic" placeholder="Write your topic in short detail" />
-			<SofaButton padding="py-3 px-3" class="w-full mt-auto" :disabled="!factory.isValid('topic')" @click="showPreview = true"
-			>Continue</SofaButton
-			>
+			<SofaButton padding="py-3 px-3" class="w-full mt-auto" :disabled="!factory.isValid('topic')" @click="state = 'questions'">
+				Continue
+			</SofaButton>
 		</template>
-		<template v-if="showPreview">
+		<template v-if="state === 'questions'">
 			<AiGen :factory="factory" />
 		</template>
 	</QuizCreateLayout>
@@ -25,9 +25,9 @@ export default defineComponent({
 		middlewares: ['isAuthenticated'],
 	},
 	setup() {
+		const state = ref<'select' | 'questions'>('select')
 		const factory = new AiGenFactory('topic')
-		const showPreview = ref(false)
-		return { factory, showPreview }
+		return { factory, state }
 	},
 })
 </script>

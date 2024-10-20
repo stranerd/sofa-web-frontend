@@ -1,6 +1,9 @@
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.mjs'
+import pdfWorker from 'pdfjs-dist/build/pdf.worker.mjs?url'
 import { chunkArray } from 'valleyed'
 import { UploadedFile } from '@modules/core'
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker
 
 const getContents = async (
 	width: number,

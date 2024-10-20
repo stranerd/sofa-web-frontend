@@ -1,7 +1,11 @@
 <template>
 	<div class="flex flex-col gap-6 h-full">
 		<div class="flex items-center gap-3">
-			<SofaInput :modelValue="factory.title" disabled />
+			<SofaInput :modelValue="factory.title" disabled>
+				<template v-if="factory.type === 'document'" #prefix>
+					<SofaIcon name="file-document" class="fill-current h-[20px]" />
+				</template>
+			</SofaInput>
 			<SofaButton padding="py-3 px-4">Refresh</SofaButton>
 		</div>
 		<div class="grid gap-6">
@@ -35,6 +39,8 @@ defineProps<{
 }>()
 
 // TODO: use content to make a request to aiGen API and populate questions
+// on mount, fetch questions with content
+// on refresh, fetch new questions with content, but keep track of old quiz and selected questions
 
 const questions = [
 	{
