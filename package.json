@@ -12,14 +12,14 @@
     "prebuild": "npm run envs",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
-    "lint:fix": "eslint --ext ts,vue --fix ./ && echo Done",
+    "lint:fix": "eslint --ext ts,vue --fix ./",
     "envs": "node bin/copy-env-app.js",
     "icons:types": "node bin/build-icons-types.js",
     "lint:staged": "lint-staged",
     "prepare": "husky"
   },
   "lint-staged": {
-    "*": "npm run lint:fix"
+    "*.(vue|ts)": "eslint --ext ts,vue --fix"
   },
   "dependencies": {
     "@capacitor-community/apple-sign-in": "^5.0.0",
