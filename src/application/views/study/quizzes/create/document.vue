@@ -9,7 +9,6 @@
 				</span>
 				<SofaHeading size="title">Upload</SofaHeading>
 				<SofaText content="Questions will be generated from the document you pick" class="text-grayColor" />
-				<SofaText content="Max file size - 50MB | Max page limit - 50" class="text-grayColor" size="sub" />
 				<SofaFileInput v-model="factory.document" accept="application/pdf, text/plain" class="mt-2">
 					<SofaButton padding="py-4 px-3" class="max-w-full">Choose from device</SofaButton>
 				</SofaFileInput>
@@ -34,7 +33,7 @@
 					<SofaInput v-model="factory.selectTo" type="number" :min="1" class="!size-[40px] !p-2" />
 				</div>
 			</div>
-			<div class="w-full grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 place-items-center overflow-y-auto">
+			<div class="w-full h-fit max-h-full grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 place-items-center overflow-y-auto">
 				<div v-for="(preview, i) in factory.previews" :key="i" class="flex flex-col gap-2">
 					<SofaImageLoader :photoUrl="preview.image" class="w-full border border-lightGray" />
 					<SofaCheckbox v-model="factory.getPreviewFor(i).selected" color="purple" class="text-grayColor">
@@ -42,6 +41,11 @@
 					</SofaCheckbox>
 				</div>
 			</div>
+			<SofaText
+				v-if="factory.errors.selectedPreviews"
+				:content="factory.errors.selectedPreviews"
+				class="text-primaryRed"
+				size="sub" />
 			<SofaButton
 				padding="p-3"
 				class="mt-auto"

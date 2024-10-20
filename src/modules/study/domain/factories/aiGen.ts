@@ -13,6 +13,8 @@ type ExtraKeys = {
 	selectTo: number
 }
 
+const MAX_TEXT_LENGTH = 48 * 48 * 10 // 10 pages from our per page text assumptions
+
 export class AiGenFactory extends BaseFactory<unknown, AiGenRequest, AiGenRequest & ExtraKeys> {
 	readonly rules = {
 		content: v.string().min(1),
@@ -41,7 +43,11 @@ export class AiGenFactory extends BaseFactory<unknown, AiGenRequest, AiGenReques
 					.custom((value) => value < this.previews.length),
 				'invalid preview selected',
 			)
-			.min(1)
+			.min(1, 'select at least one page')
+			.custom(
+				(value) => this.#mergePreviews(value).length <= MAX_TEXT_LENGTH,
+				'contents of selected pages are too big, select less pages',
+			)
 			.requiredIf(() => this.type === 'document'),
 		selectAll: v.boolean(),
 		selectFrom: v
@@ -58,7 +64,7 @@ export class AiGenFactory extends BaseFactory<unknown, AiGenRequest, AiGenReques
 
 	protected onSet = {
 		previews: () => {
-			this.selectedPreviews = []
+			this.resetProp('selectedPreviews')
 		},
 		selectAll: () => {
 			if (this.selectAll) this.selectedPreviews = new Array(this.previews.length).fill(0).map((_, i) => i)
@@ -68,10 +74,10 @@ export class AiGenFactory extends BaseFactory<unknown, AiGenRequest, AiGenReques
 			if (this.selectAll !== selectedAll) this.selectAll = selectedAll
 		},
 		selectFrom: () => {
-			if (this.isValid('selectFrom', 'selectTo')) this.select(this.selectFrom, this.selectTo)
+			if (this.isValid('selectFrom', 'selectTo')) this.#select(this.selectFrom, this.selectTo)
 		},
 		selectTo: () => {
-			if (this.isValid('selectFrom', 'selectTo')) this.select(this.selectFrom, this.selectTo)
+			if (this.isValid('selectFrom', 'selectTo')) this.#select(this.selectFrom, this.selectTo)
 		},
 	}
 
@@ -98,9 +104,15 @@ export class AiGenFactory extends BaseFactory<unknown, AiGenRequest, AiGenReques
 		return def
 	}
 
-	select(from: number, to: number) {
+	#select(from: number, to: number) {
 		const selected = new Array(to - from + 1).fill(0).map((_, i) => i + from - 1)
 		this.selectedPreviews = selected
+	}
+
+	#mergePreviews(selected: number[]) {
+		const sorted = [...selected].sort((a, b) => a - b)
+		const text = sorted.map((x) => this.previews[x].text).join('\n')
+		return text
 	}
 
 	getPreviewFor(index: number) {
