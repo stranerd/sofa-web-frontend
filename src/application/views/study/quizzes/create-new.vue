@@ -3,12 +3,12 @@
 		<template #middle-session>
 			<SofaModal>
 				<!-- First Content -->
-				<template v-if="!type">
-					<div class="w-full flex gap-4 justify-between items-center p-4 mdlg:p-6">
+				<div v-if="!type" class="p-4 mdlg:p-6 gap-4 mdlg:gap-6 flex flex-col">
+					<div class="flex gap-4 justify-between items-center">
 						<SofaHeading size="title">New Quiz</SofaHeading>
-						<SofaIcon name="circle-close" class="h-[20px] w-[20px] fill-grayColor" />
+						<SofaIcon name="circle-close" class="size-[20px] fill-grayColor" />
 					</div>
-					<div class="w-full flex flex-col mdlg:flex-row justify-between items-center gap-6 p-6">
+					<div class="flex flex-col mdlg:flex-row justify-between items-center gap-6">
 						<router-link
 							v-for="quizType in createQuizTypes"
 							:key="quizType.title"
@@ -19,7 +19,7 @@
 							<SofaText :content="quizType.description" class="text-grayColor" size="sub" />
 						</router-link>
 					</div>
-				</template>
+				</div>
 
 				<!-- Creating Through Document -->
 				<template v-if="type === 'document' && !file">
@@ -30,14 +30,14 @@
 					</div>
 					<div class="w-4/5 mx-auto rounded-lg flex flex-col justify-center items-center gap-6 p-6 bg-lightGray h-[400px]">
 						<SofaIcon name="upload" class="bg-white rounded-full p-3 w-[50px] h-[50px] fill-black" />
-						<SofaHeading size="title">{{ $screen.desktop ? 'Upload or Drag & Drop' : 'Upload' }}</SofaHeading>
+						<SofaHeading size="title">Upload</SofaHeading>
 						<SofaText
 							content="Questions will be generated from the document you pick"
 							class="text-grayColor text-center"
 							size="sub" />
 						<SofaText content="Max file size - 50MB | Max page limit - 50" class="text-grayColor" size="sub" />
 						<SofaFileInput
-							accept="application/pdf, .txt"
+							accept="application/pdf, text/plain"
 							class="rounded-lg bg-primaryBlue text-white py-4 px-3 font-bold shadow-customInverted"
 							@update:modelValue="(media) => media && scrapPdf(media as Media)">
 							{{ isLoading ? 'Processing...' : 'Choose from device' }}
@@ -95,58 +95,56 @@
 				</template>
 
 				<!-- Adding Questions Generated / Loading Them -->
-				<template>
-					<template v-if="(type === 'document' && file) || (type === 'topic' && topicTitle)">
-						<div class="w-full flex gap-4 justify-between items-center p-4 mdlg:p-6 border-b-2 border-lightGray">
-							<SofaIcon name="arrow-left" class="h-[20px] w-[20px] fill-grayColor" />
-							<SofaHeading size="title">Add questions</SofaHeading>
-							<SofaIcon name="circle-close" class="h-[20px] w-[20px] fill-grayColor" />
+				<template v-if="(type === 'document' && file) || (type === 'topic' && topicTitle)">
+					<div class="w-full flex gap-4 justify-between items-center p-4 mdlg:p-6 border-b-2 border-lightGray">
+						<SofaIcon name="arrow-left" class="h-[20px] w-[20px] fill-grayColor" />
+						<SofaHeading size="title">Add questions</SofaHeading>
+						<SofaIcon name="circle-close" class="h-[20px] w-[20px] fill-grayColor" />
+					</div>
+					<div class="mx-auto w-4/5 mdlg:w-11/12 flex flex-col gap-6 py-6">
+						<div class="flex items-center gap-3">
+							<SofaFileInput
+								v-if="type === 'document'"
+								accept="application/pdf"
+								class="rounded-lg bg-lightGray flex items-center gap-2 flex-1 flex-grow p-3">
+								<SofaIcon name="file-document" class="fill-black h-[20px]" />
+								<SofaText v-if="file" :content="file.name" class="text-black" />
+							</SofaFileInput>
+							<SofaInput v-else placeholder="Write your topic in short detail" />
+							<SofaButton padding="p-4">Refresh</SofaButton>
 						</div>
-						<div class="mx-auto w-4/5 mdlg:w-11/12 flex flex-col gap-6 py-6">
-							<div class="flex items-center gap-3">
-								<SofaFileInput
-									v-if="type === 'document'"
-									accept="application/pdf"
-									class="rounded-lg bg-lightGray flex items-center gap-2 flex-1 flex-grow p-3">
-									<SofaIcon name="file-document" class="fill-black h-[20px]" />
-									<SofaText v-if="file" :content="file.name" class="text-black" />
-								</SofaFileInput>
-								<SofaInput v-else placeholder="Write your topic in short detail" />
-								<SofaButton padding="p-4">Refresh</SofaButton>
-							</div>
-							<!-- Questions -->
-							<div class="grid gap-6">
-								<div v-for="question in questions" :key="question.id" class="bg-lightGray rounded-lg px-2 py-4">
-									<div class="flex items-center justify-between cursor-pointer gap-4" @click="toggleOptions(question.id)">
-										<SofaText :content="question.question" size="sub" />
-										<SofaIcon
-											name="angle-small-down"
-											class="h-[7px] transition"
-											:class="question.isVisible ? 'rotate-180' : 'rotate-0'" />
-										<SofaButton padding="py-2 px-3">Add</SofaButton>
-									</div>
-									<div v-if="question.isVisible">
-										<div
-											v-for="(option, index) in question.options"
-											:key="option"
-											class="bg-white p-2 rounded-lg mt-2 flex items-center gap-2">
-											<SofaIcon :name="optionIcons[index]" class="h-[15px]" />
-											<SofaText :content="option" size="sub" />
-										</div>
+						<!-- Questions -->
+						<div class="grid gap-6">
+							<div v-for="question in questions" :key="question.id" class="bg-lightGray rounded-lg px-2 py-4">
+								<div class="flex items-center justify-between cursor-pointer gap-4" @click="toggleOptions(question.id)">
+									<SofaText :content="question.question" size="sub" />
+									<SofaIcon
+										name="angle-small-down"
+										class="h-[7px] transition"
+										:class="question.isVisible ? 'rotate-180' : 'rotate-0'" />
+									<SofaButton padding="py-2 px-3">Add</SofaButton>
+								</div>
+								<div v-if="question.isVisible">
+									<div
+										v-for="(option, index) in question.options"
+										:key="option"
+										class="bg-white p-2 rounded-lg mt-2 flex items-center gap-2">
+										<SofaIcon :name="optionIcons[index]" class="h-[15px]" />
+										<SofaText :content="option" size="sub" />
 									</div>
 								</div>
 							</div>
 						</div>
-					</template>
-					<template v-else>
-						<div class="flex flex-col justify-center items-center gap-6">
-							<SofaIcon name="pen" class="fill-primaryPurple" />
-							<div class="w-4/5 bg-lightGray rounded-full h-2.5">
-								<div class="bg-primaryPurple h-2.5 rounded-full" style="width: 40%"></div>
-							</div>
-							<SofaText content="Generating questions, this could take a minute..." size="sub" />
+					</div>
+				</template>
+				<template v-else>
+					<div class="flex flex-col justify-center items-center gap-6">
+						<SofaIcon name="pen" class="fill-primaryPurple" />
+						<div class="w-4/5 bg-lightGray rounded-full h-2.5">
+							<div class="bg-primaryPurple h-2.5 w-2/5 rounded-full" />
 						</div>
-					</template>
+						<SofaText content="Generating questions, this could take a minute..." size="sub" />
+					</div>
 				</template>
 
 				<!-- Creating From Scratch -->
@@ -169,19 +167,11 @@
 	</FullLayout>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from 'vue'
-import { useRoute } from 'vue-router'
-import { Media } from '@modules/core'
+<script lang="ts">
+import { defineComponent } from 'vue'
 import { useCreateQuiz } from '@app/composables/study/quizzes'
 
-const { factory, createQuiz } = useCreateQuiz()
-const route = useRoute()
-const type = computed(() => route.query.type)
-const file = ref<Media | null>(null)
-const topicTitle = ref('')
-const isLoading = ref(false)
-const createQuizTypes = ref([
+const createQuizTypes = [
 	{
 		value: 'document',
 		icon: 'question-from-document' as IconName,
@@ -200,7 +190,36 @@ const createQuizTypes = ref([
 		title: 'Create questions from scratch',
 		description: 'Type your questions',
 	},
-])
+]
+
+export default defineComponent({
+	name: 'StudyQuizzesCreateNewPage',
+	routeConfig: {
+		goBackRoute: '/library',
+		middlewares: [
+			'isAuthenticated',
+			({ to }) => {
+				const type = to.query.type.toString()
+				if (!type || createQuizTypes.map((t) => t.value).includes(type)) return
+			}
+		],
+	},
+})
+</script>
+
+<script setup lang="ts">
+import { ref, computed } from 'vue'
+import { useRoute } from 'vue-router'
+import { Media } from '@modules/core'
+import { useCreateQuiz } from '@app/composables/study/quizzes'
+
+const route = useRoute()
+const type = computed(() => route.query.type)
+
+const { factory, createQuiz } = useCreateQuiz()
+const file = ref<Media | null>(null)
+const topicTitle = ref('')
+const isLoading = ref(false)
 
 const scrapPdf = async (media: Media) => {
 	isLoading.value = true
