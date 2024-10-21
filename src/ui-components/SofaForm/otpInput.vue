@@ -6,7 +6,7 @@
 			:key="index"
 			v-model="otps[index - 1]"
 			type="number"
-			class="md:w-[53px] w-[40px] aspect-square text-lg text-center text-darkBody focus:outline-none bg-lightGray rounded-custom"
+			class="md:w-[53px] w-[40px] aspect-square text-lg text-center focus:outline-none bg-lightGray rounded-custom"
 			:disabled="disabled"
 			@keypress="onKeyPress"
 			@keyup.right="focusInputByRef(id + (index + 1))"
