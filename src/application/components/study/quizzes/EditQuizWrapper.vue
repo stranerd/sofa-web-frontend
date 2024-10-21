@@ -29,7 +29,6 @@ const {
 	questions,
 	fetched,
 	questionFactory,
-	aiGenFactory,
 	saveQuestion,
 	reorderQuestions,
 	deleteQuestion,
@@ -71,12 +70,11 @@ const extras = computed(() => ({
 	},
 	currentQuestionById: currentQuestionById.value,
 	questionFactory,
-	aiGenFactory,
 	sortedQuestions: quiz.value?.questions.map((qId) => questions.value.find((q) => q.id === qId)).filter(Boolean) ?? [],
 	reorderQuestions,
 	deleteQuestion,
-	addQuestion: async () => {
-		const questions = await addQuestions()
+	addQuestion: async (...args: Parameters<typeof addQuestions>) => {
+		const questions = await addQuestions(...args)
 		if (questions?.at(0)) secondarySelectedQuestionId.value = questions[0].id
 	},
 	duplicateQuestion: async (original: QuestionEntity) => {

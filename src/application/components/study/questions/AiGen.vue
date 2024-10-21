@@ -36,10 +36,18 @@
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAsyncFn } from '@app/composables/core/hooks'
-import { AiGenFactory, AiGenResult, QuestionFactory, QuestionsUseCases, QuestionTypes, QuizFactory, QuizzesUseCases } from '@modules/study'
+import {
+	AiGenResult,
+	CreateQuestionFactory,
+	QuestionFactory,
+	QuestionsUseCases,
+	QuestionTypes,
+	QuizFactory,
+	QuizzesUseCases,
+} from '@modules/study'
 
 const props = defineProps<{
-	factory: AiGenFactory
+	factory: CreateQuestionFactory
 	quizId?: string
 }>()
 

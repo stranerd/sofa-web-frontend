@@ -28,8 +28,7 @@ const getContents = async (
 async function getPDFContent(content: ArrayBuffer) {
 	const pdfDocument = await pdfjsLib.getDocument(content).promise
 
-	const res = new Array(pdfDocument.numPages)
-		.fill(0)
+	const res = Array.from({ length: pdfDocument.numPages })
 		.map((_, i) => i + 1)
 		.map(async (i) => {
 			const page = await pdfDocument.getPage(i)

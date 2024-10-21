@@ -10,8 +10,8 @@ import { useUsersInList } from '../users/users'
 import { useQuestionsInList } from './questions'
 import { useHasAccess } from '.'
 import {
-	AiGenFactory,
 	CoursableAccess,
+	CreateQuestionFactory,
 	QuestionEntity,
 	QuestionFactory,
 	QuestionTypes,
@@ -110,16 +110,9 @@ export const useCreateQuiz = () => {
 	} = useAsyncFn(async () => {
 		const quiz = await QuizzesUseCases.add(factory)
 		await Promise.all(
-			[QuestionTypes.multipleChoice, QuestionTypes.trueOrFalse].map(async (questionType) => {
-				const fac = new AiGenFactory()
-				fac.content = `Title: ${quiz.title}\nDescription: ${quiz.description}`
-				fac.amount = 1
-				fac.questionType = questionType
-				const result = await QuizzesUseCases.aiGen(fac)
-				const question = result.questions.at(0)
-				if (!question) return
-				return await QuestionsUseCases.add(quiz.id, new QuestionFactory().loadEntity(question))
-			}),
+			[QuestionEntity.getTemplate(QuestionTypes.multipleChoice), QuestionEntity.getTemplate(QuestionTypes.trueOrFalse)].map((q) =>
+				QuestionsUseCases.add(quiz.id, new QuestionFactory().loadEntity(q)),
+			),
 		).catch()
 		await router.push(`/study/quizzes/${quiz.id}/edit`)
 		factory.reset()
@@ -134,7 +127,6 @@ export const useEditQuiz = (id: string) => {
 	const { quiz, questions, members, fetched } = useQuiz(id)
 	const quizFactory = new QuizFactory()
 	const questionFactory = new QuestionFactory()
-	const aiGenFactory = new AiGenFactory()
 	const { setMessage } = useSuccessHandler()
 
 	watch(
@@ -198,13 +190,17 @@ export const useEditQuiz = (id: string) => {
 		},
 	)
 
-	const { asyncFn: addQuestions } = useAsyncFn(async () => {
-		const result = await QuizzesUseCases.aiGen(aiGenFactory)
+	const { asyncFn: addQuestions } = useAsyncFn(async (factory: CreateQuestionFactory) => {
+		await factory.toModel() // ensure factory is valid before proceding
+		const raw =
+			factory.type === 'scratch'
+				? Array.from({ length: factory.amount }).map(() => QuestionEntity.getTemplate(factory.questionType))
+				: await QuizzesUseCases.aiGen(factory).then((result) => result.questions)
 		const questions = await Promise.all(
-			result.questions.map(async (question) => QuestionsUseCases.add(id, new QuestionFactory().loadEntity(question))),
+			raw.map(async (question) => QuestionsUseCases.add(id, new QuestionFactory().loadEntity(question))),
 		)
 		await setMessage('Question added')
-		aiGenFactory.reset()
+		factory.reset()
 		return questions
 	})
 
@@ -251,7 +247,6 @@ export const useEditQuiz = (id: string) => {
 		members,
 		quizFactory,
 		questionFactory,
-		aiGenFactory,
 		updateQuiz,
 		publishQuiz,
 		reorderQuestions,

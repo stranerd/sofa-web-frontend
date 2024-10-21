@@ -3,7 +3,7 @@ import { AiGenRequest, QuestionTypes } from '../types'
 import { BaseFactory, UploadedFile } from '@modules/core'
 
 type ExtraKeys = {
-	type: 'document' | 'topic' | undefined
+	type: 'document' | 'topic' | 'scratch'
 	topic: string
 	document: UploadedFile | null
 	previews: { text: string; image: string }[]
@@ -15,12 +15,12 @@ type ExtraKeys = {
 
 const MAX_TEXT_LENGTH = 48 * 48 * 10 // 10 pages from our per page text assumptions
 
-export class AiGenFactory extends BaseFactory<unknown, AiGenRequest, AiGenRequest & ExtraKeys> {
+export class CreateQuestionFactory extends BaseFactory<unknown, AiGenRequest, AiGenRequest & ExtraKeys> {
 	readonly rules = {
 		content: v.string().min(1),
 		amount: v.number().int().gt(0).lte(5, 'cannot generate more than 5 questions at once'),
 		questionType: v.in(Object.values(QuestionTypes)),
-		type: v.in(['document' as const, 'topic' as const, undefined]),
+		type: v.in(['document' as const, 'topic' as const, 'scratch' as const]),
 		topic: v
 			.string()
 			.min(1)
@@ -67,7 +67,7 @@ export class AiGenFactory extends BaseFactory<unknown, AiGenRequest, AiGenReques
 			this.resetProp('selectedPreviews')
 		},
 		selectAll: () => {
-			if (this.selectAll) this.selectedPreviews = new Array(this.previews.length).fill(0).map((_, i) => i)
+			if (this.selectAll) this.selectedPreviews = Array.from({ length: this.previews.length }).map((_, i) => i)
 		},
 		selectedPreviews: () => {
 			const selectedAll = this.selectedPreviews.length === this.previews.length
@@ -81,7 +81,7 @@ export class AiGenFactory extends BaseFactory<unknown, AiGenRequest, AiGenReques
 		},
 	}
 
-	constructor(type?: ExtraKeys['type']) {
+	constructor(type: ExtraKeys['type']) {
 		super({
 			content: '',
 			amount: 1,
@@ -105,7 +105,7 @@ export class AiGenFactory extends BaseFactory<unknown, AiGenRequest, AiGenReques
 	}
 
 	#select(from: number, to: number) {
-		const selected = new Array(to - from + 1).fill(0).map((_, i) => i + from - 1)
+		const selected = Array.from({ length: to - from + 1 }).map((_, i) => i + from - 1)
 		this.selectedPreviews = selected
 	}
 

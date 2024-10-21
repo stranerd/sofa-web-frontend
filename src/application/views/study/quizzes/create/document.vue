@@ -63,7 +63,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { useAsyncFn } from '@app/composables/core/hooks'
-import { AiGenFactory } from '@modules/study'
+import { CreateQuestionFactory } from '@modules/study'
 import { generatePreview } from '@utils/previews'
 
 export default defineComponent({
@@ -74,7 +74,7 @@ export default defineComponent({
 	},
 	setup() {
 		const state = ref<'select' | 'preview' | 'questions'>('select')
-		const factory = new AiGenFactory('document')
+		const factory = new CreateQuestionFactory('document')
 
 		const { asyncFn: loadPreviews } = useAsyncFn(async () => {
 			const document = factory.document

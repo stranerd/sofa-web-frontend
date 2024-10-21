@@ -21,7 +21,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { AiGenFactory } from '@modules/study'
+import { CreateQuestionFactory } from '@modules/study'
 
 export default defineComponent({
 	name: 'StudyQuizzesCreateTopicPage',
@@ -31,7 +31,7 @@ export default defineComponent({
 	},
 	setup() {
 		const state = ref<'select' | 'questions'>('select')
-		const factory = new AiGenFactory('topic')
+		const factory = new CreateQuestionFactory('topic')
 		return { factory, state }
 	},
 })
