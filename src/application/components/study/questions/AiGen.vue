@@ -27,20 +27,22 @@
 			</div>
 		</div>
 
-		<SofaButton padding="p-3" class="mt-auto" :class="$screen.desktop ? 'w-auto ml-auto' : 'w-full'">Continue</SofaButton>
+		<SofaButton color="green" padding="p-3" class="mt-auto" :class="$screen.desktop ? 'w-auto ml-auto' : 'w-full'">Done</SofaButton>
 	</div>
 </template>
 
 <script lang="ts" setup>
-import { AiGenFactory } from '@modules/study'
+import { AiGenFactory, QuizEntity } from '@modules/study'
 
 defineProps<{
 	factory: AiGenFactory
+	quiz?: QuizEntity
 }>()
 
 // TODO: use content to make a request to aiGen API and populate questions
 // on mount, fetch questions with content
 // on refresh, fetch new questions with content, but keep track of old quiz and selected questions
+// on done, make api call to create quiz if quiz prop not passed, and create all questions that were selected, and navigate to the question edit page
 
 const questions = [
 	{
