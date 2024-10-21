@@ -1,5 +1,6 @@
 import { QuizToModel } from '../../data/models/quizzes'
 import { QuizEntity } from '../entities/quizzes'
+import { AiGenRequest, AiGenResult } from '../types'
 import { Listeners, QueryParams, QueryResults } from '@modules/core'
 
 export interface IQuizRepository {
@@ -15,6 +16,7 @@ export interface IQuizRepository {
 	requestAccess(id: string, data: { add: boolean }): Promise<boolean>
 	grantAccess(id: string, data: { userId: string; grant: boolean }): Promise<boolean>
 	addMembers(id: string, data: { userIds: string[]; grant: boolean }): Promise<boolean>
+	aiGen: (data: AiGenRequest) => Promise<AiGenResult>
 	listenToOne: (id: string, listener: Listeners<QuizEntity>) => Promise<() => void>
 	listenToMany: (query: QueryParams, listener: Listeners<QuizEntity>, matches: (entity: QuizEntity) => boolean) => Promise<() => void>
 	listenToManyTutors: (

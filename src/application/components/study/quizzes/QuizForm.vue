@@ -1,5 +1,5 @@
 <template>
-	<form class="flex flex-col gap-4" @submit.prevent="submit">
+	<form class="flex flex-col gap-4 h-full" @submit.prevent="submit">
 		<div class="w-full md:grid md:grid-cols-2 flex flex-col-reverse gap-4">
 			<div class="col-span-1 w-full flex flex-col gap-3">
 				<SofaInput v-model="factory.title" placeholder="Title" :error="factory.errors.title" />
@@ -73,7 +73,7 @@
 			<SofaText content="Is for tutor assessments?" />
 		</SofaCheckbox>
 
-		<div class="w-full flex items-center justify-between">
+		<div class="w-full flex items-center justify-between mt-auto">
 			<SofaButton
 				type="button"
 				padding="px-5 py-2"

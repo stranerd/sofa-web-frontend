@@ -1,6 +1,6 @@
 import { QuestionEntity } from '../../domain/entities/questions'
 import { IQuestionRepository } from '../../domain/irepositories/iquestions'
-import { CoursableAccess, CreateAiQuestionsData } from '../../domain/types'
+import { CoursableAccess } from '../../domain/types'
 import { QuestionFromModel, QuestionToModel } from '../models/questions'
 import { HttpClient, Listeners, QueryParams, QueryResults, listenToMany, listenToOne } from '@modules/core'
 
@@ -29,11 +29,6 @@ export class QuestionRepository implements IQuestionRepository {
 	async add(data: QuestionToModel) {
 		const d = await this.client.post<QuestionToModel, QuestionFromModel>('/', data)
 		return this.mapper(d)
-	}
-
-	async aiAdd(data: CreateAiQuestionsData) {
-		const d = await this.client.post<CreateAiQuestionsData, QuestionFromModel[]>('/ai', data)
-		return d.map(this.mapper)
 	}
 
 	async update(id: string, data: QuestionToModel) {

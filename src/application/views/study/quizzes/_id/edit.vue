@@ -224,10 +224,10 @@
 					<SofaFormGroup>
 						<SofaLabel>Amount</SofaLabel>
 						<SofaInput
-							v-model="extras.aiGenQuestionFactory.amount"
+							v-model="extras.aiGenFactory.amount"
 							type="number"
 							placeholder="Number of questions"
-							:error="extras.aiGenQuestionFactory.errors.amount" />
+							:error="extras.aiGenFactory.errors.amount" />
 					</SofaFormGroup>
 
 					<SofaFormGroup>
@@ -237,8 +237,8 @@
 								v-for="type in QuestionEntity.getAllTypes()"
 								:key="type.value"
 								class="col-span-1 p-4 flex flex-col gap-2 items-center justify-center hover:bg-lightBlue rounded-lg"
-								:class="[extras.aiGenQuestionFactory.questionType === type.value ? 'bg-lightBlue' : 'bg-lightGray']"
-								@click="extras.aiGenQuestionFactory.questionType = type.value">
+								:class="[extras.aiGenFactory.questionType === type.value ? 'bg-lightBlue' : 'bg-lightGray']"
+								@click="extras.aiGenFactory.questionType = type.value">
 								<SofaIcon :name="type.icon" class="h-[50px]" />
 								<SofaText :content="type.label" />
 							</a>
@@ -256,7 +256,7 @@
 						</SofaButton>
 
 						<SofaButton
-							:disabled="!extras.aiGenQuestionFactory.valid"
+							:disabled="!extras.aiGenFactory.valid"
 							padding="px-5 mdlg:py-2 py-3"
 							class="mdlg:w-auto w-full"
 							type="submit">

@@ -35,6 +35,9 @@ importers:
       mathlive:
         specifier: ^0.101.0
         version: 0.101.0
+      pdfjs-dist:
+        specifier: ^4.6.82
+        version: 4.6.82
       qrcode.vue:
         specifier: ^3.4.1
         version: 3.4.1(vue@3.5.6(typescript@5.6.2))
@@ -2508,6 +2511,10 @@ packages:
 
   pdfjs-dist@4.5.136:
     resolution: {integrity: sha512-V1BALcAN/FmxBEShLxoP73PlQZAZtzlaNfRbRhJrKvXzjLC5VaIlBAQUJuWP8iaYUmIdmdLHmt3E2TBglxOm3w==}
+    engines: {node: '>=18'}
+
+  pdfjs-dist@4.6.82:
+    resolution: {integrity: sha512-BUOryeRFwvbLe0lOU6NhkJNuVQUp06WxlJVVCsxdmJ4y5cU3O3s3/0DunVdK1PMm7v2MUw52qKYaidhDH1Z9+w==}
     engines: {node: '>=18'}
 
   perfect-debounce@1.0.0:
@@ -6028,6 +6035,14 @@ snapshots:
       sha.js: 2.4.11
 
   pdfjs-dist@4.5.136:
+    optionalDependencies:
+      canvas: 2.11.2
+      path2d: 0.2.1
+    transitivePeerDependencies:
+      - encoding
+      - supports-color
+
+  pdfjs-dist@4.6.82:
     optionalDependencies:
       canvas: 2.11.2
       path2d: 0.2.1

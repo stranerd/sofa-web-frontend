@@ -1,6 +1,5 @@
 import { QuestionToModel } from '../../data/models/questions'
 import { QuestionEntity } from '../entities/questions'
-import { AiGenQuestionFactory } from '../factories/aiGenQuestions'
 import { QuestionFactory } from '../factories/questions'
 import { IQuestionRepository } from '../irepositories/iquestions'
 import { CoursableAccess } from '../types'
@@ -15,10 +14,6 @@ export class QuestionsUseCase {
 
 	async add(quizId: string, data: QuestionToModel) {
 		return await this.repository(quizId).add(data)
-	}
-
-	async aiAdd(quizId: string, factory: AiGenQuestionFactory) {
-		return await this.repository(quizId).aiAdd(await factory.toModel())
 	}
 
 	async delete(quizId: string, id: string) {

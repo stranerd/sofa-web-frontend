@@ -2,7 +2,7 @@ export type { Saleable } from '@modules/payment'
 export * from './questions'
 import type { FileEntity } from '../entities/files'
 import type { QuizEntity } from '../entities/quizzes'
-import { QuestionTypes } from './questions'
+import { QuestionData, QuestionTypes } from './questions'
 import { EmbeddedUser } from '@modules/users'
 import { Media, Ratings } from '@modules/core'
 
@@ -122,7 +122,22 @@ export type ExtendedCourseSectionItem = CourseSectionItem & {
 
 export type ExtendedCourseSections = (Omit<CourseSection, 'items'> & { items: ExtendedCourseSectionItem[] })[]
 
-export type CreateAiQuestionsData = {
+export type AiGenRequest = {
+	content: string
 	amount: number
 	questionType: QuestionTypes
+}
+
+export type AiGenResult = {
+	quiz: {
+		title: string
+		description: string
+		topic: string
+		tags: string[]
+	}
+	questions: {
+		question: string
+		explanation: string
+		data: QuestionData
+	}[]
 }

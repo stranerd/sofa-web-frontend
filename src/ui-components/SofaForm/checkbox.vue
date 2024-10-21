@@ -6,7 +6,11 @@
 		<SofaIcon class="h-[1.5em]" :name="isSelected ? 'toggle-on' : 'toggle-off'" @click="toggle" />
 	</a>
 	<a v-else class="flex items-center gap-2" :class="{ 'flex-row-reverse justify-between': rotate }">
-		<SofaIcon :name="isSelected ? 'checkbox-active' : 'checkbox'" class="md:!h-[18px] h-[20px] w-[25px]" @click="toggle" />
+		<SofaIcon
+			:name="isSelected ? 'checkbox-active' : 'checkbox'"
+			class="md:!h-[18px] h-[20px] w-[25px]"
+			:class="{ [activColor]: isSelected }"
+			@click="toggle" />
 		<span class="flex gap-2 items-center font-size-sub" @click="toggle">
 			<slot />
 		</span>
@@ -20,13 +24,21 @@ const props = withDefaults(
 		type?: 'checkbox' | 'switch'
 		value?: T
 		rotate?: boolean
+		color?: 'green' | 'purple'
 	}>(),
 	{
 		type: 'checkbox',
 		value: undefined,
 		rotate: false,
+		color: 'green',
 	},
 )
+
+const activColor = computed(() => {
+	if (props.color === 'green') return 'fill-primaryGreen'
+	if (props.color === 'purple') return 'fill-primaryPurple'
+	return ''
+})
 
 const selected = defineModel<T[] | boolean>()
 

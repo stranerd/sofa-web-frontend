@@ -10,7 +10,7 @@ import { useUsersInList } from '../users/users'
 import { useQuestionsInList } from './questions'
 import { useHasAccess } from '.'
 import {
-	AiGenQuestionFactory,
+	AiGenFactory,
 	CoursableAccess,
 	QuestionEntity,
 	QuestionFactory,
@@ -110,11 +110,17 @@ export const useCreateQuiz = () => {
 	} = useAsyncFn(async () => {
 		const quiz = await QuizzesUseCases.add(factory)
 		await Promise.all(
-			[QuestionTypes.multipleChoice, QuestionTypes.trueOrFalse].map((questionType) => {
-				const fac = new AiGenQuestionFactory()
+			[QuestionTypes.multipleChoice, QuestionTypes.trueOrFalse].map(async (questionType) => {
+				const fac = new AiGenFactory()
+				fac.content = `Title: ${quiz.title}\nDescription: ${quiz.description}`
 				fac.amount = 1
 				fac.questionType = questionType
-				return QuestionsUseCases.aiAdd(quiz.id, fac)
+				const result = await QuizzesUseCases.aiGen(fac)
+				const questionFactory = new QuestionFactory()
+				const question = result.questions.at(0)
+				if (!question) return
+				questionFactory.load(question)
+				return await QuestionsUseCases.add(quiz.id, { ...question, questionMedia: null, timeLimit: 30 })
 			}),
 		).catch()
 		await router.push(`/study/quizzes/${quiz.id}/edit`)
@@ -130,7 +136,7 @@ export const useEditQuiz = (id: string) => {
 	const { quiz, questions, members, fetched } = useQuiz(id)
 	const quizFactory = new QuizFactory()
 	const questionFactory = new QuestionFactory()
-	const aiGenQuestionFactory = new AiGenQuestionFactory()
+	const aiGenFactory = new AiGenFactory()
 	const { setMessage } = useSuccessHandler()
 
 	watch(
@@ -195,9 +201,12 @@ export const useEditQuiz = (id: string) => {
 	)
 
 	const { asyncFn: addQuestions } = useAsyncFn(async () => {
-		const questions = await QuestionsUseCases.aiAdd(id, aiGenQuestionFactory)
+		const result = await QuizzesUseCases.aiGen(aiGenFactory)
+		const questions = await Promise.all(
+			result.questions.map(async (question) => QuestionsUseCases.add(id, { ...question, questionMedia: null, timeLimit: 30 })),
+		)
 		await setMessage('Question added')
-		aiGenQuestionFactory.reset()
+		aiGenFactory.reset()
 		return questions
 	})
 
@@ -243,7 +252,7 @@ export const useEditQuiz = (id: string) => {
 		members,
 		quizFactory,
 		questionFactory,
-		aiGenQuestionFactory,
+		aiGenFactory,
 		updateQuiz,
 		publishQuiz,
 		reorderQuestions,
