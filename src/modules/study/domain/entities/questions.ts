@@ -1,6 +1,7 @@
 import { Differ, capitalize, stripHTML, compareTwoStrings } from 'valleyed'
 import { QuestionFromModel } from '../../data/models/questions'
 import { QuestionTypes } from '../types'
+import { questionTypes } from './questions-extras'
 import { BaseEntity } from '@modules/core'
 
 const compare = (a: string, b: string, quality = 0.95) =>
@@ -139,12 +140,12 @@ export class QuestionEntity extends BaseEntity<QuestionFromModel> {
 
 	static getLabel(type: QuestionTypes) {
 		const data = questionTypes[type] ?? questionTypes[QuestionTypes.multipleChoice]
-		return data.label
+		return data.extras.label
 	}
 
 	static getIcon(type: QuestionTypes) {
 		const data = questionTypes[type] ?? questionTypes[QuestionTypes.multipleChoice]
-		return data.icon
+		return data.extras.icon
 	}
 
 	static getShape(index: number) {
@@ -154,53 +155,20 @@ export class QuestionEntity extends BaseEntity<QuestionFromModel> {
 
 	static getImage(type: QuestionTypes) {
 		const data = questionTypes[type] ?? questionTypes[QuestionTypes.multipleChoice]
-		return data.image
+		return data.extras.image
+	}
+
+	static getTemplate(type: QuestionTypes) {
+		const data = questionTypes[type] ?? questionTypes[QuestionTypes.multipleChoice]
+		return data.template
 	}
 
 	static getAllTypes() {
 		return Object.entries(questionTypes).map(([key, t]) => ({
-			label: t.label,
+			label: t.extras.label,
 			value: key as QuestionTypes,
-			icon: t.icon,
-			image: t.image,
+			icon: t.extras.icon,
+			image: t.extras.image,
 		}))
 	}
-}
-
-const questionTypes: Record<QuestionTypes, { label: string; image: string; icon: IconName }> = {
-	[QuestionTypes.multipleChoice]: {
-		label: 'Multiple choice',
-		image: 'multiple-choice',
-		icon: 'question-multiple-choice',
-	},
-	[QuestionTypes.writeAnswer]: {
-		label: 'Write answer',
-		image: 'write-answer',
-		icon: 'question-write-answer',
-	},
-	[QuestionTypes.trueOrFalse]: {
-		label: 'True/False',
-		image: 'true-false',
-		icon: 'question-true-false',
-	},
-	[QuestionTypes.fillInBlanks]: {
-		label: 'Fill in blank(s)',
-		image: 'fill-in-blanks',
-		icon: 'question-fill-in-blanks',
-	},
-	[QuestionTypes.dragAnswers]: {
-		label: 'Drag answers',
-		image: 'drag-answers',
-		icon: 'question-drag-answers',
-	},
-	[QuestionTypes.sequence]: {
-		label: 'Sequence',
-		image: 'sequence',
-		icon: 'question-sequence',
-	},
-	[QuestionTypes.match]: {
-		label: 'Match',
-		image: 'match',
-		icon: 'question-match',
-	},
 }
