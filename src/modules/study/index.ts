@@ -33,7 +33,14 @@ export { FolderFactory } from './domain/factories/folders'
 export { QuestionFactory } from './domain/factories/questions'
 export { QuizFactory } from './domain/factories/quizzes'
 export { Coursable, DraftStatus, FileType, FolderSaved, QuestionTypes, QuizModes } from './domain/types'
-export type { CoursableAccess, ExtendedCourseSectionItem, ExtendedCourseSections, QuestionAnswer, StudyKeys } from './domain/types'
+export type {
+	AiGenResult,
+	CoursableAccess,
+	ExtendedCourseSectionItem,
+	ExtendedCourseSections,
+	QuestionAnswer,
+	StudyKeys,
+} from './domain/types'
 
 export type { QuestionFromModel } from './data/models/questions'
 export type StudyMaterial = CourseEntity | QuizEntity

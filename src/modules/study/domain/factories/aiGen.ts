@@ -132,9 +132,19 @@ export class AiGenFactory extends BaseFactory<unknown, AiGenRequest, AiGenReques
 		}
 	}
 
+	getTypeContent() {
+		if (this.type === 'document') return this.#mergePreviews(this.selectedPreviews)
+		if (this.type === 'topic') return this.topic
+		return this.content
+	}
+
 	load = () => {
 		throw new Error('load not supported')
 	}
 
-	model = () => this.validValues
+	model = () => {
+		const { amount, questionType } = this.validValues
+		const content = this.getTypeContent()
+		return { content, amount, questionType }
+	}
 }

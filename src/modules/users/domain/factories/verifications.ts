@@ -33,7 +33,6 @@ export class VerificationFactory extends BaseFactory<VerificationEntity, Verific
 	}
 
 	load = (entity: VerificationEntity) => {
-		this.entityId = entity.id
 		this.courses = entity.content.courses
 		this.quizzes = entity.content.quizzes
 	}

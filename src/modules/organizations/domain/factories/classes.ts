@@ -36,7 +36,6 @@ export class ClassFactory extends BaseFactory<ClassEntity, ClassToModel, Keys> {
 	}
 
 	load = (entity: ClassEntity) => {
-		this.entityId = entity.id
 		this.title = entity.title
 		this.description = entity.description
 		this.photo = entity.photo

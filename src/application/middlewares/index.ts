@@ -43,11 +43,7 @@ export const isOnboarding = defineMiddleware(async ({ to, goBackToNonAuth }) => 
 	const redirect = await checkAuthUser(to.fullPath)
 	if (redirect) return redirect
 	const user = useAuth().user.value
-	if (user) {
-		const userTypeFactory = new UserTypeFactory()
-		userTypeFactory.load(user)
-		if (userTypeFactory.valid) return goBackToNonAuth()
-	}
+	if (user && new UserTypeFactory().loadEntity(user).valid) return goBackToNonAuth()
 })
 export const isSubscribed = defineMiddleware(async ({ goBackToNonAuth }) => {
 	if (!useAuth().isSubscribed.value) return goBackToNonAuth()

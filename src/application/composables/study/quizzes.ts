@@ -116,11 +116,9 @@ export const useCreateQuiz = () => {
 				fac.amount = 1
 				fac.questionType = questionType
 				const result = await QuizzesUseCases.aiGen(fac)
-				const questionFactory = new QuestionFactory()
 				const question = result.questions.at(0)
 				if (!question) return
-				questionFactory.load(question)
-				return await QuestionsUseCases.add(quiz.id, { ...question, questionMedia: null, timeLimit: 30 })
+				return await QuestionsUseCases.add(quiz.id, new QuestionFactory().loadEntity(question))
 			}),
 		).catch()
 		await router.push(`/study/quizzes/${quiz.id}/edit`)
@@ -203,7 +201,7 @@ export const useEditQuiz = (id: string) => {
 	const { asyncFn: addQuestions } = useAsyncFn(async () => {
 		const result = await QuizzesUseCases.aiGen(aiGenFactory)
 		const questions = await Promise.all(
-			result.questions.map(async (question) => QuestionsUseCases.add(id, { ...question, questionMedia: null, timeLimit: 30 })),
+			result.questions.map(async (question) => QuestionsUseCases.add(id, new QuestionFactory().loadEntity(question))),
 		)
 		await setMessage('Question added')
 		aiGenFactory.reset()
@@ -216,7 +214,8 @@ export const useEditQuiz = (id: string) => {
 	})
 
 	const { asyncFn: duplicateQuestion } = useAsyncFn(async (original: QuestionEntity) => {
-		const question = await QuestionsUseCases.add(id, original)
+		const factory = new QuestionFactory().loadEntity(original)
+		const question = await QuestionsUseCases.add(id, factory)
 		await setMessage('Question duplicated')
 		return question
 	})

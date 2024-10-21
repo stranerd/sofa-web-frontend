@@ -1,4 +1,3 @@
-import { QuestionToModel } from '../../data/models/questions'
 import { QuestionEntity } from '../entities/questions'
 import { QuestionFactory } from '../factories/questions'
 import { IQuestionRepository } from '../irepositories/iquestions'
@@ -12,8 +11,8 @@ export class QuestionsUseCase {
 		this.repository = repository
 	}
 
-	async add(quizId: string, data: QuestionToModel) {
-		return await this.repository(quizId).add(data)
+	async add(quizId: string, factory: QuestionFactory) {
+		return await this.repository(quizId).add(await factory.toModel())
 	}
 
 	async delete(quizId: string, id: string) {

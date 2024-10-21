@@ -20,7 +20,6 @@ export class UserLocationFactory extends BaseFactory<UserEntity, UserLocation, U
 	}
 
 	load = (entity: UserEntity) => {
-		this.entityId = entity.id
 		if (entity.location) {
 			this.country = entity.location.country
 			this.state = entity.location.state

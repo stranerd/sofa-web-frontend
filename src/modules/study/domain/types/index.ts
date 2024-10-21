@@ -137,6 +137,7 @@ export type AiGenResult = {
 	}
 	questions: {
 		question: string
+		questionMedia: Media | null
 		explanation: string
 		data: QuestionData
 	}[]

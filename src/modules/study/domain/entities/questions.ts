@@ -1,16 +1,11 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import stringSimilarity from 'string-similarity'
-import { Differ, capitalize, stripHTML } from 'valleyed'
+import { Differ, capitalize, stripHTML, compareTwoStrings } from 'valleyed'
 import { QuestionFromModel } from '../../data/models/questions'
 import { QuestionTypes } from '../types'
 import { BaseEntity } from '@modules/core'
 
 const compare = (a: string, b: string, quality = 0.95) =>
-	stringSimilarity.compareTwoStrings(
-		stripHTML(a).toLowerCase().replaceAll(' ', '').trim(),
-		stripHTML(b).toLowerCase().replaceAll(' ', '').trim(),
-	) >= quality
+	compareTwoStrings(stripHTML(a).toLowerCase().replaceAll(' ', '').trim(), stripHTML(b).toLowerCase().replaceAll(' ', '').trim()) >=
+	quality
 
 export class QuestionEntity extends BaseEntity<QuestionFromModel> {
 	constructor(data: QuestionFromModel) {
@@ -136,6 +131,10 @@ export class QuestionEntity extends BaseEntity<QuestionFromModel> {
 
 	get image() {
 		return QuestionEntity.getImage(this.strippedData.type)
+	}
+
+	get editPage() {
+		return `/study/quizzes/${this.quizId}/edit?q=${this.id}`
 	}
 
 	static getLabel(type: QuestionTypes) {

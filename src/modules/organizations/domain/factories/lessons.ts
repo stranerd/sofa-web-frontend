@@ -18,7 +18,6 @@ export class LessonFactory extends BaseFactory<ClassLesson, LessonToModel, Lesso
 	}
 
 	load = (entity: ClassLesson) => {
-		this.entityId = entity.id
 		this.title = entity.title
 		this.teachers = entity.users.teachers
 	}

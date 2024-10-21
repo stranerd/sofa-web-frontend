@@ -1,7 +1,7 @@
 import { v } from 'valleyed'
 import { QuestionToModel } from '../../data/models/questions'
 import { QuestionEntity } from '../entities/questions'
-import { QuestionTypes } from '../types'
+import { AiGenResult, QuestionTypes } from '../types'
 import { BaseFactory } from '@modules/core'
 
 type FillOrDragOption = { type: 'q' | 'a'; value: string }
@@ -19,7 +19,7 @@ type Keys = Omit<QuestionToModel, 'data'> & {
 	dragAnswersAnswers: FillOrDragOption[]
 }
 
-export class QuestionFactory extends BaseFactory<QuestionEntity, QuestionToModel, Keys> {
+export class QuestionFactory extends BaseFactory<QuestionEntity | AiGenResult['questions'][number], QuestionToModel, Keys> {
 	readonly rules = {
 		question: v
 			.string()
@@ -207,9 +207,8 @@ export class QuestionFactory extends BaseFactory<QuestionEntity, QuestionToModel
 		else this.multipleAnswers.push(index)
 	}
 
-	load = (entity: QuestionEntity | Pick<QuestionEntity, 'question' | 'explanation' | 'data'>) => {
+	load = (entity: QuestionEntity | AiGenResult['questions'][number]) => {
 		if ('id' in entity) {
-			this.entityId = entity.id
 			this.question = entity.question
 			this.questionMedia = entity.questionMedia
 			this.timeLimit = entity.timeLimit

@@ -2,12 +2,12 @@ import { v } from 'valleyed'
 import { ref } from 'vue'
 import { QuizToModel } from '../../data/models/quizzes'
 import { QuizEntity } from '../entities/quizzes'
-import { QuizModes } from '../types'
+import { AiGenResult, QuizModes } from '../types'
 import { BaseFactory } from '@modules/core'
 
 type Keys = Omit<QuizToModel, 'modes'> & Record<`mode${Capitalize<QuizModes>}`, boolean>
 
-export class QuizFactory extends BaseFactory<QuizEntity, QuizToModel, Keys> {
+export class QuizFactory extends BaseFactory<QuizEntity | AiGenResult['quiz'], QuizToModel, Keys> {
 	public topicId = ''
 	public tagIds: string[] = []
 	#tagString = ref('')
@@ -66,20 +66,24 @@ export class QuizFactory extends BaseFactory<QuizEntity, QuizToModel, Keys> {
 		this.tags = this.tags.filter((_, i) => i !== index)
 	}
 
-	load = (entity: QuizEntity) => {
-		this.entityId = entity.id
+	load = (entity: QuizEntity | AiGenResult['quiz']) => {
+		if ('id' in entity) {
+			this.photo = entity.photo
+			this.topicId = entity.topicId
+			this.tagIds = entity.tagIds
+			this.isForTutors = entity.isForTutors
+			this.timeLimit = entity.timeLimit
+			this.modeGames = entity.modes.games
+			this.modeTests = entity.modes.tests
+			this.modeFlashcards = entity.modes.flashcards
+			this.modePractice = entity.modes.practice
+			this.modeAssessments = entity.modes.assessments
+		} else {
+			this.topic = entity.topic
+			this.tags = entity.tags
+		}
 		this.title = entity.title
 		this.description = entity.description
-		this.photo = entity.photo
-		this.topicId = entity.topicId
-		this.tagIds = entity.tagIds
-		this.isForTutors = entity.isForTutors
-		this.timeLimit = entity.timeLimit
-		this.modeGames = entity.modes.games
-		this.modeTests = entity.modes.tests
-		this.modeFlashcards = entity.modes.flashcards
-		this.modePractice = entity.modes.practice
-		this.modeAssessments = entity.modes.assessments
 	}
 
 	model = () => {

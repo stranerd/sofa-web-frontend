@@ -19,15 +19,15 @@ function copy<T>(input: T): T {
 export abstract class BaseFactory<E, T, K extends Record<string, any>> extends ClassPropertiesWrapper<K> {
 	#entity = ref<string | null>(null)
 	errors: Record<keyof K, string>
-	abstract model: () => T
-	abstract load: (entity: E) => void
-	reserved: string[] = []
+	protected abstract model: () => T
+	protected abstract load: (entity: E) => void
 	protected abstract readonly rules: { [Key in keyof K]: VCore<K[Key] | undefined | null> }
+	protected readonly onSet: Partial<Record<keyof K, (value: any) => void>> = {} as any
+	protected reserved: string[] = []
 	protected readonly defaults: K
-	public readonly values: K
+	protected readonly values: K
 	protected readonly validValues: K
 	readonly #cloneValues: K
-	protected readonly onSet: Partial<Record<keyof K, (value: any) => void>> = {} as any
 
 	constructor(keys: K) {
 		super(keys, {
@@ -61,10 +61,6 @@ export abstract class BaseFactory<E, T, K extends Record<string, any>> extends C
 		return this.#entity.value
 	}
 
-	protected set entityId(v: string | null) {
-		this.#entity.value = v
-	}
-
 	set(key: keyof K, value: any, ignoreRules = false) {
 		const check = this.checkValidity(key, value)
 
@@ -90,7 +86,7 @@ export abstract class BaseFactory<E, T, K extends Record<string, any>> extends C
 	}
 
 	reset() {
-		this.entityId = null
+		this.#entity.value = null
 		const reserved: (keyof K)[] = (this.reserved ?? []).concat(['userId', 'user', 'userBio'])
 		this.#keys.filter((key) => !reserved.includes(key)).forEach((key) => this.resetProp(key))
 	}
@@ -106,16 +102,18 @@ export abstract class BaseFactory<E, T, K extends Record<string, any>> extends C
 	}
 
 	loadEntity(entity: E) {
+		this.#entity.value = entity && typeof entity === 'object' && 'id' in entity && typeof entity.id === 'string' ? entity.id : null
 		this.load(entity)
 		this.#keys.forEach((key) => {
 			this.#cloneValues[key] = copy(this.values[key])
 		})
+		return this
 	}
 
 	async toModel() {
 		if (!this.valid) {
 			this.#keys.forEach((key) => this.set(key, this.values[key]))
-			throw new Error('Validation errors')
+			throw new Error(`Validation errors for ${this.constructor.name.toLowerCase().replace('factory', '')}`)
 		}
 		return deepToRaw(this.model())
 	}

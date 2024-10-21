@@ -19,7 +19,6 @@ export class TutorRequestFactory extends BaseFactory<TutorRequestEntity, TutorRe
 	}
 
 	load = (entity: TutorRequestEntity) => {
-		this.entityId = entity.id
 		this.topicId = entity.topicId
 		this.verification = entity.verification
 		this.qualification = entity.qualification

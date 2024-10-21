@@ -14,7 +14,6 @@ export class ConversationFactory extends BaseFactory<ConversationEntity, CreateC
 	}
 
 	load = (entity: ConversationEntity) => {
-		this.entityId = entity.id
 		this.body = entity.title
 		this.tutorId = entity.tutor?.id ?? null
 	}
