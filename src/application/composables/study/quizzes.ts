@@ -10,8 +10,8 @@ import { useUsersInList } from '../users/users'
 import { useQuestionsInList } from './questions'
 import { useHasAccess } from '.'
 import {
-	AiGenQuestionFactory,
 	CoursableAccess,
+	CreateQuestionFactory,
 	QuestionEntity,
 	QuestionFactory,
 	QuestionTypes,
@@ -110,12 +110,9 @@ export const useCreateQuiz = () => {
 	} = useAsyncFn(async () => {
 		const quiz = await QuizzesUseCases.add(factory)
 		await Promise.all(
-			[QuestionTypes.multipleChoice, QuestionTypes.trueOrFalse].map((questionType) => {
-				const fac = new AiGenQuestionFactory()
-				fac.amount = 1
-				fac.questionType = questionType
-				return QuestionsUseCases.aiAdd(quiz.id, fac)
-			}),
+			[QuestionEntity.getTemplate(QuestionTypes.multipleChoice), QuestionEntity.getTemplate(QuestionTypes.trueOrFalse)].map((q) =>
+				QuestionsUseCases.add(quiz.id, new QuestionFactory().loadEntity(q)),
+			),
 		).catch()
 		await router.push(`/study/quizzes/${quiz.id}/edit`)
 		factory.reset()
@@ -130,7 +127,6 @@ export const useEditQuiz = (id: string) => {
 	const { quiz, questions, members, fetched } = useQuiz(id)
 	const quizFactory = new QuizFactory()
 	const questionFactory = new QuestionFactory()
-	const aiGenQuestionFactory = new AiGenQuestionFactory()
 	const { setMessage } = useSuccessHandler()
 
 	watch(
@@ -194,10 +190,17 @@ export const useEditQuiz = (id: string) => {
 		},
 	)
 
-	const { asyncFn: addQuestions } = useAsyncFn(async () => {
-		const questions = await QuestionsUseCases.aiAdd(id, aiGenQuestionFactory)
+	const { asyncFn: addQuestions } = useAsyncFn(async (factory: CreateQuestionFactory) => {
+		await factory.toModel() // ensure factory is valid before proceding
+		const raw =
+			factory.type === 'scratch'
+				? Array.from({ length: factory.amount }).map(() => QuestionEntity.getTemplate(factory.questionType))
+				: await QuizzesUseCases.aiGen(factory).then((result) => result.questions)
+		const questions = await Promise.all(
+			raw.map(async (question) => QuestionsUseCases.add(id, new QuestionFactory().loadEntity(question))),
+		)
 		await setMessage('Question added')
-		aiGenQuestionFactory.reset()
+		factory.reset()
 		return questions
 	})
 
@@ -207,7 +210,8 @@ export const useEditQuiz = (id: string) => {
 	})
 
 	const { asyncFn: duplicateQuestion } = useAsyncFn(async (original: QuestionEntity) => {
-		const question = await QuestionsUseCases.add(id, original)
+		const factory = new QuestionFactory().loadEntity(original)
+		const question = await QuestionsUseCases.add(id, factory)
 		await setMessage('Question duplicated')
 		return question
 	})
@@ -243,7 +247,6 @@ export const useEditQuiz = (id: string) => {
 		members,
 		quizFactory,
 		questionFactory,
-		aiGenQuestionFactory,
 		updateQuiz,
 		publishQuiz,
 		reorderQuestions,

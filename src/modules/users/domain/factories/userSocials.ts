@@ -51,7 +51,6 @@ export class UserSocialsFactory extends BaseFactory<UserEntity, UserSocialsType,
 	}
 
 	load = (entity: UserEntity) => {
-		this.entityId = entity.id
 		this.socials = entity.socials
 	}
 

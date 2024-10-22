@@ -12,14 +12,14 @@
     "prebuild": "npm run envs",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
-    "lint:fix": "eslint --ext ts,vue --fix ./ && echo Done",
+    "lint:fix": "eslint --ext ts,vue --fix ./",
     "envs": "node bin/copy-env-app.js",
     "icons:types": "node bin/build-icons-types.js",
     "lint:staged": "lint-staged",
     "prepare": "husky"
   },
   "lint-staged": {
-    "*": "npm run lint:fix"
+    "*.(vue|ts)": "eslint --ext ts,vue --fix"
   },
   "dependencies": {
     "@capacitor-community/apple-sign-in": "^5.0.0",
@@ -31,10 +31,11 @@
     "chart.js": "^4.4.4",
     "gsap": "^3.12.5",
     "mathlive": "^0.101.0",
+    "pdfjs-dist": "^4.6.82",
     "qrcode.vue": "^3.4.1",
     "socket.io-client": "^4.7.5",
     "string-similarity": "^4.0.4",
-    "valleyed": "^4.3.1",
+    "valleyed": "^4.4.0",
     "video.js": "^8.17.4",
     "vue": "^3.5.6",
     "vue-draggable-plus": "^0.5.3",

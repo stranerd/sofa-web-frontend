@@ -1,4 +1,5 @@
 import { QuizEntity } from '../entities/quizzes'
+import { CreateQuestionFactory } from '../factories/createQuestion'
 import { QuizFactory } from '../factories/quizzes'
 import { IQuizRepository } from '../irepositories/iquizzes'
 import { DraftStatus } from '../types'
@@ -13,6 +14,10 @@ export class QuizzesUseCase {
 
 	async add(factory: QuizFactory) {
 		return await this.repository.add(await factory.toModel())
+	}
+
+	async aiGen(factory: CreateQuestionFactory) {
+		return await this.repository.aiGen(await factory.toModel())
 	}
 
 	async delete(id: string) {

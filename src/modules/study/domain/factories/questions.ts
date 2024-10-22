@@ -1,7 +1,8 @@
 import { v } from 'valleyed'
 import { QuestionToModel } from '../../data/models/questions'
 import { QuestionEntity } from '../entities/questions'
-import { QuestionTypes } from '../types'
+import { AiGenResult, QuestionTypes } from '../types'
+import { indicator } from '../entities/questions-extras'
 import { BaseFactory } from '@modules/core'
 
 type FillOrDragOption = { type: 'q' | 'a'; value: string }
@@ -19,7 +20,7 @@ type Keys = Omit<QuestionToModel, 'data'> & {
 	dragAnswersAnswers: FillOrDragOption[]
 }
 
-export class QuestionFactory extends BaseFactory<QuestionEntity, QuestionToModel, Keys> {
+export class QuestionFactory extends BaseFactory<QuestionEntity | AiGenResult['questions'][number], QuestionToModel, Keys> {
 	readonly rules = {
 		question: v
 			.string()
@@ -100,7 +101,7 @@ export class QuestionFactory extends BaseFactory<QuestionEntity, QuestionToModel
 			trueOrFalseAnswer: true,
 			writeAnswerAnswers: [],
 			sequenceAnswers: [],
-			indicator: '----------',
+			indicator,
 			fillInBlanksAnswers: [],
 			dragAnswersAnswers: [],
 			matchSet: [],
@@ -207,12 +208,13 @@ export class QuestionFactory extends BaseFactory<QuestionEntity, QuestionToModel
 		else this.multipleAnswers.push(index)
 	}
 
-	load = (entity: QuestionEntity) => {
-		this.entityId = entity.id
-		this.question = entity.question
-		this.questionMedia = entity.questionMedia
+	load = (entity: QuestionEntity | AiGenResult['questions'][number]) => {
+		if ('id' in entity) {
+			this.question = entity.question
+			this.questionMedia = entity.questionMedia
+			this.timeLimit = entity.timeLimit
+		}
 		this.explanation = entity.explanation
-		this.timeLimit = entity.timeLimit
 		this.type = entity.data.type
 		if (entity.data.type === QuestionTypes.multipleChoice) {
 			this.multipleOptions = entity.data.options

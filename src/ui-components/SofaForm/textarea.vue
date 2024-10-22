@@ -26,7 +26,7 @@
 				</div>
 				<math-field
 					ref="mathRef"
-					class="w-full bg-white z-[10] px-4 !outline-primaryOrange text-darkBody absolute top-0"
+					class="w-full bg-white z-[10] px-4 !outline-primaryOrange absolute top-0"
 					:class="{ hidden: !showMath || !quill }"
 					@beforeinput="saveFormula">
 					{{ mathText }}

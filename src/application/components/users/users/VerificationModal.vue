@@ -4,9 +4,9 @@
 			<SofaHeading content="Verification application" />
 			<div class="flex items-center justify-end w-1/2 border-l border-lightGray gap-2">
 				<div class="inline">{{ currentIndex + 1 }}-10 of {{ data.length }}</div>
-				<SofaIcon class="h-[20px]" name="alt-arrow-left" />
+				<SofaIcon class="h-[20px]" name="chevron-left" />
 				<div class="w-[2px] h-4 bg-grayColor" />
-				<SofaIcon class="h-[20px]" name="alt-arrow-right" @click="currentIndex < data.length - 1 ? currentIndex++ : null" />
+				<SofaIcon class="h-[20px]" name="chevron-right" @click="currentIndex < data.length - 1 ? currentIndex++ : null" />
 				<SofaIcon class="h-[16px] pr-2" name="circle-close" @click="close" />
 			</div>
 		</div>
@@ -54,11 +54,11 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { UserEntity, VerificationEntity } from '@modules/users'
+import StudyMaterialCard from '@app/components/study/StudyMaterialCard.vue'
 import { useCoursesInList } from '@app/composables/study/courses-list'
 import { useQuizzesInList } from '@app/composables/study/quizzes-list'
 import { useAcceptVerificationRequest } from '@app/composables/users/verifications'
-import StudyMaterialCard from '@app/components/study/StudyMaterialCard.vue'
+import { UserEntity, VerificationEntity } from '@modules/users'
 
 const props = defineProps<{
 	close: () => void

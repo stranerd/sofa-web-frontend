@@ -70,6 +70,7 @@ export function asArray<T extends BaseFactory<any, any, any>>(factory: { new ():
 		get hasChanges() {
 			const hasInsideChanges = this.factories.some((instance) => instance.hasChanges)
 			if (hasInsideChanges) return true
+			// @ts-expect-error - .model() is protected
 			const models = this.factories.map((instance) => instance.model())
 			return !Differ.equal(deepToRaw(this.#lastLoadedEntities), models)
 		}

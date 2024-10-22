@@ -16,7 +16,6 @@ export class UserAiFactory extends BaseFactory<UserEntity, UserAi, UserAi> {
 	}
 
 	load = (entity: UserEntity) => {
-		this.entityId = entity.id
 		if (entity.ai) {
 			this.name = entity.ai.name
 			this.tagline = entity.ai.tagline

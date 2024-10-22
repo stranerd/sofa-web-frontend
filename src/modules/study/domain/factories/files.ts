@@ -57,7 +57,6 @@ export class FileFactory extends BaseFactory<FileEntity, FileToModel, FileToMode
 	}
 
 	load = (entity: FileEntity) => {
-		this.entityId = entity.id
 		this.title = entity.title
 		this.description = entity.description
 		this.photo = entity.photo

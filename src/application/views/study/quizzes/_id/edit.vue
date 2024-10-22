@@ -211,7 +211,7 @@
 			<SofaModal v-if="showAddQuestionModal" :close="() => (showAddQuestionModal = false)">
 				<form
 					class="w-full flex flex-col mdlg:p-6 gap-6 p-4 items-center justify-center"
-					@submit.prevent="() => extras.addQuestion().then(() => (showAddQuestionModal = false))">
+					@submit.prevent="() => extras.addQuestion(createQuestionFactory).then(() => (showAddQuestionModal = false))">
 					<div class="w-full text-center hidden md:inline-block">
 						<SofaHeading size="title" content="Add question" />
 					</div>
@@ -224,10 +224,10 @@
 					<SofaFormGroup>
 						<SofaLabel>Amount</SofaLabel>
 						<SofaInput
-							v-model="extras.aiGenQuestionFactory.amount"
+							v-model="createQuestionFactory.amount"
 							type="number"
 							placeholder="Number of questions"
-							:error="extras.aiGenQuestionFactory.errors.amount" />
+							:error="createQuestionFactory.errors.amount" />
 					</SofaFormGroup>
 
 					<SofaFormGroup>
@@ -237,8 +237,8 @@
 								v-for="type in QuestionEntity.getAllTypes()"
 								:key="type.value"
 								class="col-span-1 p-4 flex flex-col gap-2 items-center justify-center hover:bg-lightBlue rounded-lg"
-								:class="[extras.aiGenQuestionFactory.questionType === type.value ? 'bg-lightBlue' : 'bg-lightGray']"
-								@click="extras.aiGenQuestionFactory.questionType = type.value">
+								:class="[createQuestionFactory.questionType === type.value ? 'bg-lightBlue' : 'bg-lightGray']"
+								@click="createQuestionFactory.questionType = type.value">
 								<SofaIcon :name="type.icon" class="h-[50px]" />
 								<SofaText :content="type.label" />
 							</a>
@@ -256,7 +256,7 @@
 						</SofaButton>
 
 						<SofaButton
-							:disabled="!extras.aiGenQuestionFactory.valid"
+							:disabled="!createQuestionFactory.valid"
 							padding="px-5 mdlg:py-2 py-3"
 							class="mdlg:w-auto w-full"
 							type="submit">
@@ -291,7 +291,7 @@ import EditQuestionsList from '@app/components/study/questions/EditQuestionsList
 import EditQuizWrapper from '@app/components/study/quizzes/EditQuizWrapper.vue'
 import RequestAccess from '@app/components/study/quizzes/RequestAccess.vue'
 import { useModals } from '@app/composables/core/modals'
-import { QuestionEntity } from '@modules/study'
+import { CreateQuestionFactory, QuestionEntity } from '@modules/study'
 
 export default defineComponent({
 	name: 'StudyQuizzesIdEditPage',
@@ -317,8 +317,11 @@ export default defineComponent({
 
 		const openAccessModal = useModals().study.manageAccess.open
 
+		const createQuestionFactory = new CreateQuestionFactory('scratch')
+
 		return {
 			QuestionEntity,
+			createQuestionFactory,
 			showAddQuestionModal,
 			showCurrentlyEditingModal,
 			showMoreOptions,

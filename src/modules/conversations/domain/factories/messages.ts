@@ -19,7 +19,6 @@ export class MessageFactory extends BaseFactory<MessageEntity, MessageToModel, M
 	}
 
 	load = (entity: MessageEntity) => {
-		this.entityId = entity.id
 		this.body = entity.body
 		this.media = entity.media
 	}

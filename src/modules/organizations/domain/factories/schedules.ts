@@ -64,7 +64,6 @@ export class ScheduleFactory extends BaseFactory<ScheduleEntity, ScheduleToModel
 	}
 
 	load = (entity: ScheduleEntity) => {
-		this.entityId = entity.id
 		this.title = entity.title
 		this.description = entity.description
 		this.lessonId = entity.lessonId

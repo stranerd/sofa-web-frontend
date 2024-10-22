@@ -25,15 +25,22 @@ export { FileEntity } from './domain/entities/files'
 export { FolderEntity } from './domain/entities/folders'
 export { QuestionEntity } from './domain/entities/questions'
 export { QuizEntity } from './domain/entities/quizzes'
-export { CourseSectionsFactory } from './domain/factories/courseSections'
 export { CourseFactory } from './domain/factories/courses'
+export { CourseSectionsFactory } from './domain/factories/courseSections'
+export { CreateQuestionFactory } from './domain/factories/createQuestion'
 export { FileFactory } from './domain/factories/files'
 export { FolderFactory } from './domain/factories/folders'
-export { AiGenQuestionFactory } from './domain/factories/aiGenQuestions'
 export { QuestionFactory } from './domain/factories/questions'
 export { QuizFactory } from './domain/factories/quizzes'
 export { Coursable, DraftStatus, FileType, FolderSaved, QuestionTypes, QuizModes } from './domain/types'
-export type { CoursableAccess, ExtendedCourseSections, ExtendedCourseSectionItem, QuestionAnswer, StudyKeys } from './domain/types'
+export type {
+	AiGenResult,
+	CoursableAccess,
+	ExtendedCourseSectionItem,
+	ExtendedCourseSections,
+	QuestionAnswer,
+	StudyKeys,
+} from './domain/types'
 
 export type { QuestionFromModel } from './data/models/questions'
 export type StudyMaterial = CourseEntity | QuizEntity

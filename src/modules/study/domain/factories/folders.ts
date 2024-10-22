@@ -13,7 +13,6 @@ export class FolderFactory extends BaseFactory<FolderEntity, FolderToModel, Fold
 	}
 
 	load = (entity: FolderEntity) => {
-		this.entityId = entity.id
 		this.title = entity.title
 	}
 
