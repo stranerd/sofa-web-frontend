@@ -7,7 +7,7 @@
 		@click="showOptions = true">
 		<span v-if="placeholder" class="font-semibold">{{ placeholder }}</span>
 		<span class="ml-auto grow truncate">{{ selectedOptions.map((o) => o.value).join(', ') }}</span>
-		<SofaIcon name="angle-small-down" class="h-[7px] fill-deepGray" />
+		<SofaIcon name="chevron-down" class="h-[7px] fill-deepGray" />
 		<dialog
 			v-if="showOptions"
 			open

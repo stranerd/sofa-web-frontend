@@ -6,13 +6,13 @@
 				<div class="inline">{{ currentIndex + 1 }} of {{ data.length }}</div>
 				<SofaIcon
 					class="h-[20px]"
-					name="alt-arrow-left"
+					name="chevron-left"
 					:class="{ 'fill-grayColor': currentIndex < 1 }"
 					@click="currentIndex > 0 ? currentIndex-- : null" />
 				<div class="w-[2px] h-4 bg-grayColor" />
 				<SofaIcon
 					class="h-[20px]"
-					name="alt-arrow-right"
+					name="chevron-right"
 					:class="{ 'fill-grayColor': currentIndex >= data.length }"
 					@click="currentIndex < data.length - 1 ? currentIndex++ : null" />
 				<SofaIcon class="h-[16px] pr-2" name="circle-close" @click="close" />

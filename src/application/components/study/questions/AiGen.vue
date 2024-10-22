@@ -6,29 +6,54 @@
 					<SofaIcon name="file-document" class="fill-current h-[20px]" />
 				</template>
 			</SofaInput>
-			<SofaButton padding="py-3 px-4">Refresh</SofaButton>
-		</div>
-		<div class="flex flex-col gap-4 h-fit max-h-full overflow-y-auto">
-			<div v-for="(question, index) in questions" :key="index" class="bg-lightGray rounded-lg px-2 py-4">
-				<SofaText>{{ JSON.stringify(question) }}</SofaText>
-				<!-- <div class="flex items-center justify-between cursor-pointer gap-4" @click="toggleOptions(question.id)">
-					<SofaText :content="question.question" size="sub" />
-					<SofaIcon name="angle-small-down" class="h-[7px] transition" :class="question.isVisible ? 'rotate-180' : 'rotate-0'" />
-					<SofaButton padding="py-2 px-3">Add</SofaButton>
-				</div>
-				<div v-if="question.isVisible">
-					<div
-						v-for="(option, index) in question.options"
-						:key="option"
-						class="bg-white p-2 rounded-lg mt-2 flex items-center gap-2">
-						<SofaIcon :name="optionIcons[index]" class="h-[15px]" />
-						<SofaText :content="option" size="sub" />
-					</div>
-				</div> -->
-			</div>
+			<SofaButton padding="py-3 px-4" :disabled="fetchQuestionsLoading || submitLoading" @click="fetchQuestions">Refresh</SofaButton>
 		</div>
 
-		<SofaButton color="green" padding="p-3" class="mt-auto" :class="$screen.desktop ? 'w-auto ml-auto' : 'w-full'">Done</SofaButton>
+		<div v-if="fetchQuestionsLoading || submitLoading" class="flex flex-col justify-center items-center gap-4 p-4 h-full min-h-[400px]">
+			<SofaIcon name="pen" class="fill-primaryPurple" />
+			<div class="w-4/5 bg-lightGray rounded-full h-2 mdlg:h-3">
+				<div class="bg-primaryPurple h-full rounded-full animate-load" />
+			</div>
+			<SofaText content="Generating questions, this could take a minute..." size="sub" />
+		</div>
+
+		<div v-else class="flex flex-col gap-4 h-fit max-h-full overflow-y-auto">
+			<template v-for="(question, index) in questions" :key="index">
+				<div v-if="question.data.type === QuestionTypes.multipleChoice" class="bg-lightGray rounded-lg p-3 flex flex-col gap-2">
+					<div class="flex items-center gap-4">
+						<SofaText :content="question.question" size="sub" class="grow" />
+						<SofaIcon
+							name="chevron-down"
+							class="h-[7px] transition"
+							:class="{ 'rotate-180': openQuestions.includes(question.hash) }"
+							@click="toggleOpenQuestion(question.hash)" />
+						<SofaButton padding="py-2 px-3" @click="toggleSelectedQuestion(question.hash)">
+							{{ selectedQuestions.includes(question.hash) ? 'Remove' : 'Add' }}
+						</SofaButton>
+					</div>
+					<template v-if="openQuestions.includes(question.hash)">
+						<div
+							v-for="(option, index) in question.data.options"
+							:key="option"
+							class="bg-white p-2 rounded-lg flex items-center gap-2">
+							<SofaIcon :name="QuestionEntity.getShape(index)" class="h-[15px]" />
+							<SofaText :content="option" size="sub" class="grow" />
+							<SofaIcon v-if="question.data.answers.includes(index)" name="selected" class="w-[23px]" />
+						</div>
+					</template>
+				</div>
+			</template>
+		</div>
+
+		<SofaButton
+			color="green"
+			padding="py-3 px-4"
+			class="mt-auto"
+			:disabled="!factory.valid || !selectedQuestions.length || fetchQuestionsLoading || submitLoading"
+			:class="$screen.desktop ? 'w-auto ml-auto' : 'w-full'"
+			@click="submit">
+			Done
+		</SofaButton>
 	</div>
 </template>
 
@@ -39,6 +64,7 @@ import { useAsyncFn } from '@app/composables/core/hooks'
 import {
 	AiGenResult,
 	CreateQuestionFactory,
+	QuestionEntity,
 	QuestionFactory,
 	QuestionsUseCases,
 	QuestionTypes,
@@ -53,41 +79,73 @@ const props = defineProps<{
 
 const router = useRouter()
 const quiz = ref<AiGenResult['quiz'] | null>(null)
-const questions = ref<AiGenResult['questions']>([])
-const selectedQuestionsIndex = ref<number[]>([])
-const currentlySelectedQuestions = computed(() => selectedQuestionsIndex.value.map((index) => questions.value[index]).filter(Boolean))
+const questions = ref<(AiGenResult['questions'][number] & { hash: string })[]>([])
+const openQuestions = ref<string[]>([])
+const selectedQuestions = ref<string[]>([])
+const currentlySelectedQuestions = computed(() =>
+	selectedQuestions.value.map((hash) => questions.value.find((q) => q.hash === hash)).filter(Boolean),
+)
 
-const { asyncFn: fetchQuestions } = useAsyncFn(async () => {
-	props.factory.questionType = QuestionTypes.multipleChoice
-	props.factory.amount = 5
-	const result = await QuizzesUseCases.aiGen(props.factory)
-	if (!quiz.value || Object.keys(selectedQuestionsIndex.value).length === 0) quiz.value = result.quiz
-	const selected = currentlySelectedQuestions.value
-	questions.value = [...currentlySelectedQuestions.value, ...result.questions]
-	selectedQuestionsIndex.value = selected.map((_, index) => index)
-})
+const { loading: fetchQuestionsLoading, asyncFn: fetchQuestions } = useAsyncFn(
+	async () => {
+		props.factory.questionType = QuestionTypes.multipleChoice
+		props.factory.amount = 10
+		const result = await QuizzesUseCases.aiGen(props.factory)
+		if (!quiz.value || Object.keys(selectedQuestions.value).length === 0) quiz.value = result.quiz
+		questions.value = [...currentlySelectedQuestions.value, ...result.questions.map((q) => ({ ...q, hash: $utils.getRandomValue() }))]
+	},
+	{ hideLoading: true },
+)
 
-const { asyncFn: submit } = useAsyncFn(async () => {
-	const quizId =
-		!props.quizId && quiz.value ? await QuizzesUseCases.add(new QuizFactory().loadEntity(quiz.value)).then((quiz) => quiz.id) : null
-	if (!quizId) return await router.push('/library/quizzes')
-	const questions = await Promise.all(
-		currentlySelectedQuestions.value
-			.map((question) => new QuestionFactory().loadEntity(question))
-			.map((factory) => QuestionsUseCases.add(quizId, factory)),
-	)
-	const question = questions.at(0)
-	if (question) await router.push(question ? question.editPage : `/library/quizzes`)
-})
+const { loading: submitLoading, asyncFn: submit } = useAsyncFn(
+	async () => {
+		const quizId =
+			!props.quizId && quiz.value ? await QuizzesUseCases.add(new QuizFactory().loadEntity(quiz.value)).then((quiz) => quiz.id) : null
+		if (!quizId) return await router.push('/library/quizzes')
+		const questions = await Promise.all(
+			currentlySelectedQuestions.value
+				.map((question) => new QuestionFactory().loadEntity(question))
+				.map((factory) => QuestionsUseCases.add(quizId, factory)),
+		)
+		const question = questions.at(0)
+		if (question) await router.push(question ? question.editPage : `/library/quizzes`)
+	},
+	{ hideLoading: true },
+)
 
-const toggleQuestion = (index: number) => {
-	const isSelected = selectedQuestionsIndex.value.includes(index)
-	if (isSelected) selectedQuestionsIndex.value = selectedQuestionsIndex.value.filter((i) => i !== index)
-	else selectedQuestionsIndex.value = selectedQuestionsIndex.value.concat(index)
+const toggleSelectedQuestion = (hash: string) => {
+	const isSelected = selectedQuestions.value.includes(hash)
+	if (isSelected) selectedQuestions.value = selectedQuestions.value.filter((i) => i !== hash)
+	else selectedQuestions.value = selectedQuestions.value.concat(hash)
 }
 
-// TODO: remove after
-;[submit, toggleQuestion]
+const toggleOpenQuestion = (hash: string) => {
+	const isOpen = openQuestions.value.includes(hash)
+	if (isOpen) openQuestions.value = openQuestions.value.filter((i) => i !== hash)
+	else openQuestions.value = openQuestions.value.concat(hash)
+}
 
 onMounted(fetchQuestions)
 </script>
+
+<style scoped>
+@keyframes load {
+	0%,
+	100% {
+		width: 0;
+	}
+
+	25%,
+	75% {
+		width: 50%;
+	}
+
+	50% {
+		width: 100%;
+	}
+}
+
+.animate-load {
+	animation: load 5s infinite linear;
+}
+</style>

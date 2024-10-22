@@ -25,7 +25,7 @@ export abstract class BaseFactory<E, T, K extends Record<string, any>> extends C
 	protected readonly onSet: Partial<Record<keyof K, (value: any) => void>> = {} as any
 	protected reserved: string[] = []
 	protected readonly defaults: K
-	protected readonly values: K
+	public readonly values: K
 	protected readonly validValues: K
 	readonly #cloneValues: K
 

@@ -17,8 +17,8 @@ const MAX_TEXT_LENGTH = 48 * 48 * 10 // 10 pages from our per page text assumpti
 
 export class CreateQuestionFactory extends BaseFactory<unknown, AiGenRequest, AiGenRequest & ExtraKeys> {
 	readonly rules = {
-		content: v.string().min(1),
-		amount: v.number().int().gt(0).lte(5, 'cannot generate more than 5 questions at once'),
+		content: v.string().min(1).max(MAX_TEXT_LENGTH),
+		amount: v.number().int().gt(0).lte(10, 'cannot generate more than 5 questions at once'),
 		questionType: v.in(Object.values(QuestionTypes)),
 		type: v.in(['document' as const, 'topic' as const, 'scratch' as const]),
 		topic: v
@@ -63,6 +63,9 @@ export class CreateQuestionFactory extends BaseFactory<unknown, AiGenRequest, Ai
 	}
 
 	protected onSet = {
+		topic: () => {
+			this.content = this.topic
+		},
 		previews: () => {
 			this.resetProp('selectedPreviews')
 		},
@@ -72,6 +75,7 @@ export class CreateQuestionFactory extends BaseFactory<unknown, AiGenRequest, Ai
 		selectedPreviews: () => {
 			const selectedAll = this.selectedPreviews.length === this.previews.length
 			if (this.selectAll !== selectedAll) this.selectAll = selectedAll
+			this.content = this.#mergePreviews(this.selectedPreviews)
 		},
 		selectFrom: () => {
 			if (this.isValid('selectFrom', 'selectTo')) this.#select(this.selectFrom, this.selectTo)
@@ -132,19 +136,12 @@ export class CreateQuestionFactory extends BaseFactory<unknown, AiGenRequest, Ai
 		}
 	}
 
-	getTypeContent() {
-		if (this.type === 'document') return this.#mergePreviews(this.selectedPreviews)
-		if (this.type === 'topic') return this.topic
-		return this.content
-	}
-
 	load = () => {
 		throw new Error('load not supported')
 	}
 
 	model = () => {
-		const { amount, questionType } = this.validValues
-		const content = this.getTypeContent()
+		const { content, amount, questionType } = this.validValues
 		return { content, amount, questionType }
 	}
 }
